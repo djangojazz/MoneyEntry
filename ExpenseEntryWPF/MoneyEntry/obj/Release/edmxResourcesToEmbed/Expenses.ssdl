@@ -1,0 +1,119 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="ExpensesModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+  <EntityContainer Name="ExpensesModelStoreContainer">
+    <EntitySet Name="tdCategory" EntityType="ExpensesModel.Store.tdCategory" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="tdType" EntityType="ExpensesModel.Store.tdType" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="tePerson" EntityType="ExpensesModel.Store.tePerson" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="teTransaction" EntityType="ExpensesModel.Store.teTransaction" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="vTrans" EntityType="ExpensesModel.Store.vTrans" store:Type="Views" store:Schema="dbo" store:Name="vTrans">
+      <DefiningQuery>SELECT 
+      [vTrans].[PersonID] AS [PersonID], 
+      [vTrans].[Name] AS [Name], 
+      [vTrans].[Amount] AS [Amount], 
+      [vTrans].[TransactionDesc] AS [TransactionDesc], 
+      [vTrans].[Type] AS [Type], 
+      [vTrans].[Category] AS [Category], 
+      [vTrans].[CreatedDate] AS [CreatedDate], 
+      [vTrans].[TransactionID] AS [TransactionID], 
+      [vTrans].[RunningTotal] AS [RunningTotal], 
+      [vTrans].[reconciled] AS [reconciled]
+      FROM [dbo].[vTrans] AS [vTrans]</DefiningQuery>
+    </EntitySet>
+    <AssociationSet Name="FK_Transaction_Person" Association="ExpensesModel.Store.FK_Transaction_Person">
+      <End Role="tePerson" EntitySet="tePerson" />
+      <End Role="teTransaction" EntitySet="teTransaction" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="tdCategory">
+    <Key>
+      <PropertyRef Name="CategoryID" />
+    </Key>
+    <Property Name="CategoryID" Type="tinyint" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="Description" Type="varchar" MaxLength="128" />
+  </EntityType>
+  <EntityType Name="tdType">
+    <Key>
+      <PropertyRef Name="TypeID" />
+    </Key>
+    <Property Name="TypeID" Type="tinyint" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="Description" Type="varchar" MaxLength="128" />
+  </EntityType>
+  <EntityType Name="tePerson">
+    <Key>
+      <PropertyRef Name="PersonID" />
+    </Key>
+    <Property Name="PersonID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="FirstName" Type="varchar" MaxLength="255" />
+    <Property Name="LastName" Type="varchar" MaxLength="255" />
+  </EntityType>
+  <EntityType Name="teTransaction">
+    <Key>
+      <PropertyRef Name="TransactionID" />
+    </Key>
+    <Property Name="TransactionID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="Amount" Type="money" Nullable="false" />
+    <Property Name="TransactionDesc" Type="varchar" Nullable="false" MaxLength="128" />
+    <Property Name="TypeID" Type="tinyint" Nullable="false" />
+    <Property Name="CategoryID" Type="tinyint" Nullable="false" />
+    <Property Name="CreatedDt" Type="date" />
+    <Property Name="ModifiedDt" Type="date" />
+    <Property Name="reconciled" Type="bit" />
+    <Property Name="RunningTotal" Type="money" />
+    <Property Name="PersonID" Type="int" />
+  </EntityType>
+  <!--Errors Found During Generation:
+      warning 6002: The table/view 'Expenses.dbo.vTrans' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
+      -->
+  <EntityType Name="vTrans">
+    <Key>
+      <PropertyRef Name="PersonID" />
+      <PropertyRef Name="Amount" />
+      <PropertyRef Name="TransactionDesc" />
+      <PropertyRef Name="TransactionID" />
+    </Key>
+    <Property Name="PersonID" Type="int" Nullable="false" />
+    <Property Name="Name" Type="varchar" MaxLength="511" />
+    <Property Name="Amount" Type="money" Nullable="false" />
+    <Property Name="TransactionDesc" Type="varchar" Nullable="false" MaxLength="128" />
+    <Property Name="Type" Type="varchar" MaxLength="128" />
+    <Property Name="Category" Type="varchar" MaxLength="128" />
+    <Property Name="CreatedDate" Type="date" />
+    <Property Name="TransactionID" Type="int" Nullable="false" />
+    <Property Name="RunningTotal" Type="money" />
+    <Property Name="reconciled" Type="bit" />
+  </EntityType>
+  <Association Name="FK_Transaction_Person">
+    <End Role="tePerson" Type="ExpensesModel.Store.tePerson" Multiplicity="0..1" />
+    <End Role="teTransaction" Type="ExpensesModel.Store.teTransaction" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="tePerson">
+        <PropertyRef Name="PersonID" />
+      </Principal>
+      <Dependent Role="teTransaction">
+        <PropertyRef Name="PersonID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Function Name="fdate" ReturnType="datetime" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="ListDate" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="spMoneyEntry" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="Amount" Type="money" Mode="In" />
+    <Parameter Name="Description" Type="varchar" Mode="In" />
+    <Parameter Name="Type" Type="varchar" Mode="In" />
+    <Parameter Name="Category" Type="varchar" Mode="In" />
+    <Parameter Name="Created" Type="datetime" Mode="In" />
+    <Parameter Name="PersonID" Type="int" Mode="In" />
+  </Function>
+  <Function Name="spMoneyUpdate" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="TransactionID" Type="int" Mode="In" />
+    <Parameter Name="Amount" Type="money" Mode="In" />
+    <Parameter Name="TransactionDesc" Type="varchar" Mode="In" />
+    <Parameter Name="Type" Type="varchar" Mode="In" />
+    <Parameter Name="Category" Type="varchar" Mode="In" />
+    <Parameter Name="CreatedDate" Type="date" Mode="In" />
+    <Parameter Name="Reconciled" Type="bit" Mode="In" />
+    <Parameter Name="Person" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="spUpdateTotals" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+</Schema>

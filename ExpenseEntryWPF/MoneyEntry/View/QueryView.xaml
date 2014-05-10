@@ -1,0 +1,70 @@
+﻿<UserControl x:Class="MoneyEntry.View.QueryView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             Background="Black">
+    <UserControl.Resources>
+        <ResourceDictionary Source="..\MainWindowResources.xaml" />
+    </UserControl.Resources>
+        <DockPanel>
+        <Border DockPanel.Dock="Top">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Grid.Row="0" Grid.Column="0">
+                        <Label Content="StartDate: " />
+                        <Border>
+                            <DatePicker Height="30" Margin="10" Foreground="{StaticResource FontBrush}" FontSize="20" SelectedDate="{Binding RefreshStart}" />
+                        </Border>
+                        <Label Content="Type of Transaction: " HorizontalContentAlignment="Stretch"/>
+                        <Border>
+                            <ComboBox x:Name="comboType" Margin="10" ItemsSource="{Binding Types}" DisplayMemberPath="TypeName" SelectedValuePath="TypeName" SelectedValue="{Binding CurrentType}" HorizontalContentAlignment="Stretch" />
+                        </Border>
+                        <Label Content="Description: " />
+                        <Border>
+                            <TextBox Margin="14" Text="{Binding Desc}"/>
+                        </Border>
+                    </StackPanel>
+                    <StackPanel Grid.Row="0" Grid.Column="1">
+                        <Label Content="EndDate: " />
+                        <Border >
+                            <DatePicker Height="30" Margin="10" Foreground="{StaticResource FontBrush}" FontSize="20" SelectedDate="{Binding RefreshEnd}" />
+                        </Border>
+                        <Label Content="Category of Transaction: " Foreground="{StaticResource FontBrush}" />
+                        <Border>
+                            <ComboBox x:Name="comboCategory" Margin="10" ItemsSource="{Binding Categories}" DisplayMemberPath="CategoryName" SelectedValuePath="CategoryName" SelectedValue="{Binding CurrentCategory}" />
+                        </Border>
+                        <Label Content="Amount: " />
+                        <Border>
+                        <TextBox Margin="14" Text="{Binding MoneyAmount}"/>
+                        </Border>
+                    </StackPanel>
+                </Grid>
+            </Border>
+        <Button DockPanel.Dock="Top" Style="{StaticResource GlassButton}" Content="Find Values" Command="{Binding FindCommand}"/>
+                
+                <DataGrid  DockPanel.Dock="Top" x:Name="datagrid" ItemsSource="{Binding MoneyEnts}" AutoGenerateColumns="False" HorizontalAlignment="Left" VerticalAlignment="Top" 
+                              IsSynchronizedWithCurrentItem="True" MaxHeight="700" >
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="TransactionId" Binding="{Binding TransactionId}" CanUserReorder="True"/>
+                        <DataGridTextColumn Header="EntryDate" Binding="{Binding CreatedDate}" CanUserReorder="True"/>
+                        <DataGridTextColumn Header="Description" Binding="{Binding TransactionDesc}" />
+                        <DataGridTextColumn Header="TypeName" Binding="{Binding Type}"/>
+                        <DataGridTextColumn Header="CategoryName" Binding="{Binding Category}" CanUserReorder="True"/>
+                        <DataGridTextColumn Header="Amount" Binding="{Binding Amount, StringFormat={}{0:#.00}}"  />
+                        <DataGridTextColumn Header="RunningTotal" Binding="{Binding RunningTotal, StringFormat={}{0:#.00}}" />
+                        <DataGridCheckBoxColumn Header="IsReconciled" Binding="{Binding Reconciled}" CanUserReorder="True"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+        </DockPanel>
+</UserControl>

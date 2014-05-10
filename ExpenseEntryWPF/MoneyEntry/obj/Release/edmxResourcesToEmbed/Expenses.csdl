@@ -1,0 +1,94 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="ExpensesModel" Alias="Self" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+  <EntityContainer Name="ExpensesEntities">
+    <EntitySet Name="tdCategories" EntityType="ExpensesModel.tdCategory" />
+    <EntitySet Name="tdTypes" EntityType="ExpensesModel.tdType" />
+    <EntitySet Name="tePersons" EntityType="ExpensesModel.tePerson" />
+    <EntitySet Name="teTransactions" EntityType="ExpensesModel.teTransaction" />
+    <AssociationSet Name="FK_Transaction_Person" Association="ExpensesModel.FK_Transaction_Person">
+      <End Role="tePerson" EntitySet="tePersons" />
+      <End Role="teTransaction" EntitySet="teTransactions" />
+    </AssociationSet>
+    <FunctionImport Name="spMoneyEntry">
+      <Parameter Name="Amount" Mode="In" Type="Decimal" />
+      <Parameter Name="Description" Mode="In" Type="String" />
+      <Parameter Name="Type" Mode="In" Type="String" />
+      <Parameter Name="Category" Mode="In" Type="String" />
+      <Parameter Name="Created" Mode="In" Type="DateTime" />
+      <Parameter Name="PersonID" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="spUpdateRunningTotals" />
+    <FunctionImport Name="spUpdateTotals" />
+    <EntitySet Name="vTrans" EntityType="ExpensesModel.vTran" />
+    <FunctionImport Name="spMoneyUpdate">
+      <Parameter Name="TransactionID" Mode="In" Type="Int32" />
+      <Parameter Name="Amount" Mode="In" Type="Decimal" />
+      <Parameter Name="TransactionDesc" Mode="In" Type="String" />
+      <Parameter Name="Type" Mode="In" Type="String" />
+      <Parameter Name="Category" Mode="In" Type="String" />
+      <Parameter Name="CreatedDate" Mode="In" Type="DateTime" />
+      <Parameter Name="Reconciled" Mode="In" Type="Boolean" />
+      <Parameter Name="Person" Mode="In" Type="String" />
+    </FunctionImport>
+  </EntityContainer>
+  <EntityType Name="tdCategory">
+    <Key>
+      <PropertyRef Name="CategoryID" />
+    </Key>
+    <Property Name="CategoryID" Type="Byte" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+    <Property Name="Description" Type="String" MaxLength="128" Unicode="false" FixedLength="false" />
+  </EntityType>
+  <EntityType Name="tdType">
+    <Key>
+      <PropertyRef Name="TypeID" />
+    </Key>
+    <Property Name="TypeID" Type="Byte" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+    <Property Name="Description" Type="String" MaxLength="128" Unicode="false" FixedLength="false" />
+  </EntityType>
+  <EntityType Name="tePerson">
+    <Key>
+      <PropertyRef Name="PersonID" />
+    </Key>
+    <Property Name="PersonID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+    <Property Name="FirstName" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
+    <Property Name="LastName" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
+    <NavigationProperty Name="teTransactions" Relationship="ExpensesModel.FK_Transaction_Person" FromRole="tePerson" ToRole="teTransaction" />
+  </EntityType>
+  <EntityType Name="teTransaction">
+    <Key>
+      <PropertyRef Name="TransactionID" />
+    </Key>
+    <Property Name="TransactionID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+    <Property Name="Amount" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+    <Property Name="TransactionDesc" Type="String" Nullable="false" MaxLength="128" Unicode="false" FixedLength="false" />
+    <Property Name="TypeID" Type="Byte" Nullable="false" />
+    <Property Name="CategoryID" Type="Byte" Nullable="false" />
+    <Property Name="CreatedDt" Type="DateTime" Precision="0" />
+    <Property Name="ModifiedDt" Type="DateTime" Precision="0" />
+    <Property Name="reconciled" Type="Boolean" />
+    <Property Name="RunningTotal" Type="Decimal" Precision="19" Scale="4" />
+    <NavigationProperty Name="tePerson" Relationship="ExpensesModel.FK_Transaction_Person" FromRole="teTransaction" ToRole="tePerson" />
+  </EntityType>
+  <Association Name="FK_Transaction_Person">
+    <End Role="tePerson" Type="ExpensesModel.tePerson" Multiplicity="0..1" />
+    <End Role="teTransaction" Type="ExpensesModel.teTransaction" Multiplicity="*" />
+  </Association>
+  <EntityType Name="vTran">
+    <Key>
+      <PropertyRef Name="PersonID" />
+      <PropertyRef Name="Amount" />
+      <PropertyRef Name="TransactionDesc" />
+      <PropertyRef Name="TransactionID" />
+    </Key>
+    <Property Type="Int32" Name="PersonID" Nullable="false" />
+    <Property Type="String" Name="Name" MaxLength="511" FixedLength="false" Unicode="false" />
+    <Property Type="Decimal" Name="Amount" Nullable="false" Precision="19" Scale="4" />
+    <Property Type="String" Name="TransactionDesc" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+    <Property Type="String" Name="Type" MaxLength="128" FixedLength="false" Unicode="false" />
+    <Property Type="String" Name="Category" MaxLength="128" FixedLength="false" Unicode="false" />
+    <Property Type="DateTime" Name="CreatedDate" Precision="0" />
+    <Property Type="Int32" Name="TransactionID" Nullable="false" />
+    <Property Type="Decimal" Name="RunningTotal" Precision="19" Scale="4" />
+    <Property Type="Boolean" Name="reconciled" />
+  </EntityType>
+</Schema>
