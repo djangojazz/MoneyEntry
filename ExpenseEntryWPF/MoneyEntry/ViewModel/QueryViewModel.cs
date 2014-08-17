@@ -18,7 +18,7 @@ namespace MoneyEntry.ViewModel
     class QueryViewModel : WorkspaceViewModel, IDataErrorInfo
     {
         #region Fields
-
+        // Look at this later
         Person _Person;
         ReadOnlyCollection<Categories> _categories;
         ReadOnlyCollection<Types> _types;
