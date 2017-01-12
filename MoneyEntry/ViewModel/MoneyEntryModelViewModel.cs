@@ -43,31 +43,7 @@ namespace MoneyEntry.ViewModel
             get { return _MoneyEntry.Name; }
             set
             {
-                // WE may want this later but for now leave it out.
-
-                //if (string.Compare(value, _MoneyEntry.Name, StringComparison.CurrentCultureIgnoreCase) == 0)
-                //    return;
-                //else
-                //{
-                //    using (var transaction = new TransactionScope())
-                //    {
-                //        ee.spMoneyUpdate(
-                //            _MoneyEntry.TransactionId,
-                //            _MoneyEntry.Amount,
-                //            _MoneyEntry.TransactionDesc,
-                //            _MoneyEntry.TypeName,
-                //            _MoneyEntry.CategoryName,
-                //            _MoneyEntry.CreatedDate,
-                //            _MoneyEntry.Reconciled,
-                //            value
-                //            );
-
-                //        transaction.Complete();
-                //    }
-                //}
-
                 _MoneyEntry.Name = value;
-
                 OnPropertyChanged("Name");
             }
         }
@@ -183,6 +159,17 @@ namespace MoneyEntry.ViewModel
                 OnPropertyChanged("Type");
             }
         }
+
+        public int CategoryId
+        {
+            get { return _MoneyEntry.CategoryId; }
+            set
+            {
+                _MoneyEntry.CategoryId = value;
+                OnPropertyChanged("CategoryId");
+            }
+        }
+
 
         public string Category
         {

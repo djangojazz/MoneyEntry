@@ -24,5 +24,7 @@ namespace MoneyEntry
         public int TransactionID { get; set; }
         public Nullable<decimal> RunningTotal { get; set; }
         public Nullable<bool> reconciled { get; set; }
+        public byte TypeID { get; set; }
+        public byte CategoryID { get; set; }
     }
 }

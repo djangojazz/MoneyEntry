@@ -49,13 +49,17 @@ warning 6002: The table/view 'Expenses.dbo.vTrans' does not have a primary key d
             <PropertyRef Name="PersonID" />
             <PropertyRef Name="Amount" />
             <PropertyRef Name="TransactionDesc" />
+            <PropertyRef Name="TypeID" />
+            <PropertyRef Name="CategoryID" />
             <PropertyRef Name="TransactionID" />
           </Key>
           <Property Name="PersonID" Type="int" Nullable="false" />
           <Property Name="Name" Type="varchar" MaxLength="511" />
           <Property Name="Amount" Type="money" Nullable="false" />
           <Property Name="TransactionDesc" Type="varchar" MaxLength="128" Nullable="false" />
+          <Property Name="TypeID" Type="tinyint" Nullable="false" />
           <Property Name="Type" Type="varchar" MaxLength="128" />
+          <Property Name="CategoryID" Type="tinyint" Nullable="false" />
           <Property Name="Category" Type="varchar" MaxLength="128" />
           <Property Name="CreatedDate" Type="date" />
           <Property Name="TransactionID" Type="int" Nullable="false" />
@@ -108,7 +112,9 @@ warning 6002: The table/view 'Expenses.dbo.vTrans' does not have a primary key d
 [vTrans].[Name] AS [Name], 
 [vTrans].[Amount] AS [Amount], 
 [vTrans].[TransactionDesc] AS [TransactionDesc], 
+[vTrans].[TypeID] AS [TypeID], 
 [vTrans].[Type] AS [Type], 
+[vTrans].[CategoryID] AS [CategoryID], 
 [vTrans].[Category] AS [Category], 
 [vTrans].[CreatedDate] AS [CreatedDate], 
 [vTrans].[TransactionID] AS [TransactionID], 
@@ -170,6 +176,8 @@ FROM [dbo].[vTrans] AS [vTrans]</DefiningQuery>
             <PropertyRef Name="Amount" />
             <PropertyRef Name="TransactionDesc" />
             <PropertyRef Name="TransactionID" />
+            <PropertyRef Name="TypeID" />
+            <PropertyRef Name="CategoryID" />
           </Key>
           <Property Name="PersonID" Type="Int32" Nullable="false" />
           <Property Name="Name" Type="String" MaxLength="511" FixedLength="false" Unicode="false" />
@@ -181,6 +189,8 @@ FROM [dbo].[vTrans] AS [vTrans]</DefiningQuery>
           <Property Name="TransactionID" Type="Int32" Nullable="false" />
           <Property Name="RunningTotal" Type="Decimal" Precision="19" Scale="4" />
           <Property Name="reconciled" Type="Boolean" />
+          <Property Name="TypeID" Type="Byte" Nullable="false" />
+          <Property Name="CategoryID" Type="Byte" Nullable="false" />
         </EntityType>
         <Association Name="FK_Transaction_Person">
           <End Role="tePerson" Type="Self.tePerson" Multiplicity="0..1" />
@@ -275,6 +285,8 @@ FROM [dbo].[vTrans] AS [vTrans]</DefiningQuery>
           <EntitySetMapping Name="vTrans">
             <EntityTypeMapping TypeName="ExpensesModel.vTrans">
               <MappingFragment StoreEntitySet="vTrans">
+                <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
+                <ScalarProperty Name="TypeID" ColumnName="TypeID" />
                 <ScalarProperty Name="PersonID" ColumnName="PersonID" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Amount" ColumnName="Amount" />
