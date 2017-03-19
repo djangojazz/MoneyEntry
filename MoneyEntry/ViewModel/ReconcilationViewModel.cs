@@ -23,14 +23,14 @@ namespace MoneyEntry.ViewModel
         ReadOnlyCollection<Types> _types;
         ObservableCollection<MoneyEntryModelViewModel> _moneyentries;
         
-        RelayCommand _SaveCommand;
+        //RelayCommand _SaveCommand;
         RelayCommand _RefreshCommand;
 
         bool _isSelected;
         string _Desc;
         decimal _MoneyAmount;
         string _CurrentCategory;
-        DateTime _MoneyEntry;
+        //DateTime _MoneyEntry;
         DateTime _RefreshStart;
         DateTime _RefreshEnd;
 
@@ -42,10 +42,7 @@ namespace MoneyEntry.ViewModel
 
         public ReconcilationViewModel(Person person)
         {
-            if (person == null)
-                throw new ArgumentNullException("person");
-
-            _Person = person;
+            _Person = person ?? throw new ArgumentNullException("person");
             CurrentType = "Debit";
             var lastreconciledate = ee.vTrans
                                     .Where(n => n.PersonID == _Person.PersonId && n.reconciled == true)

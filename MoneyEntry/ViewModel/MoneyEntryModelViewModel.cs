@@ -14,7 +14,7 @@ namespace MoneyEntry.ViewModel
         ExpensesEntities ee = new ExpensesEntities();
 
         private readonly MoneyEntryModel _MoneyEntry;
-        private ObservableCollection<Type> _types;
+        //private ObservableCollection<Type> _types;
 
 
         public MoneyEntryModelViewModel(MoneyEntryModel aMoneyEntryModel)
