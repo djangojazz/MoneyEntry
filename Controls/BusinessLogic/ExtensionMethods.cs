@@ -5,7 +5,8 @@ using System.Data;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization.Formatters.Binary;
-namespace Controls.BusinessLogic
+
+namespace Controls
 {
   public static class ExtensionMethods
   {                 

@@ -1,7 +1,7 @@
 ﻿using System;     
 using System.Windows.Input;
 
-namespace Controls.BusinessLogic
+namespace Controls
 {
   public sealed class DelegateCommand<T> : ICommand
   {

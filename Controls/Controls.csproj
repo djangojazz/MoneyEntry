@@ -74,6 +74,10 @@
   <ItemGroup>
     <Compile Include="BusinessLogic\DelegateCommand.cs" />
     <Compile Include="BusinessLogic\ExtensionMethods.cs" />
+    <Compile Include="Controls\KeyboardPopup.cs" />
+    <Compile Include="Controls\MultiCheckBoxPopup.xaml.cs">
+      <DependentUpon>MultiCheckBoxPopup.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Extensions\ListView\DoubleClickBehavior.cs" />
     <Compile Include="Extensions\ListView\EnterReleaseBehavior.cs" />
     <Compile Include="Extensions\ListView\EscapeReleaseBehavior.cs" />
@@ -101,6 +105,16 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Controls\MultiCheckBoxPopup.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="styles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
