@@ -27,22 +27,17 @@ namespace Extensions.ListView
                                                                          
       if ((ClickedItem != null))
         base.ExecuteCommand(null);
-    }
-
+    }                                 
   }
 
 
   public sealed class DoubleClick
   {
-
-    //DEPENDENCY PROPERTIES
-    // Using a DependencyProperty as the backing store for Command. This enables animation, styling, binding, etc... 
     public static readonly DependencyProperty CommandProperty = DependencyProperty.RegisterAttached("Command", typeof(ICommand), typeof(DoubleClick), new PropertyMetadata(OnSetCommandCallback));
     public static readonly DependencyProperty CommandParameterProperty = DependencyProperty.RegisterAttached("CommandParameter", typeof(object), typeof(DoubleClick), new PropertyMetadata(OnSetCommandParameterCallback));
 
     public static readonly DependencyProperty DoubleClickBehaviorProperty = DependencyProperty.RegisterAttached("SelectedIndexChangedBehavior", typeof(DoubleClickBehavior), typeof(DoubleClick), null);
-
-    //METHODS
+              
     private static DoubleClickBehavior GetOrCreateBehavior(System.Windows.Controls.ListView element)
     {
       DoubleClickBehavior behavior = element.GetValue(DoubleClickBehaviorProperty) as DoubleClickBehavior;
@@ -102,8 +97,6 @@ namespace Extensions.ListView
     public static void SetDoubleClickBehavior(DependencyObject obj, DoubleClickBehavior value)
     {
       obj.SetValue(DoubleClickBehaviorProperty, value);
-    }
-
-  }
-
+    }  
+  }  
 }

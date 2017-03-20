@@ -75,6 +75,9 @@
     <Compile Include="BusinessLogic\DelegateCommand.cs" />
     <Compile Include="BusinessLogic\ExtensionMethods.cs" />
     <Compile Include="Extensions\ListView\DoubleClickBehavior.cs" />
+    <Compile Include="Extensions\ListView\EnterReleaseBehavior.cs" />
+    <Compile Include="Extensions\ListView\EscapeReleaseBehavior.cs" />
+    <Compile Include="Extensions\ListView\SelectionChangeBehavior.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
