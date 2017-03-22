@@ -78,6 +78,9 @@
     <Compile Include="Controls\MultiCheckBoxPopup.xaml.cs">
       <DependentUpon>MultiCheckBoxPopup.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\SearchCombo.xaml.cs">
+      <DependentUpon>SearchCombo.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Extensions\ListView\DoubleClickBehavior.cs" />
     <Compile Include="Extensions\ListView\EnterReleaseBehavior.cs" />
     <Compile Include="Extensions\ListView\EscapeReleaseBehavior.cs" />
@@ -108,6 +111,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="Controls\MultiCheckBoxPopup.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\SearchCombo.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

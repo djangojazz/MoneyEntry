@@ -1,7 +1,6 @@
 ﻿using System.Windows.Input;
 using System.Windows;
-using Prism.Interactivity;
-using System.Windows;
+using Prism.Interactivity;   
 using System.Windows.Controls;
 
 namespace Extensions.ListView
