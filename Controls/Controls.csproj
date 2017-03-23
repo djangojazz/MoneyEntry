@@ -74,8 +74,10 @@
   <ItemGroup>
     <Compile Include="BusinessLogic\DelegateCommand.cs" />
     <Compile Include="BusinessLogic\ExtensionMethods.cs" />
+    <Compile Include="Charting\Charts\BaseChart.cs" />
     <Compile Include="Charting\Models\PlotPoint.cs" />
     <Compile Include="Charting\Models\PlotPoints.cs" />
+    <Compile Include="Charting\Models\PlotTrend.cs" />
     <Compile Include="Controls\KeyboardPopup.cs" />
     <Compile Include="Controls\MultiCheckBoxPopup.xaml.cs">
       <DependentUpon>MultiCheckBoxPopup.xaml</DependentUpon>
