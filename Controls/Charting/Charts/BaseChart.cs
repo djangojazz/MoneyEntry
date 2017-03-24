@@ -1,9 +1,5 @@
 ﻿using Controls.Types;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Data;
-using System.Diagnostics;
+using System;      
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -14,16 +10,14 @@ using System.Windows.Threading;
 namespace Controls.Charting
 {
   public abstract class BaseChart : UserControl
-  {
-
-
+  {          
     private TimeSpan _defaultTimeSpan = new TimeSpan(1000);
 
     internal DispatcherTimer Timer = new DispatcherTimer();
     public BaseChart()
     {
       Timer.Interval = _defaultTimeSpan;
-      FontType = FontType != null ? FontType : new FontFamily("Segoe UI");
+      FontType = FontType ?? new FontFamily("Segoe UI");
     }
 
     #region "Dependent Properties"
@@ -277,7 +271,7 @@ namespace Controls.Charting
 
     protected virtual void DrawYAxis(Canvas partCanvasYTicks, Canvas partCanvasYLabels, double yCeiling, double yFloor, double viewHeight, double labelHeight)
     {
-      dynamic segment = ((yCeiling - yFloor) / YNumberOfTicks);
+      var segment = ((yCeiling - yFloor) / YNumberOfTicks);
       partCanvasYTicks.Children.RemoveRange(0, partCanvasYTicks.Children.Count);
       partCanvasYLabels.Children.RemoveRange(0, partCanvasYLabels.Children.Count);
 
@@ -290,55 +284,52 @@ namespace Controls.Charting
         StrokeThickness = 2,
         Stroke = Brushes.Black
       });
-
-
+                    
       //Sizing should be done from the ceiling
-      dynamic lastText = YValueConverter == null ? yCeiling.ToString() : (string)YValueConverter.Convert(yCeiling, typeof(string), null, System.Globalization.CultureInfo.InvariantCulture);
-      dynamic spacingForText = lastText.Count;
-      dynamic fontSize = 0;
-      dynamic finalSpacing = 0;
-      dynamic lastSpaceFactor = 0;
+      var lastText = YValueConverter == null ? yCeiling.ToString() : (string)YValueConverter.Convert(yCeiling, typeof(string), null, System.Globalization.CultureInfo.InvariantCulture);
+      var spacingForText = lastText.Length;
+      var fontSize = 0.0;
+      var finalSpacing = 0.0;
+      var lastSpaceFactor = 0.0;
 
-      switch (spacingForText)
+      if (spacingForText == 7)
       {
-        case  // ERROR: Case labels with binary operators are unsupported : LessThanOrEqual
-  7:
-          fontSize = 30;
-          finalSpacing = spacingForText * 0.3;
-          lastSpaceFactor = finalSpacing * 1.2;
-          break;
-        case  // ERROR: Case labels with binary operators are unsupported : LessThanOrEqual
-  9:
-          fontSize = 24;
-          finalSpacing = spacingForText * 0.5;
-          lastSpaceFactor = finalSpacing * 1.5;
-          break;
-        case  // ERROR: Case labels with binary operators are unsupported : LessThanOrEqual
-  11:
-          fontSize = 18;
-          finalSpacing = spacingForText * 0.68;
-          lastSpaceFactor = finalSpacing * 1.45;
-          break;
-        case  // ERROR: Case labels with binary operators are unsupported : LessThanOrEqual
-  13:
-          fontSize = 16;
-          finalSpacing = spacingForText * 0.7;
-          lastSpaceFactor = finalSpacing * 1.44;
-          break;
-        default:
-          fontSize = 14;
-          finalSpacing = spacingForText * 0.7;
-          lastSpaceFactor = finalSpacing * 1.44;
-          break;
+        fontSize = 30;
+        finalSpacing = spacingForText * 0.3;
+        lastSpaceFactor = finalSpacing * 1.2;
       }
-
+      else if (spacingForText == 9)
+      {
+        fontSize = 24;
+        finalSpacing = spacingForText * 0.5;
+        lastSpaceFactor = finalSpacing * 1.5;
+      }
+      else if (spacingForText == 11)
+      {
+        fontSize = 18;
+        finalSpacing = spacingForText * 0.68;
+        lastSpaceFactor = finalSpacing * 1.45;
+      }
+      else if (spacingForText == 13)
+      {
+        fontSize = 16;
+        finalSpacing = spacingForText * 0.7;
+        lastSpaceFactor = finalSpacing * 1.44;
+      }
+      else if (spacingForText == 14)
+      {
+        fontSize = 14;
+        finalSpacing = spacingForText * 0.7;
+        lastSpaceFactor = finalSpacing * 1.44;
+      }
+     
       for (int i = 0; i <= YNumberOfTicks; i++)
       {
-        dynamic ySegment = i == 0 ? 0 : i * (viewHeight / YNumberOfTicks);
-        dynamic ySegmentLabel = i == 0 ? yFloor : yFloor + (i * segment);
-        dynamic textForLabel = new string(YValueConverter == null ? ySegmentLabel.ToString : YValueConverter.Convert(ySegmentLabel, typeof(string), null, System.Globalization.CultureInfo.InvariantCulture));
+        var ySegment = i == 0 ? 0 : i * (viewHeight / YNumberOfTicks);
+        var ySegmentLabel = i == 0 ? yFloor : yFloor + (i * segment);
+        var textForLabel = YValueConverter == null ? ySegmentLabel.ToString() : (string)YValueConverter.Convert(ySegmentLabel, typeof(string), null, System.Globalization.CultureInfo.InvariantCulture);
 
-        dynamic lineSegment = new Line
+        var lineSegment = new Line
         {
           X1 = 0,
           X2 = labelHeight,
@@ -349,7 +340,7 @@ namespace Controls.Charting
         };
         partCanvasYTicks.Children.Add(lineSegment);
 
-        dynamic labelSegment = new TextBlock
+        var labelSegment = new TextBlock
         {
           Text = textForLabel,
           FontSize = fontSize,
@@ -362,7 +353,7 @@ namespace Controls.Charting
 
     protected virtual void DrawXAxis(Canvas partCanvasXTicks, Canvas partCanvasXLabels, double xCeiling, double xFloor, int xTicks, double viewWidth, double labelHeight)
     {
-      dynamic segment = ((xCeiling - xFloor) / xTicks);
+      var segment = ((xCeiling - xFloor) / xTicks);
       partCanvasXTicks.Children.RemoveRange(0, partCanvasXTicks.Children.Count);
       partCanvasXLabels.Children.RemoveRange(0, partCanvasXLabels.Children.Count);
 
@@ -377,54 +368,52 @@ namespace Controls.Charting
       });
 
       //Sizing should be done from the ceiling
-      dynamic lastText = GetXSegmentText(xCeiling.ToString());
+      var lastText = GetXSegmentText(xCeiling.ToString());
 
-      dynamic spacingForText = lastText.Count * 6;
-      dynamic totalLength = spacingForText * xTicks;
-      dynamic fontSize = 0;
-      dynamic finalSpacing = 0;
-      dynamic lastSpaceFactor = 0;
+      var spacingForText = lastText.Length * 6;
+      var totalLength = spacingForText * xTicks;
+      var fontSize = 0;
+      var finalSpacing = 0.0;
+      var lastSpaceFactor = 0.0;
 
-      switch (totalLength)
+      if (totalLength == 200)
       {
-        case  // ERROR: Case labels with binary operators are unsupported : LessThanOrEqual
-  200:
-          fontSize = 30;
-          finalSpacing = spacingForText * 1.2;
-          lastSpaceFactor = finalSpacing * 2;
-          break;
-        case  // ERROR: Case labels with binary operators are unsupported : LessThanOrEqual
-  250:
-          fontSize = 20;
-          finalSpacing = spacingForText * 0.9;
-          lastSpaceFactor = finalSpacing * 1.75;
-          break;
-        case  // ERROR: Case labels with binary operators are unsupported : LessThanOrEqual
-  500:
-          fontSize = 16;
-          finalSpacing = spacingForText * 0.6;
-          lastSpaceFactor = finalSpacing * 2;
-          break;
-        case  // ERROR: Case labels with binary operators are unsupported : LessThanOrEqual
-  750:
-          fontSize = 12;
-          finalSpacing = spacingForText * 0.45;
-          lastSpaceFactor = finalSpacing * 1.8;
-          break;
-        default:
-          fontSize = 8;
-          finalSpacing = spacingForText * 0.3;
-          lastSpaceFactor = finalSpacing * 2;
-          break;
+        fontSize = 30;
+        finalSpacing = spacingForText * 1.2;
+        lastSpaceFactor = finalSpacing * 2;
+      }
+      else if (totalLength == 250)
+      {
+        fontSize = 20;
+        finalSpacing = spacingForText * 0.9;
+        lastSpaceFactor = finalSpacing * 1.75;
+      }
+      else if (totalLength == 500)
+      {
+        fontSize = 16;
+        finalSpacing = spacingForText * 0.6;
+        lastSpaceFactor = finalSpacing * 2;
+      }
+      else if (totalLength == 750)
+      {
+        fontSize = 12;
+        finalSpacing = spacingForText * 0.45;
+        lastSpaceFactor = finalSpacing * 1.8;
+      }
+      else
+      {
+        fontSize = 8;
+        finalSpacing = spacingForText * 0.3;
+        lastSpaceFactor = finalSpacing * 2;
       }
 
       for (int i = 0; i <= xTicks; i++)
       {
-        dynamic xSegment = i == 0 ? 0 : i * (viewWidth / xTicks);
-        dynamic xSegmentLabel = i == 0 ? xFloor : xFloor + (i * segment);
-        dynamic textForLabel = GetXSegmentText(xSegmentLabel);
+        var xSegment = i == 0 ? 0 : i * (viewWidth / xTicks);
+        var xSegmentLabel = i == 0 ? xFloor : xFloor + (i * segment);
+        var textForLabel = GetXSegmentText(xSegmentLabel.ToString());
 
-        dynamic lineSegment = new Line
+        var lineSegment = new Line
         {
           X1 = xSegment,
           X2 = xSegment,
@@ -435,7 +424,7 @@ namespace Controls.Charting
         };
         partCanvasXTicks.Children.Add(lineSegment);
 
-        dynamic labelSegment = new TextBlock
+        var labelSegment = new TextBlock
         {
           Text = textForLabel,
           FontSize = fontSize,
@@ -452,15 +441,15 @@ namespace Controls.Charting
       {                         
         if (t.Points != null)
         {
-          dynamic xFactor = (viewWidth / (xCeiling - xFloor));
-          dynamic yFactor = (viewHeight / (yCeiling - yFloor));
+          var xFactor = (viewWidth / (xCeiling - xFloor));
+          var yFactor = (viewHeight / (yCeiling - yFloor));
 
           xFactor = double.IsNaN(xFactor) || double.IsInfinity(xFactor) ? 1 : xFactor;
           yFactor = double.IsNaN(yFactor) || double.IsInfinity(yFactor) ? 1 : yFactor;
 
           for (int i = 1; i <= t.Points.Count - 1; i++)
           { 
-            dynamic toDraw = new Line
+            var toDraw = new Line
             {  
               X1 = (t.Points[i - 1].XAsDouble - xFloor) * xFactor,
               Y1 = (t.Points[i - 1].YAsDouble - yFloor) * yFactor,

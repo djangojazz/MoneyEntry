@@ -75,6 +75,10 @@
     <Compile Include="BusinessLogic\DelegateCommand.cs" />
     <Compile Include="BusinessLogic\ExtensionMethods.cs" />
     <Compile Include="Charting\Charts\BaseChart.cs" />
+    <Compile Include="Charting\Charts\testinherit.cs" />
+    <Compile Include="Charting\Charts\LineChart.xaml.cs">
+      <DependentUpon>LineChart.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Charting\Models\PlotPoint.cs" />
     <Compile Include="Charting\Models\PlotPoints.cs" />
     <Compile Include="Charting\Models\PlotTrend.cs" />
@@ -114,6 +118,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Charting\Charts\LineChart.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\MultiCheckBoxPopup.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
