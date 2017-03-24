@@ -18,7 +18,7 @@ namespace Controls.Charting
   /// <summary>
   /// Interaction logic for TestUC.xaml
   /// </summary>
-  public partial class LineChart : BaseChart
+  public partial class LineChart
   {
 
     //VARIABLES
@@ -142,60 +142,46 @@ namespace Controls.Charting
       if (ChartData.Count > 1)
       {
         //Uniformity check of X and Y types.  EG: You cannot have a DateTime and a Number for different X axis or Y axis sets.
+        if (ChartData.ToList().Select(x => x.Points[0].X.GetType()).Distinct().GroupBy(x => x).Count() > 1 || ChartData.ToList().Select(x => x.Points[0].Y.GetType()).Distinct().GroupBy(x => x).Count() > 1)
+        {
+          PART_CanvasPoints.LayoutTransform = new ScaleTransform(1, 1);
+          PART_CanvasPoints.UpdateLayout();
+          var fontFamily = FontType ?? new FontFamily("Segoe UI");
+          var stackPanel = new StackPanel();
+          stackPanel.Children.Add(new TextBlock { Text = "Type Mismatch cannot render!", FontSize = 54, FontFamily = fontFamily });
+          stackPanel.Children.Add(new TextBlock { Text = "Either the X or Y plot points are of different types.", FontSize = 32, FontFamily = fontFamily });
+          PART_CanvasPoints.Children.Add(stackPanel);
+          return;
+        }
       }
 
-      //If ChartData.Count > 1 Then
-      //  
-      //  If ChartData.ToList().Select(Function(x) x.Points(0).X.GetType).Distinct.GroupBy(Function(x) x).Count > 1 Or ChartData.ToList().Select(Function(x) x.Points(0).Y.GetType).Distinct.GroupBy(Function(x) x).Count > 1 Then
-      //    Me.PART_CanvasPoints.LayoutTransform = New ScaleTransform(1, 1)
-      //    Me.PART_CanvasPoints.UpdateLayout()
-      //    Dim fontFamily = If(Me.FontType IsNot Nothing, Me.FontType, New FontFamily("Segoe UI"))
-      //    Dim stackPanel = New StackPanel
-      //    stackPanel.Children.Add(New TextBlock With {.Text = "Type Mismatch cannot render!", .FontSize = 54, .FontFamily = fontFamily})
-      //    stackPanel.Children.Add(New TextBlock With {.Text = "Either the X or Y plot points are of different types.", .FontSize = 32, .FontFamily = fontFamily})
-      //    Me.PART_CanvasPoints.Children.Add(stackPanel)
-      //    Return
-      //  End If
-      //End If
+      PART_CanvasPoints.LayoutTransform = new ScaleTransform(1, -1);
+      PART_CanvasPoints.UpdateLayout();
 
-      //Me.PART_CanvasPoints.LayoutTransform = New ScaleTransform(1, -1)
-      //Me.PART_CanvasPoints.UpdateLayout()
+      _xFloor = ChartData.SelectMany(x => x.Points).Select(x => x.XAsDouble).OrderBy(x => x).FirstOrDefault();
+      _xCeiling = ChartData.SelectMany(x => x.Points).Select(x => x.XAsDouble).OrderByDescending(x => x).FirstOrDefault();
+      _yFloor = ChartData.SelectMany(x => x.Points).Select(x => x.YAsDouble).OrderBy(x => x).FirstOrDefault();
+      _yCeiling = ChartData.SelectMany(x => x.Points).Select(x => x.YAsDouble).OrderByDescending(x => x).FirstOrDefault();
 
-      //Me._xFloor = ChartData.SelectMany(Function(x) x.Points).Select(Function(x) x.XAsDouble).OrderBy(Function(x) x).FirstOrDefault()
-      //Me._xCeiling = ChartData.SelectMany(Function(x) x.Points).Select(Function(x) x.XAsDouble).OrderByDescending(Function(x) x).FirstOrDefault()
-      //Me._yFloor = ChartData.SelectMany(Function(x) x.Points).Select(Function(x) x.YAsDouble).OrderBy(Function(x) x).FirstOrDefault()
-      //Me._yCeiling = ChartData.SelectMany(Function(x) x.Points).Select(Function(x) x.YAsDouble).OrderByDescending(Function(x) x).FirstOrDefault()
+      PART_CanvasPoints.Children.RemoveRange(0, PART_CanvasPoints.Children.Count);
+      DrawTrends(PART_CanvasPoints, _viewWidth, _viewHeight, _xCeiling, _xFloor, _yCeiling, _yFloor);
 
-      //Me.PART_CanvasPoints.Children.RemoveRange(0, Me.PART_CanvasPoints.Children.Count)
-      //Me.DrawTrends(PART_CanvasPoints, _viewWidth, _viewHeight, _xCeiling, _xFloor, _yCeiling, _yFloor)
+      if (PART_CanvasXAxisTicks != null && PART_CanvasYAxisTicks != null)
+      {
+        if (XNumberOfTicks == 0)
+        {
+          //want at the very least to see a beginning and an end and redraw to show this.
+          XNumberOfTicks = 1;
+          var pt = ChartData[0].Points[0];
+          ChartData[0].Points.Add(pt);
+          DrawTrends(PART_CanvasPoints, _viewWidth, _viewHeight, _xCeiling, _xFloor, _yCeiling, _yFloor);
+        }
+      }
 
-      //If Me.PART_CanvasXAxisTicks IsNot Nothing And Me.PART_CanvasYAxisTicks IsNot Nothing Then
-      //  If Me.XNumberOfTicks = 0 Then
-      //    'I want at the very least to see a beginning and an end and redraw to show this.
-      //    Me.XNumberOfTicks = 1
-      //    Dim pt = ChartData(0).Points(0)
-      //    ChartData(0).Points.Add(pt)
-      //    Me.DrawTrends(PART_CanvasPoints, _viewWidth, _viewHeight, _xCeiling, _xFloor, _yCeiling, _yFloor)
-      //  End If
-      //  Me.DrawXAxis(PART_CanvasXAxisTicks, PART_CanvasXAxisLabels, _xCeiling, _xFloor, XNumberOfTicks, _viewWidth, _labelHeight)
-      //  Me.DrawYAxis(PART_CanvasYAxisTicks, PART_CanvasYAxisLabels, _yCeiling, _yFloor, _viewHeight, _labelHeight)
-      //End If
+      DrawXAxis(PART_CanvasXAxisTicks, PART_CanvasXAxisLabels, _xCeiling, _xFloor, XNumberOfTicks, _viewWidth, _labelHeight);
+      DrawYAxis(PART_CanvasYAxisTicks, PART_CanvasYAxisLabels, _yCeiling, _yFloor, _viewHeight, _labelHeight);
     }
 
-    //public override void OnTick(object o)
-    //{
-    //  throw new NotImplementedException();
-    //}
-
-    //public override void ResizeAndPlotPoints(object o)
-    //{
-    //  throw new NotImplementedException();
-    //}
-
-    //public override void Resized()
-    //{
-    //  throw new NotImplementedException();
-    //}
     private void ClearCanvasOfAllData()
     {
       PART_CanvasPoints.Children.Clear();
@@ -204,6 +190,6 @@ namespace Controls.Charting
       PART_CanvasYAxisLabels.Children.Clear();
       PART_CanvasYAxisTicks.Children.Clear();
     }
-#endregion
+    #endregion
   }
 }
