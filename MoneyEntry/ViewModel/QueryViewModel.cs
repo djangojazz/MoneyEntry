@@ -20,7 +20,7 @@ namespace MoneyEntry.ViewModel
         #region Fields
 
         Person _Person;
-        ReadOnlyCollection<Categories> _categories;
+        ReadOnlyCollection<Category> _categories;
         ReadOnlyCollection<Types> _types;
         ObservableCollection<MoneyEntryModelViewModel> _moneyentries;
 
@@ -181,23 +181,23 @@ namespace MoneyEntry.ViewModel
         #endregion
 
         #region Category related
-        public ReadOnlyCollection<Categories> Categories
+        public ReadOnlyCollection<Category> Categories
         {
             get
             {
                 if (_categories == null)
                 {
-                    List<Categories> cats = this.GetCategories();
-                    _categories = new ReadOnlyCollection<Categories>(cats);
+                    List<Category> cats = this.GetCategories();
+                    _categories = new ReadOnlyCollection<Category>(cats);
                 }
                 return _categories;
             }
         }
 
-        List<Categories> GetCategories()
+        List<Category> GetCategories()
         {
             //ExpensesEntities ee = new ExpensesEntities();
-            return ee.tdCategory.Select(x => new Categories()
+            return ee.tdCategory.Select(x => new Category()
             {
                 CategoryId = x.CategoryID,
                 CategoryName = x.Description

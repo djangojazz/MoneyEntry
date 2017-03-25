@@ -13,7 +13,9 @@
       <RowDefinition Height="Auto" />
     </Grid.RowDefinitions>
     <Grid>
-      <cntrls:MultiCheckBoxPopup ItemsCollection="{Binding Categories}" ScrollingHeight="300"  />
+      <cntrls:MultiCheckBoxPopup ItemsCollection="{Binding Categories}" 
+                                 ScrollingHeight="300"  
+                                 Header="{Binding CategoryHeader}" />
     </Grid>
     
     <Button Grid.Row="1" Command="{Binding TestCommand}" Content="Test" />
