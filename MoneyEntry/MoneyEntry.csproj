@@ -125,12 +125,16 @@
       <DependentUpon>Expenses.tt</DependentUpon>
     </Compile>
     <Compile Include="ViewModel\CategoryViewModel.cs" />
+    <Compile Include="ViewModel\ChartViewModel.cs" />
     <Compile Include="ViewModel\MoneyEntryModelViewModel.cs" />
     <Compile Include="ViewModel\MoneyEntryViewModel.cs" />
     <Compile Include="ViewModel\QueryViewModel.cs" />
     <Compile Include="ViewModel\ReconcilationViewModel.cs" />
     <Compile Include="View\CategoryView.xaml.cs">
       <DependentUpon>CategoryView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ChartView.xaml.cs">
+      <DependentUpon>ChartView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\MoneyEntryView.xaml.cs">
       <DependentUpon>MoneyEntryView.xaml</DependentUpon>
@@ -216,6 +220,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="View\ChartView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\CustomerView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -252,6 +260,12 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Controls\Controls.csproj">
+      <Project>{0bf98ebe-cfba-41da-8c80-62b282072193}</Project>
+      <Name>Controls</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

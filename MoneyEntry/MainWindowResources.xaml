@@ -18,6 +18,9 @@ This resource dictionary is used by the MainWindow.
 <DataTemplate DataType="{x:Type vm:CategoryViewModel}">
     <vw:CategoryView/>
 </DataTemplate>
+  <DataTemplate DataType="{x:Type vm:ChartViewModel}">
+    <vw:ChartView/>
+  </DataTemplate>
 
 <Style TargetType="{x:Type Border}">
     <Setter Property="Background" Value="{StaticResource MoneyBrush}" />
@@ -57,7 +60,7 @@ This resource dictionary is used by the MainWindow.
     Background="White"
     VerticalContentAlignment="Bottom"
     Width="16" Height="16" />
-    <Label Content="{Binding Path=DisplayName}" 
+    <Label Content="{Binding DisplayName}" 
         VerticalAlignment="Center"
         Foreground="{StaticResource ButtonBrush}"
         FontSize="16" />
@@ -77,9 +80,6 @@ This resource dictionary is used by the MainWindow.
     />
 </DataTemplate>
 
-
-    
-    
 <Style x:Key="largeCalender" TargetType="{x:Type Calendar}">
     <Setter Property="Template">
         <Setter.Value>

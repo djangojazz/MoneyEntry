@@ -37,8 +37,7 @@ namespace MoneyEntry.ViewModel
             get { return _Desc; }
             set
             {
-                _Desc = value;
-
+                _Desc = value;          
                 OnPropertyChanged("Desc");
             }
         }

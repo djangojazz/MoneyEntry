@@ -40,22 +40,18 @@
                 <Border Margin="5" >
                     <ComboBox Margin="10" x:Name="combopersons"
                     FontSize="20"
-                    ItemsSource="{Binding Path=People}"
+                    ItemsSource="{Binding People}"
                     DisplayMemberPath="FirstName"
                     SelectedValuePath="PersonId"
                     SelectedValue="{Binding Path=CurrentUser}"
                     Foreground="{StaticResource FontBrush}">
                     </ComboBox>
                 </Border>
-                <HeaderedContentControl
-          Content="{Binding Path=Commands}"
-          ContentTemplate="{StaticResource CommandsTemplate}" />
+                <HeaderedContentControl Content="{Binding Commands}" ContentTemplate="{StaticResource CommandsTemplate}" />
             </StackPanel>
         </Border>
       <Border Grid.Column="1" Grid.Row="1" >
-        <HeaderedContentControl 
-          Content="{Binding Path=Workspaces}"
-          ContentTemplate="{StaticResource WorkspacesTemplate}" />
+        <HeaderedContentControl  Content="{Binding Workspaces}" ContentTemplate="{StaticResource WorkspacesTemplate}" />
       </Border>  
     </Grid>
 </Window>

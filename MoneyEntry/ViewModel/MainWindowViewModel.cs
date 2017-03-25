@@ -119,17 +119,11 @@ namespace MoneyEntry.ViewModel
         {
             return new List<CommandViewModel>
             {
-                new CommandViewModel("Add Category",
-                    new RelayCommand(param => this.Categories())),
-
-                new CommandViewModel("MoneyEntry", 
-                    new RelayCommand(param => this.MoneyEntry())),
-
-                new CommandViewModel("Reconciliation",
-                    new RelayCommand(param => this.Reconciliation())),
-
-                new CommandViewModel("Search",
-                    new RelayCommand(param => this.Query()))
+                new CommandViewModel("Add Category", new RelayCommand(param => this.Categories())),
+                new CommandViewModel("MoneyEntry",   new RelayCommand(param => this.MoneyEntry())),
+                new CommandViewModel("Reconciliation", new RelayCommand(param => this.Reconciliation())),
+                new CommandViewModel("Search",  new RelayCommand(param => this.Query())),
+                new CommandViewModel("Charting",  new RelayCommand(param => this.Chart())),
             };
         }
 
@@ -281,8 +275,16 @@ namespace MoneyEntry.ViewModel
             this.SetActiveWorkspace(category);
         }
 
+        private void Chart()
+        {
+          SetCurrentUser();
+          ChartViewModel chart = new ChartViewModel(_currentPerson);
+          this.Workspaces.Add(chart);
+          this.SetActiveWorkspace(chart);
+        }
 
-        void SetActiveWorkspace(WorkspaceViewModel workspace)
+
+    void SetActiveWorkspace(WorkspaceViewModel workspace)
         {
             Debug.Assert(this.Workspaces.Contains(workspace));
 
