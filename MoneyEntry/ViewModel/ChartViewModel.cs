@@ -4,13 +4,15 @@ using System.ComponentModel;
 using System;
 using System.Windows;
 using System.Windows.Input;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace MoneyEntry.ViewModel
 {
   public class ChartViewModel : WorkspaceViewModel
   {
     Person _Person;
-    ObservableCollection<tdCategory> _categories;
+    IEnumerable<tdCategory> _categories;
 
     RelayCommand _testCommand;
 
@@ -21,9 +23,12 @@ namespace MoneyEntry.ViewModel
 
     public ChartViewModel(Person person)
     {
-      _Person = person;                                  
+      _Person = person;   
+      Categories = ee.tdCategory.ToList();
     }
 
+    public IEnumerable<tdCategory> Categories { get; }
+  
     public ICommand TestCommand
     {
       get

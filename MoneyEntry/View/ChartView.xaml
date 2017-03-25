@@ -13,8 +13,7 @@
       <RowDefinition Height="Auto" />
     </Grid.RowDefinitions>
     <Grid>
-      <TextBlock Text="Chart" FontSize="42" />
-      
+      <cntrls:MultiCheckBoxPopup ItemsCollection="{Binding Categories}" ScrollingHeight="300"  />
     </Grid>
     
     <Button Grid.Row="1" Command="{Binding TestCommand}" Content="Test" />

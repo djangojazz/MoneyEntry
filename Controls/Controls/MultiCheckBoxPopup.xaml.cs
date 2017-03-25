@@ -24,11 +24,11 @@ namespace Controls
 
     #region "scrollingheight"
 
-    public static readonly DependencyProperty scrollingheightproperty = DependencyProperty.Register("scrollingheight", typeof(int), typeof(MultiCheckBoxPopup), new PropertyMetadata(400));
-    public int scrollingheight
+    public static readonly DependencyProperty ScrollingHeightproperty = DependencyProperty.Register("ScrollingHeight", typeof(int), typeof(MultiCheckBoxPopup), new PropertyMetadata(400));
+    public int ScrollingHeight
     {
-      get { return (int)GetValue(scrollingheightproperty); }
-      set { SetValue(scrollingheightproperty, value); }
+      get { return (int)GetValue(ScrollingHeightproperty); }
+      set { SetValue(ScrollingHeightproperty, value); }
     }
     #endregion                                                        s
 

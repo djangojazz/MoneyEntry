@@ -9,12 +9,17 @@
 
 namespace MoneyEntry
 {
-    using System;
-    using System.Collections.Generic;
-    
-    public partial class tdCategory
+  using System;
+  using System.Collections.Generic;
+
+  public partial class tdCategory
+  {
+    public byte CategoryID { get; set; }
+    public string Description { get; set; }
+
+    public override string ToString()
     {
-        public byte CategoryID { get; set; }
-        public string Description { get; set; }
+      return Description;
     }
+  }
 }
