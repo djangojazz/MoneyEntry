@@ -1,26 +1,19 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Linq;       
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
+using System.Windows.Controls;  
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace Controls.Charting
 {
   /// <summary>
-  /// Interaction logic for TestUC.xaml
+  /// Interaction logic for BarChart.xaml
   /// </summary>
-  public partial class LineChart
+  public partial class BarChart
   {
-
     //VARIABLES
     private double _xFloor = 0;
     private double _xCeiling = 0;
@@ -30,30 +23,27 @@ namespace Controls.Charting
     private double _viewWidth = 0;
     private double _tickWidth = 0;
     private double _tickHeight = 0;
-    private double _labelWidth = 0;  
+    private double _labelWidth = 0;
     private double _labelHeight = 0;
+    private int _xNumberOfTicks = 0;
+    private List<double> _explicitTicks;
 
     private double Ratio
     {
-      get { return PART_CanvasBorder.ActualHeight / PART_CanvasBorder.ActualWidth; }
+      get => PART_CanvasBorder.ActualHeight / PART_CanvasBorder.ActualWidth;
     }
-
-    public LineChart()
+                                                                            
+    private double SegmentLength
+    {
+      get => _viewWidth / _xNumberOfTicks;
+    }
+                     
+    public BarChart()
     {
       InitializeComponent();
       Part_Layout.DataContext = this;
     }
-
-    #region "XNumberOfTicks"
-
-    public static readonly DependencyProperty XNumberOfTicksProperty = DependencyProperty.Register(nameof(XNumberOfTicks), typeof(int), typeof(LineChart), new UIPropertyMetadata(0));
-    public int XNumberOfTicks
-    {
-      get { return (int)GetValue(XNumberOfTicksProperty); }
-      set { SetValue(XNumberOfTicksProperty, value); }
-    }
-    #endregion
-
+           
     #region "DataChangedAndTimingEvents"
     public override void OnTick(object o)
     {
@@ -73,9 +63,16 @@ namespace Controls.Charting
     {
       SetupInternalHeightAndWidths();
       SetupHeightAndWidthsOfObjects();
+      ResetTicksForSpecificDateRange();
       CalculatePlotTrends();
     }
 
+    private void ResetTicksForSpecificDateRange()
+    {
+      _explicitTicks = ChartData.SelectMany(x => x.Points).Select(x => x.XAsDouble).Distinct().OrderBy(x => x).ToList();
+      _xNumberOfTicks = _explicitTicks.Count();
+    }
+              
     private void SetupHeightAndWidthsOfObjects()
     {
       PART_CanvasYAxisLabels.Height = _viewHeight;
@@ -168,20 +165,146 @@ namespace Controls.Charting
 
       if (PART_CanvasXAxisTicks != null && PART_CanvasYAxisTicks != null)
       {
-        if (XNumberOfTicks == 0)
+        if (_xNumberOfTicks == 0)
         {
           //want at the very least to see a beginning and an end and redraw to show this.
-          XNumberOfTicks = 1;
-          var pt = ChartData[0].Points[0];
-          ChartData[0].Points.Add(pt);
-          DrawTrends(PART_CanvasPoints, _viewWidth, _viewHeight, _xCeiling, _xFloor, _yCeiling, _yFloor);
+          _xNumberOfTicks = 1;                                                                           
         }
       }
 
-      DrawXAxis(PART_CanvasXAxisTicks, PART_CanvasXAxisLabels, _xCeiling, _xFloor, XNumberOfTicks, _viewWidth, _labelHeight);
+      DrawXAxis(PART_CanvasXAxisTicks, PART_CanvasXAxisLabels, _xCeiling, 0, _xNumberOfTicks, _viewWidth, _labelHeight);
       DrawYAxis(PART_CanvasYAxisTicks, PART_CanvasYAxisLabels, _yCeiling, _yFloor, _viewHeight, _labelHeight);
     }
+    #endregion
 
+#region "Drawing Methods"
+
+    protected override void DrawXAxis(Canvas partCanvasXTicks, Canvas partCanvasXLabels, double xCeiling, double xFloor, int xTicks, double viewWidth, double labelHeight)
+    {
+      partCanvasXTicks.Children.RemoveRange(0, partCanvasXTicks.Children.Count);
+      partCanvasXLabels.Children.RemoveRange(0, partCanvasXLabels.Children.Count);
+
+      partCanvasXTicks.Children.Add(new Line
+      {
+        X1 = 0,
+        X2 = _viewWidth,
+        Y1 = 0,
+        Y2 = 0,
+        StrokeThickness = 2,
+        Stroke = Brushes.Black
+      });
+
+      //Sizing should be done from the ceiling
+      dynamic lastText = XValueConverter == null ? xCeiling.ToString() : XValueConverter.Convert(xCeiling, typeof(string), null, System.Globalization.CultureInfo.InvariantCulture);
+      dynamic spacingForText = lastText.Count * 6;
+      dynamic totalLength = spacingForText * xTicks;
+      dynamic fontSize = 0;
+      dynamic spacing = 0;
+
+      if (totalLength == 200)
+      {
+        fontSize = 30;
+        spacing = spacingForText * 1.2;
+      }
+      else if (totalLength == 250)
+      {
+        fontSize = 20;
+        spacing = spacingForText * 0.9;
+      }
+      else if (totalLength == 500)
+      {
+        fontSize = 16;
+        spacing = spacingForText * 0.6;
+      }
+      else if (totalLength == 750)
+      {
+        fontSize = 12;
+        spacing = spacingForText * 0.45;
+      }
+      else
+      {
+        fontSize = 8;
+        spacing = spacingForText * 0.3;
+      }
+        
+      for (int i = 0; i <= xTicks - 1; i++)
+      {
+        dynamic segment = GetSegment(i);
+
+        dynamic xSegmentLabel = _explicitTicks[i];
+        dynamic textForLabel = new string(XValueConverter == null ? xSegmentLabel.ToString : XValueConverter.Convert(xSegmentLabel, typeof(string), null, System.Globalization.CultureInfo.InvariantCulture));
+
+        dynamic lineSegment = new Line
+        {
+          X1 = segment,
+          X2 = segment,
+          Y1 = 0,
+          Y2 = labelHeight,
+          StrokeThickness = 2,
+          Stroke = Brushes.Black
+        };
+        partCanvasXTicks.Children.Add(lineSegment);
+
+        dynamic labelSegment = new TextBlock
+        {
+          Text = textForLabel,
+          FontSize = fontSize,
+          Margin = new Thickness(segment - spacing, 0, 0, 0)
+        };
+
+        partCanvasXLabels.Children.Add(labelSegment);
+      }
+    }
+
+    protected override void DrawTrends(Canvas partCanvas, double viewWidth, double viewHeight, double xCeiling, double xFloor, double yCeiling, double yFloor)
+    {
+      var widthOfBar = viewWidth / ((_xNumberOfTicks + 2) * ChartData.Count);
+      var yFactor = (viewHeight / (yCeiling - yFloor));
+
+      yFactor = double.IsNaN(yFactor) || double.IsInfinity(yFactor) ? 1 : yFactor;
+
+      for (int i = 0; i <= _xNumberOfTicks - 1; i++)
+      {
+        var xValue = _explicitTicks[i];
+
+        DrawTrendsFromDate(xValue, widthOfBar, yFactor, i);
+      }
+    }
+
+    private void DrawTrendsFromDate(double xSegmentValue, double widthOfBar, double yFactor, int segmentIndex)
+    {
+      ChartData.SelectMany(x => x.Points).Where(x => x.XAsDouble == xSegmentValue).Select((pnt, ind) => new {
+        YAsDouble = pnt.YAsDouble,
+        XAsDouble = pnt.XAsDouble,
+        Index = ind
+      }).ToList().ForEach(t =>
+      {
+        var segment = GetSegment(segmentIndex);
+
+        //If I have two sets or more on the same day I need to see that
+        segment = segment + t.Index > 0 ? (t.Index) * widthOfBar : 0;
+
+        var matches = ChartData.Where((x, ind) => x.Points.ToList().Exists(y => y.XAsDouble == t.XAsDouble & y.YAsDouble == t.YAsDouble));
+        var color = matches.Count() > 1 ? matches.Skip(t.Index).Take(1).First().LineColor : matches.First().LineColor;
+
+        var toDraw = new Line
+        {
+          X1 = segment,
+          Y1 = 0,
+          X2 = segment,
+          Y2 = (t.YAsDouble - _yFloor) * yFactor,
+          StrokeThickness = widthOfBar,
+          Stroke = color
+        };
+        PART_CanvasPoints.Children.Add(toDraw);
+      });
+    }
+
+    private double GetSegment(int index)
+    {
+      return (index * SegmentLength) + (SegmentLength / 2);
+    }
+                                                           
     private void ClearCanvasOfAllData()
     {
       PART_CanvasPoints.Children.Clear();

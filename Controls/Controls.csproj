@@ -74,8 +74,10 @@
   <ItemGroup>
     <Compile Include="BusinessLogic\DelegateCommand.cs" />
     <Compile Include="BusinessLogic\ExtensionMethods.cs" />
+    <Compile Include="Charting\Charts\BarChart.xaml.cs">
+      <DependentUpon>BarChart.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Charting\Charts\BaseChart.cs" />
-    <Compile Include="Charting\Charts\testinherit.cs" />
     <Compile Include="Charting\Charts\LineChart.xaml.cs">
       <DependentUpon>LineChart.xaml</DependentUpon>
     </Compile>
@@ -118,6 +120,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Charting\Charts\BarChart.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Charting\Charts\LineChart.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
