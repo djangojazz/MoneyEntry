@@ -24,5 +24,6 @@ namespace MoneyEntry.View
     {
       InitializeComponent();
     }
+              
   }
 }

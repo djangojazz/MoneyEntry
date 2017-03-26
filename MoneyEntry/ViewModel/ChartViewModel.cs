@@ -7,6 +7,8 @@ using System.Windows.Input;
 using System.Collections.Generic;
 using System.Linq;
 using Controls.Types;
+using Controls;
+using Controls.Charting;
 
 namespace MoneyEntry.ViewModel
 {
@@ -14,40 +16,31 @@ namespace MoneyEntry.ViewModel
   {
     Person _person;                     
     RelayCommand _testCommand;
-
-    private string _Desc;
-    private string _CurrentCategory;
-
-    ExpensesEntities ee = new ExpensesEntities();
-
+    private bool _loaded = false;
+                                                     
     public ChartViewModel(Person person)
     {
       _person = person;
-      Categories = ee.tdCategory.ToList().Select(x => new Category(x.CategoryID, x.Description, true)).ToList();
+      _testCommand = new RelayCommand(param => this.Test());
+
+      Categories = new ObservableCollectionContentNotifying<Category>();
+      using (var context = new ExpensesEntities())
+      {                                                                                                                               
+        Categories.ClearAndAddRange(context.tdCategory.ToList().Select(x => new Category(x.CategoryID, x.Description, false)).ToList());
+      }
+                                                                                                                                        
+      Categories.Skip(10).Take(1).First().IsUsed = true;
+      Start = DateTime.Now.Date.AddMonths(-3);
+      End = DateTime.Now;
+      UpdateHeader();                                        
     }
 
-    public Frequency[] Array
-    { 
-      get
-      {
-        return Enum.GetValues(typeof(Frequency)).Cast<Frequency>().ToArray();
-      }
-    }          
+    #region Properties
+    public Frequency[] Array { get => Enum.GetValues(typeof(Frequency)).Cast<Frequency>().ToArray(); }
 
-    public IEnumerable<Category> Categories { get; }
-  
-    public ICommand TestCommand
-    {
-      get
-      {
-        if (_testCommand == null)
-        {
-          _testCommand = new RelayCommand(param => this.Test());
-        }
-        return _testCommand;
-      }
-    }
-
+    public ObservableCollectionContentNotifying<Category> Categories { get; }
+         
+    #region OpenProperty
     private bool _open;
 
     public bool Open
@@ -56,10 +49,17 @@ namespace MoneyEntry.ViewModel
       set
       {
         _open = value;
+        if (_loaded)
+        {
+          UpdateHeader();
+        }
         OnPropertyChanged("Open");
+        _loaded = true;
       }
     }
+    #endregion
 
+    #region CategoryHeader
     private string _categoryHeader;
 
     public string CategoryHeader
@@ -71,29 +71,63 @@ namespace MoneyEntry.ViewModel
         OnPropertyChanged("CategoryHeader");
       }
     }
+    #endregion
 
+    #region Start
+    private DateTime _start;
 
-    private void UpdateHeader(object sender, ObservableCollectionContentChangedArgs e)
+    public DateTime Start
     {
-      UpdateHeader();
+      get { return _start; }
+      set
+      {
+        _start = value;
+        OnPropertyChanged("Start");
+      }
     }
+    #endregion
 
+    #region End
+    private DateTime _end;
+
+    public DateTime End
+    {
+      get { return _end; }
+      set
+      {
+        _end = value;
+        OnPropertyChanged("End");
+      }
+    }
+    #endregion
+                                                                
+    public ObservableCollectionContentNotifying<PlotTrend> ChartData;
+               
+    #endregion
+
+    #region TestCommandAndMethod
+    public ICommand TestCommand  { get => _testCommand; }
+
+    private void Test()
+    {
+      var s = String.Empty;
+      Categories.Where(x => x.IsUsed == true).ToList().ForEach(x => s += x + Environment.NewLine);
+      MessageBox.Show(s);
+    }
+    #endregion
+
+    #region Methods
     private void UpdateHeader()
     {
       var itemsSelected = Categories.Where(x => x.IsUsed == true).Select(x => x.ToString());
       var headerUpdated = itemsSelected.Any() ? string.Join(", ", itemsSelected) : "No Items";
       CategoryHeader = headerUpdated;
     }
-
-    private void Test()
-    {
-      MessageBox.Show("Test Call");
-    }
-
+        
     public override string DisplayName
     {
       get { return "Charting (" + _person.FirstName + ")"; }
     }
-                                                                
+#endregion
   }
 }

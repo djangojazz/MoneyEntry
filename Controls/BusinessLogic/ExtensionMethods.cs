@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Controls.Types;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
@@ -18,18 +19,18 @@ namespace Controls
         input.Add(o);
       }
     }
-                      
-    //public static void ClearAndAddRange<T>(this ObservableCollectionContentNotifying<T> input, IEnumerable<T> array)
-    //{
-    //  input.SuspendNotification = true;
-    //  input.Clear();    
-    //  foreach (var o in array)
-    //  {                         
-    //    input.Add(o);
-    //  }
-    //  input.SuspendNotification = false;
-    //}
-                     
+
+    public static void ClearAndAddRange<T>(this ObservableCollectionContentNotifying<T> input, IEnumerable<T> array)
+    {
+      input.SuspendNotification = true;
+      input.Clear();
+      foreach (var o in array)
+      {
+        input.Add(o);
+      }
+      input.SuspendNotification = false;
+    }
+
     public static void ClearAndAddRange<T, T2>(this IDictionary<T, T2> input, IDictionary<T, T2> dict)
     {
       input.Clear();
