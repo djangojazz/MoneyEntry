@@ -28,7 +28,10 @@ namespace MoneyEntry.ViewModel
       {                                                                                                                               
         Categories.ClearAndAddRange(context.tdCategory.ToList().Select(x => new Category(x.CategoryID, x.Description, false)).ToList());
       }
-                                                                                                                                        
+
+      var newInput = new TransactionSummationByDurationInput(3, new DateTime(2017, 1, 1), DateTime.Now, Frequency.Month, false, new int[] { 2, 10 ,17 });
+      var serialization = newInput.SerializeToXml();
+
       Categories.Skip(10).Take(1).First().IsUsed = true;
       Start = DateTime.Now.Date.AddMonths(-3);
       End = DateTime.Now;

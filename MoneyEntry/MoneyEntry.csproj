@@ -112,6 +112,7 @@
     <Compile Include="Model\Frequency.cs" />
     <Compile Include="Model\MoneyEntryModel.cs" />
     <Compile Include="Model\Person.cs" />
+    <Compile Include="Model\TransactionSummationByDurationInput.cs" />
     <Compile Include="Model\Types.cs" />
     <Compile Include="tdCategory.cs">
       <DependentUpon>Expenses.tt</DependentUpon>
