@@ -27,10 +27,7 @@ namespace MoneyEntry.ViewModel
       Start = DateTime.Now.Date.AddMonths(-2);
       End = DateTime.Now;
       Ceiling = 100;
-                              
-      var newInput = new TransactionSummationByDurationInput(_person.PersonId, Start, End, Frequency.Month, false, new int[] { 2, 10, 17 });
-      var serialization = newInput.SerializeToXml();
-
+      
       UpdateDataForCharting();
     }
 
@@ -138,13 +135,18 @@ namespace MoneyEntry.ViewModel
     {
       using (var context = new ExpensesEntities())
       {
-        var results = context.spCategoryUseOverDuration(_start, _end, 2, _person.PersonId, _ceiling).ToList();
+        var results = context.spCategoryUseOverDuration(_start, _end, 2, _person.PersonId, _ceiling).ToList().Select(x => (byte)x.CategoryID).ToArray();
         Categories.ClearAndAddRange(context.tdCategory.ToList().Select(x => new Category(x.CategoryID, x.Description, false)).ToList());
-        Categories.Where(x => results.Select(y => y.CategoryID).ToList().Contains(x.CategoryId))
+        Categories.Where(x => results.Contains(x.CategoryId))
                   .ToList()
                   .ForEach(x => x.IsUsed = true);
-      }
 
+        var newInput = new TransactionSummationByDurationInput(_person.PersonId, _start, _end, Frequency.Month, false, results);
+        var serialization = newInput.SerializeToXml();
+
+        var data = context.spTransactionSummationByDuration(serialization);
+      }
+                     
       UpdateHeader();
     }
 
