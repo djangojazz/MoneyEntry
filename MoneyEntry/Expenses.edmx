@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
   <!-- EF Runtime content -->
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="ExpensesModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+    <Schema Namespace="ExpensesModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="tdCategory">
           <Key>
             <PropertyRef Name="CategoryID" />
@@ -78,9 +78,6 @@ warning 6002: The table/view 'Expenses.dbo.vTrans' does not have a primary key d
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Function Name="fdate" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="datetime">
-          <Parameter Name="ListDate" Type="varchar" Mode="In" />
-        </Function>
         <Function Name="spCategoryLines" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="spCategoryUseOverDuration" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Start" Type="date" Mode="In" />
@@ -127,19 +124,19 @@ warning 6002: The table/view 'Expenses.dbo.vTrans' does not have a primary key d
           <EntitySet Name="teTransaction" EntityType="Self.teTransaction" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="vTrans" EntityType="Self.vTrans" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
-[vTrans].[PersonID] AS [PersonID], 
-[vTrans].[Name] AS [Name], 
-[vTrans].[Amount] AS [Amount], 
-[vTrans].[TransactionDesc] AS [TransactionDesc], 
-[vTrans].[TypeID] AS [TypeID], 
-[vTrans].[Type] AS [Type], 
-[vTrans].[CategoryID] AS [CategoryID], 
-[vTrans].[Category] AS [Category], 
-[vTrans].[CreatedDate] AS [CreatedDate], 
-[vTrans].[TransactionID] AS [TransactionID], 
-[vTrans].[RunningTotal] AS [RunningTotal], 
-[vTrans].[reconciled] AS [reconciled]
-FROM [dbo].[vTrans] AS [vTrans]</DefiningQuery>
+    [vTrans].[PersonID] AS [PersonID], 
+    [vTrans].[Name] AS [Name], 
+    [vTrans].[Amount] AS [Amount], 
+    [vTrans].[TransactionDesc] AS [TransactionDesc], 
+    [vTrans].[TypeID] AS [TypeID], 
+    [vTrans].[Type] AS [Type], 
+    [vTrans].[CategoryID] AS [CategoryID], 
+    [vTrans].[Category] AS [Category], 
+    [vTrans].[CreatedDate] AS [CreatedDate], 
+    [vTrans].[TransactionID] AS [TransactionID], 
+    [vTrans].[RunningTotal] AS [RunningTotal], 
+    [vTrans].[reconciled] AS [reconciled]
+    FROM [dbo].[vTrans] AS [vTrans]</DefiningQuery>
           </EntitySet>
           <AssociationSet Name="FK_Transaction_Person" Association="Self.FK_Transaction_Person">
             <End Role="tePerson" EntitySet="tePerson" />
@@ -149,7 +146,7 @@ FROM [dbo].[vTrans] AS [vTrans]</DefiningQuery>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
-      <Schema Namespace="ExpensesModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+      <Schema Namespace="ExpensesModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityType Name="tdCategory">
           <Key>
             <PropertyRef Name="CategoryID" />
@@ -189,28 +186,6 @@ FROM [dbo].[vTrans] AS [vTrans]</DefiningQuery>
           <Property Name="PersonID" Type="Int32" />
           <NavigationProperty Name="tePerson" Relationship="Self.FK_Transaction_Person" FromRole="teTransaction" ToRole="tePerson" />
         </EntityType>
-        <EntityType Name="vTrans">
-          <Key>
-            <PropertyRef Name="PersonID" />
-            <PropertyRef Name="Amount" />
-            <PropertyRef Name="TransactionDesc" />
-            <PropertyRef Name="TransactionID" />
-            <PropertyRef Name="TypeID" />
-            <PropertyRef Name="CategoryID" />
-          </Key>
-          <Property Name="PersonID" Type="Int32" Nullable="false" />
-          <Property Name="Name" Type="String" MaxLength="511" FixedLength="false" Unicode="false" />
-          <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
-          <Property Name="TransactionDesc" Type="String" MaxLength="128" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Type" Type="String" MaxLength="128" FixedLength="false" Unicode="false" />
-          <Property Name="Category" Type="String" MaxLength="128" FixedLength="false" Unicode="false" />
-          <Property Name="CreatedDate" Type="DateTime" Precision="0" />
-          <Property Name="TransactionID" Type="Int32" Nullable="false" />
-          <Property Name="RunningTotal" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="reconciled" Type="Boolean" />
-          <Property Name="TypeID" Type="Byte" Nullable="false" />
-          <Property Name="CategoryID" Type="Byte" Nullable="false" />
-        </EntityType>
         <Association Name="FK_Transaction_Person">
           <End Role="tePerson" Type="Self.tePerson" Multiplicity="0..1" />
           <End Role="teTransaction" Type="Self.teTransaction" Multiplicity="*" />
@@ -228,12 +203,27 @@ FROM [dbo].[vTrans] AS [vTrans]</DefiningQuery>
           <EntitySet Name="tdType" EntityType="Self.tdType" />
           <EntitySet Name="tePerson" EntityType="Self.tePerson" />
           <EntitySet Name="teTransaction" EntityType="Self.teTransaction" />
-          <EntitySet Name="vTrans" EntityType="Self.vTrans" />
           <AssociationSet Name="FK_Transaction_Person" Association="Self.FK_Transaction_Person">
             <End Role="tePerson" EntitySet="tePerson" />
             <End Role="teTransaction" EntitySet="teTransaction" />
           </AssociationSet>
           <FunctionImport Name="spCategoryLines" />
+          <FunctionImport Name="spCategoryUseOverDuration" ReturnType="Collection(ExpensesModel.spCategoryUseOverDuration_Result)">
+            <Parameter Name="Start" Mode="In" Type="DateTime" />
+            <Parameter Name="End" Mode="In" Type="DateTime" />
+            <Parameter Name="TypeId" Mode="In" Type="Int32" />
+            <Parameter Name="PersonId" Mode="In" Type="Int32" />
+            <Parameter Name="Minimum" Mode="In" Type="Decimal" />
+          </FunctionImport>
+          <FunctionImport Name="spInsertOrUpdateTransaction">
+            <Parameter Name="TransactionID" Mode="In" Type="Int32" />
+            <Parameter Name="Amount" Mode="In" Type="Decimal" />
+            <Parameter Name="TransactionDesc" Mode="In" Type="String" />
+            <Parameter Name="TypeId" Mode="In" Type="Int32" />
+            <Parameter Name="CategoryId" Mode="In" Type="Int32" />
+            <Parameter Name="CreatedDt" Mode="In" Type="DateTime" />
+            <Parameter Name="PersonID" Mode="In" Type="Int32" />
+          </FunctionImport>
           <FunctionImport Name="spMoneyEntry">
             <Parameter Name="Amount" Mode="In" Type="Decimal" />
             <Parameter Name="Description" Mode="In" Type="String" />
@@ -253,24 +243,9 @@ FROM [dbo].[vTrans] AS [vTrans]</DefiningQuery>
             <Parameter Name="Person" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="spUpdateTotals" />
-          <FunctionImport Name="spCategoryUseOverDuration" ReturnType="Collection(ExpensesModel.spCategoryUseOverDuration_Result)">
-            <Parameter Name="Start" Mode="In" Type="DateTime" />
-            <Parameter Name="End" Mode="In" Type="DateTime" />
-            <Parameter Name="TypeId" Mode="In" Type="Int32" />
-            <Parameter Name="PersonId" Mode="In" Type="Int32" />
-            <Parameter Name="Minimum" Mode="In" Type="Decimal" />
-          </FunctionImport>
-          <FunctionImport Name="spInsertOrUpdateTransaction">
-            <Parameter Name="TransactionID" Mode="In" Type="Int32" />
-            <Parameter Name="Amount" Mode="In" Type="Decimal" />
-            <Parameter Name="TransactionDesc" Mode="In" Type="String" />
-            <Parameter Name="TypeId" Mode="In" Type="Int32" />
-            <Parameter Name="CategoryId" Mode="In" Type="Int32" />
-            <Parameter Name="CreatedDt" Mode="In" Type="DateTime" />
-            <Parameter Name="PersonID" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="spTransactionSummationByDuration">
-          <Parameter Name="Xml" Mode="In" Type="String" />
+          <EntitySet Name="vTrans" EntityType="ExpensesModel.vTrans" />
+          <FunctionImport Name="spTransactionSummationByDuration" ReturnType="Collection(ExpensesModel.spTransactionSummationByDuration_Result)">
+            <Parameter Name="Xml" Mode="In" Type="String" />
           </FunctionImport>
         </EntityContainer>
         <ComplexType Name="spCategoryUseOverDuration_Result">
@@ -280,11 +255,40 @@ FROM [dbo].[vTrans] AS [vTrans]</DefiningQuery>
           <Property Type="String" Name="CategoryDesc" Nullable="true" MaxLength="128" />
           <Property Type="Decimal" Name="Amount" Nullable="true" Precision="19" />
         </ComplexType>
+        <EntityType Name="vTrans">
+          <Key>
+            <PropertyRef Name="PersonID" />
+            <PropertyRef Name="Amount" />
+            <PropertyRef Name="TransactionDesc" />
+            <PropertyRef Name="TypeID" />
+            <PropertyRef Name="CategoryID" />
+            <PropertyRef Name="TransactionID" />
+          </Key>
+          <Property Name="PersonID" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="511" FixedLength="false" Unicode="false" />
+          <Property Name="Amount" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <Property Name="TransactionDesc" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="TypeID" Type="Byte" Nullable="false" />
+          <Property Name="Type" Type="String" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="CategoryID" Type="Byte" Nullable="false" />
+          <Property Name="Category" Type="String" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="0" />
+          <Property Name="TransactionID" Type="Int32" Nullable="false" />
+          <Property Name="RunningTotal" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="reconciled" Type="Boolean" />
+        </EntityType>
+        <ComplexType Name="spTransactionSummationByDuration_Result">
+          <Property Type="Int32" Name="CategoryId" Nullable="true" />
+          <Property Type="String" Name="CategoryDesc" Nullable="true" MaxLength="128" />
+          <Property Type="String" Name="GroupName" Nullable="true" MaxLength="64" />
+          <Property Type="DateTime" Name="GroupStart" Nullable="true" />
+          <Property Type="Decimal" Name="Amount" Nullable="true" Precision="19" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
-      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="ExpensesModelStoreContainer" CdmEntityContainer="ExpensesEntities">
           <EntitySetMapping Name="tdCategory">
             <EntityTypeMapping TypeName="ExpensesModel.tdCategory">
@@ -327,28 +331,7 @@ FROM [dbo].[vTrans] AS [vTrans]</DefiningQuery>
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="vTrans">
-            <EntityTypeMapping TypeName="ExpensesModel.vTrans">
-              <MappingFragment StoreEntitySet="vTrans">
-                <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
-                <ScalarProperty Name="TypeID" ColumnName="TypeID" />
-                <ScalarProperty Name="PersonID" ColumnName="PersonID" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Amount" ColumnName="Amount" />
-                <ScalarProperty Name="TransactionDesc" ColumnName="TransactionDesc" />
-                <ScalarProperty Name="Type" ColumnName="Type" />
-                <ScalarProperty Name="Category" ColumnName="Category" />
-                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
-                <ScalarProperty Name="TransactionID" ColumnName="TransactionID" />
-                <ScalarProperty Name="RunningTotal" ColumnName="RunningTotal" />
-                <ScalarProperty Name="reconciled" ColumnName="reconciled" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="spCategoryLines" FunctionName="ExpensesModel.Store.spCategoryLines" />
-          <FunctionImportMapping FunctionImportName="spMoneyEntry" FunctionName="ExpensesModel.Store.spMoneyEntry" />
-          <FunctionImportMapping FunctionImportName="spMoneyUpdate" FunctionName="ExpensesModel.Store.spMoneyUpdate" />
-          <FunctionImportMapping FunctionImportName="spUpdateTotals" FunctionName="ExpensesModel.Store.spUpdateTotals" />
           <FunctionImportMapping FunctionImportName="spCategoryUseOverDuration" FunctionName="ExpensesModel.Store.spCategoryUseOverDuration">
             <ResultMapping>
               <ComplexTypeMapping TypeName="ExpensesModel.spCategoryUseOverDuration_Result">
@@ -361,13 +344,44 @@ FROM [dbo].[vTrans] AS [vTrans]</DefiningQuery>
             </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="spInsertOrUpdateTransaction" FunctionName="ExpensesModel.Store.spInsertOrUpdateTransaction" />
-          <FunctionImportMapping FunctionImportName="spTransactionSummationByDuration" FunctionName="ExpensesModel.Store.spTransactionSummationByDuration" />
+          <FunctionImportMapping FunctionImportName="spMoneyEntry" FunctionName="ExpensesModel.Store.spMoneyEntry" />
+          <FunctionImportMapping FunctionImportName="spMoneyUpdate" FunctionName="ExpensesModel.Store.spMoneyUpdate" />
+          <FunctionImportMapping FunctionImportName="spUpdateTotals" FunctionName="ExpensesModel.Store.spUpdateTotals" />
+          <EntitySetMapping Name="vTrans">
+            <EntityTypeMapping TypeName="ExpensesModel.vTrans">
+              <MappingFragment StoreEntitySet="vTrans">
+                <ScalarProperty Name="reconciled" ColumnName="reconciled" />
+                <ScalarProperty Name="RunningTotal" ColumnName="RunningTotal" />
+                <ScalarProperty Name="TransactionID" ColumnName="TransactionID" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="Category" ColumnName="Category" />
+                <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="TypeID" ColumnName="TypeID" />
+                <ScalarProperty Name="TransactionDesc" ColumnName="TransactionDesc" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="PersonID" ColumnName="PersonID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="spTransactionSummationByDuration" FunctionName="ExpensesModel.Store.spTransactionSummationByDuration">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="ExpensesModel.spTransactionSummationByDuration_Result">
+                <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
+                <ScalarProperty Name="CategoryDesc" ColumnName="CategoryDesc" />
+                <ScalarProperty Name="GroupName" ColumnName="GroupName" />
+                <ScalarProperty Name="GroupStart" ColumnName="GroupStart" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
   </edmx:Runtime>
   <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
-  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <Connection>
       <DesignerInfoPropertySet>
         <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
@@ -378,7 +392,7 @@ FROM [dbo].[vTrans] AS [vTrans]</DefiningQuery>
         <DesignerProperty Name="ValidateOnBuild" Value="true" />
         <DesignerProperty Name="EnablePluralization" Value="false" />
         <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
-        <DesignerProperty Name="UseLegacyProvider" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
         <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
       </DesignerInfoPropertySet>
     </Options>

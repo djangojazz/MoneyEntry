@@ -7,9 +7,6 @@
              xmlns:cntrls="clr-namespace:Controls;assembly=Controls"
              xmlns:charting="clr-namespace:Controls.Charting;assembly=Controls"
              mc:Ignorable="d" >
-  <!--<UserControl.Resources>
-    <ResourceDictionary Source="..\MainWindowResources.xaml" />
-  </UserControl.Resources>-->
   <Grid>
     <Grid.RowDefinitions>
       <RowDefinition Height="Auto"/>

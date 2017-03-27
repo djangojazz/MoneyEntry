@@ -25,10 +25,11 @@ namespace MoneyEntry.ViewModel
       _testCommand = new RelayCommand(param => this.Test());
       Categories = new ObservableCollectionContentNotifying<Category>();
       Start = DateTime.Now.Date.AddMonths(-2);
-      End = DateTime.Now;
+      End = DateTime.Now.Date;
       Ceiling = 100;
       
       UpdateDataForCharting();
+      _loaded = true;
     }
 
     #region Properties
@@ -133,8 +134,10 @@ namespace MoneyEntry.ViewModel
     #region Methods
     private void UpdateDataForCharting()
     {
+      if (!_loaded) return;
+
       using (var context = new ExpensesEntities())
-      {
+      { 
         var results = context.spCategoryUseOverDuration(_start, _end, 2, _person.PersonId, _ceiling).ToList().Select(x => (byte)x.CategoryID).ToArray();
         Categories.ClearAndAddRange(context.tdCategory.ToList().Select(x => new Category(x.CategoryID, x.Description, false)).ToList());
         Categories.Where(x => results.Contains(x.CategoryId))
@@ -144,7 +147,8 @@ namespace MoneyEntry.ViewModel
         var newInput = new TransactionSummationByDurationInput(_person.PersonId, _start, _end, Frequency.Month, false, results);
         var serialization = newInput.SerializeToXml();
 
-        var data = context.spTransactionSummationByDuration(serialization);
+        var data = context.spTransactionSummationByDuration(serialization).ToList();
+        var more = data.Select(x => x.Amount).ToList().First();
       }
                      
       UpdateHeader();
