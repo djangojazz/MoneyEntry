@@ -5,14 +5,14 @@ namespace MoneyEntry.Model
   public class Category : ViewModelBase
   {                    
     public Category() {}
-    public Category(int categoryId, string categoryName, bool isUsed)
+    public Category(byte categoryId, string categoryName, bool isUsed)
     {
       CategoryId = categoryId;
       CategoryName = categoryName;
       IsUsed = isUsed;
     }
 
-    public int CategoryId { get; set; }
+    public byte CategoryId { get; set; }
     public string CategoryName { get; set; }
 
     private bool _isUsed;

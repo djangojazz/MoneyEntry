@@ -22,6 +22,7 @@
           <ColumnDefinition Width="*"/>
           <ColumnDefinition Width="*"/>
           <ColumnDefinition Width="*"/>
+          <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
           <RowDefinition Height="Auto"/>
@@ -44,6 +45,11 @@
         <Label Grid.Row="0" Grid.Column="2" Content="EndDate: " HorizontalAlignment="Center"/>
         <Border Grid.Row="1" Grid.Column="2">
           <DatePicker Height="30" Margin="10" Foreground="{StaticResource FontBrush}" FontSize="20" SelectedDate="{Binding End}" />
+        </Border>
+
+        <Label Grid.Row="0" Grid.Column="3" Content="Minimum Money Use: " HorizontalAlignment="Center"/>
+        <Border Grid.Row="1" Grid.Column="3">
+          <TextBox Height="30" Margin="10" Foreground="{StaticResource FontBrush}" FontSize="20" Text="{Binding Ceiling}" />
         </Border>
       </Grid>
     </Border>

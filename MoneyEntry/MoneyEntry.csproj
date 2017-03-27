@@ -114,6 +114,9 @@
     <Compile Include="Model\Person.cs" />
     <Compile Include="Model\TransactionSummationByDurationInput.cs" />
     <Compile Include="Model\Types.cs" />
+    <Compile Include="spCategoryUseOverDuration_Result.cs">
+      <DependentUpon>Expenses.tt</DependentUpon>
+    </Compile>
     <Compile Include="tdCategory.cs">
       <DependentUpon>Expenses.tt</DependentUpon>
     </Compile>

@@ -10,11 +10,13 @@
 namespace MoneyEntry
 {
     using System;
-    using System.Collections.Generic;
     
-    public partial class tdCategory
+    public partial class spCategoryUseOverDuration_Result
     {
         public byte CategoryID { get; set; }
-        public string Description { get; set; }
+        public byte TypeID { get; set; }
+        public string TypeDesc { get; set; }
+        public string CategoryDesc { get; set; }
+        public Nullable<decimal> Amount { get; set; }
     }
 }

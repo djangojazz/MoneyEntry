@@ -82,6 +82,22 @@ warning 6002: The table/view 'Expenses.dbo.vTrans' does not have a primary key d
           <Parameter Name="ListDate" Type="varchar" Mode="In" />
         </Function>
         <Function Name="spCategoryLines" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="spCategoryUseOverDuration" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Start" Type="date" Mode="In" />
+          <Parameter Name="End" Type="date" Mode="In" />
+          <Parameter Name="TypeId" Type="int" Mode="In" />
+          <Parameter Name="PersonId" Type="int" Mode="In" />
+          <Parameter Name="Minimum" Type="money" Mode="In" />
+        </Function>
+        <Function Name="spInsertOrUpdateTransaction" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="TransactionID" Type="int" Mode="In" />
+          <Parameter Name="Amount" Type="money" Mode="In" />
+          <Parameter Name="TransactionDesc" Type="varchar" Mode="In" />
+          <Parameter Name="TypeId" Type="int" Mode="In" />
+          <Parameter Name="CategoryId" Type="int" Mode="In" />
+          <Parameter Name="CreatedDt" Type="datetime" Mode="In" />
+          <Parameter Name="PersonID" Type="int" Mode="In" />
+        </Function>
         <Function Name="spMoneyEntry" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Amount" Type="money" Mode="In" />
           <Parameter Name="Description" Type="varchar" Mode="In" />
@@ -99,6 +115,9 @@ warning 6002: The table/view 'Expenses.dbo.vTrans' does not have a primary key d
           <Parameter Name="CreatedDate" Type="date" Mode="In" />
           <Parameter Name="Reconciled" Type="bit" Mode="In" />
           <Parameter Name="Person" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="spTransactionSummationByDuration" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Xml" Type="xml" Mode="In" />
         </Function>
         <Function Name="spUpdateTotals" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <EntityContainer Name="ExpensesModelStoreContainer">
@@ -234,7 +253,33 @@ FROM [dbo].[vTrans] AS [vTrans]</DefiningQuery>
             <Parameter Name="Person" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="spUpdateTotals" />
+          <FunctionImport Name="spCategoryUseOverDuration" ReturnType="Collection(ExpensesModel.spCategoryUseOverDuration_Result)">
+            <Parameter Name="Start" Mode="In" Type="DateTime" />
+            <Parameter Name="End" Mode="In" Type="DateTime" />
+            <Parameter Name="TypeId" Mode="In" Type="Int32" />
+            <Parameter Name="PersonId" Mode="In" Type="Int32" />
+            <Parameter Name="Minimum" Mode="In" Type="Decimal" />
+          </FunctionImport>
+          <FunctionImport Name="spInsertOrUpdateTransaction">
+            <Parameter Name="TransactionID" Mode="In" Type="Int32" />
+            <Parameter Name="Amount" Mode="In" Type="Decimal" />
+            <Parameter Name="TransactionDesc" Mode="In" Type="String" />
+            <Parameter Name="TypeId" Mode="In" Type="Int32" />
+            <Parameter Name="CategoryId" Mode="In" Type="Int32" />
+            <Parameter Name="CreatedDt" Mode="In" Type="DateTime" />
+            <Parameter Name="PersonID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="spTransactionSummationByDuration">
+          <Parameter Name="Xml" Mode="In" Type="String" />
+          </FunctionImport>
         </EntityContainer>
+        <ComplexType Name="spCategoryUseOverDuration_Result">
+          <Property Type="Byte" Name="CategoryID" Nullable="false" />
+          <Property Type="Byte" Name="TypeID" Nullable="false" />
+          <Property Type="String" Name="TypeDesc" Nullable="true" MaxLength="128" />
+          <Property Type="String" Name="CategoryDesc" Nullable="true" MaxLength="128" />
+          <Property Type="Decimal" Name="Amount" Nullable="true" Precision="19" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -304,6 +349,19 @@ FROM [dbo].[vTrans] AS [vTrans]</DefiningQuery>
           <FunctionImportMapping FunctionImportName="spMoneyEntry" FunctionName="ExpensesModel.Store.spMoneyEntry" />
           <FunctionImportMapping FunctionImportName="spMoneyUpdate" FunctionName="ExpensesModel.Store.spMoneyUpdate" />
           <FunctionImportMapping FunctionImportName="spUpdateTotals" FunctionName="ExpensesModel.Store.spUpdateTotals" />
+          <FunctionImportMapping FunctionImportName="spCategoryUseOverDuration" FunctionName="ExpensesModel.Store.spCategoryUseOverDuration">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="ExpensesModel.spCategoryUseOverDuration_Result">
+                <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
+                <ScalarProperty Name="TypeID" ColumnName="TypeID" />
+                <ScalarProperty Name="TypeDesc" ColumnName="TypeDesc" />
+                <ScalarProperty Name="CategoryDesc" ColumnName="CategoryDesc" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="spInsertOrUpdateTransaction" FunctionName="ExpensesModel.Store.spInsertOrUpdateTransaction" />
+          <FunctionImportMapping FunctionImportName="spTransactionSummationByDuration" FunctionName="ExpensesModel.Store.spTransactionSummationByDuration" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
