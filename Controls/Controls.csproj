@@ -44,6 +44,7 @@
     <Reference Include="Microsoft.Practices.Unity.RegistrationByConvention, Version=4.0.0.0, Culture=neutral, PublicKeyToken=6d32ff45e0ccc69f, processorArchitecture=MSIL">
       <HintPath>..\MoneyEntry\packages\Unity.4.0.1\lib\net45\Microsoft.Practices.Unity.RegistrationByConvention.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="Prism, Version=6.3.0.0, Culture=neutral, PublicKeyToken=40ee6c3a2184dc59, processorArchitecture=MSIL">
       <HintPath>..\MoneyEntry\packages\Prism.Core.6.3.0\lib\net45\Prism.dll</HintPath>
     </Reference>
@@ -91,6 +92,11 @@
     <Compile Include="Controls\SearchCombo.xaml.cs">
       <DependentUpon>SearchCombo.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Converters\Converters.cs" />
+    <Compile Include="Converters\Instances\ChartAdditionalInfoAndPointMultiConverter.cs" />
+    <Compile Include="Converters\Instances\InstanceInSetToStringConverter.cs" />
+    <Compile Include="Converters\Instances\DecimalConverter.cs" />
+    <Compile Include="Converters\Instances\DateFormatConverter.cs" />
     <Compile Include="Extensions\ListView\DoubleClickBehavior.cs" />
     <Compile Include="Extensions\ListView\EnterReleaseBehavior.cs" />
     <Compile Include="Extensions\ListView\EscapeReleaseBehavior.cs" />
