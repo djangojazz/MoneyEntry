@@ -13,10 +13,11 @@ namespace MoneyEntry
     
     public partial class spTransactionSummationByDuration_Result
     {
-        public Nullable<int> CategoryId { get; set; }
-        public string CategoryDesc { get; set; }
+        public Nullable<byte> CategoryId { get; set; }
+        public string CategoryName { get; set; }
         public string GroupName { get; set; }
-        public Nullable<System.DateTime> GroupStart { get; set; }
+        public Nullable<System.DateTime> Grouping { get; set; }
+        public Nullable<int> Position { get; set; }
         public Nullable<decimal> Amount { get; set; }
     }
 }

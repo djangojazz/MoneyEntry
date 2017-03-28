@@ -38,31 +38,6 @@ namespace MoneyEntry
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("spCategoryLines");
         }
     
-        public virtual ObjectResult<spCategoryUseOverDuration_Result> spCategoryUseOverDuration(Nullable<System.DateTime> start, Nullable<System.DateTime> end, Nullable<int> typeId, Nullable<int> personId, Nullable<decimal> minimum)
-        {
-            var startParameter = start.HasValue ?
-                new ObjectParameter("Start", start) :
-                new ObjectParameter("Start", typeof(System.DateTime));
-    
-            var endParameter = end.HasValue ?
-                new ObjectParameter("End", end) :
-                new ObjectParameter("End", typeof(System.DateTime));
-    
-            var typeIdParameter = typeId.HasValue ?
-                new ObjectParameter("TypeId", typeId) :
-                new ObjectParameter("TypeId", typeof(int));
-    
-            var personIdParameter = personId.HasValue ?
-                new ObjectParameter("PersonId", personId) :
-                new ObjectParameter("PersonId", typeof(int));
-    
-            var minimumParameter = minimum.HasValue ?
-                new ObjectParameter("Minimum", minimum) :
-                new ObjectParameter("Minimum", typeof(decimal));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<spCategoryUseOverDuration_Result>("spCategoryUseOverDuration", startParameter, endParameter, typeIdParameter, personIdParameter, minimumParameter);
-        }
-    
         public virtual int spInsertOrUpdateTransaction(Nullable<int> transactionID, Nullable<decimal> amount, string transactionDesc, Nullable<int> typeId, Nullable<int> categoryId, Nullable<System.DateTime> createdDt, Nullable<int> personID)
         {
             var transactionIDParameter = transactionID.HasValue ?
@@ -165,6 +140,31 @@ namespace MoneyEntry
         public virtual int spUpdateTotals()
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("spUpdateTotals");
+        }
+    
+        public virtual ObjectResult<spCategoryUseOverDuration_Result> spCategoryUseOverDuration(Nullable<System.DateTime> start, Nullable<System.DateTime> end, Nullable<int> typeId, Nullable<int> personId, Nullable<decimal> minimum)
+        {
+            var startParameter = start.HasValue ?
+                new ObjectParameter("Start", start) :
+                new ObjectParameter("Start", typeof(System.DateTime));
+    
+            var endParameter = end.HasValue ?
+                new ObjectParameter("End", end) :
+                new ObjectParameter("End", typeof(System.DateTime));
+    
+            var typeIdParameter = typeId.HasValue ?
+                new ObjectParameter("TypeId", typeId) :
+                new ObjectParameter("TypeId", typeof(int));
+    
+            var personIdParameter = personId.HasValue ?
+                new ObjectParameter("PersonId", personId) :
+                new ObjectParameter("PersonId", typeof(int));
+    
+            var minimumParameter = minimum.HasValue ?
+                new ObjectParameter("Minimum", minimum) :
+                new ObjectParameter("Minimum", typeof(decimal));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<spCategoryUseOverDuration_Result>("spCategoryUseOverDuration", startParameter, endParameter, typeIdParameter, personIdParameter, minimumParameter);
         }
     
         public virtual ObjectResult<spTransactionSummationByDuration_Result> spTransactionSummationByDuration(string xml)

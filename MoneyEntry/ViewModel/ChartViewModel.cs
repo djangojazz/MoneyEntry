@@ -138,7 +138,7 @@ namespace MoneyEntry.ViewModel
 
       using (var context = new ExpensesEntities())
       { 
-        var results = context.spCategoryUseOverDuration(_start, _end, 2, _person.PersonId, _ceiling).ToList().Select(x => (byte)x.CategoryID).ToArray();
+        var results = context.spCategoryUseOverDuration(_start, _end, 2, _person.PersonId, _ceiling).ToList().Select(x => (int)x.CategoryID).ToArray();
         Categories.ClearAndAddRange(context.tdCategory.ToList().Select(x => new Category(x.CategoryID, x.Description, false)).ToList());
         Categories.Where(x => results.Contains(x.CategoryId))
                   .ToList()

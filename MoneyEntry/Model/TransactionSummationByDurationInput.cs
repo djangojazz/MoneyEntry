@@ -7,14 +7,14 @@ using System.Xml.Serialization;
 
 namespace MoneyEntry.Model
 {
-  [Serializable]
+  [Serializable, XmlRoot("Input")]
   public class TransactionSummationByDurationInput
   {
     public TransactionSummationByDurationInput()
     { 
     }
 
-    public TransactionSummationByDurationInput(int personId, DateTime start, DateTime end, Frequency grouping, bool summarize, params byte[] categories)
+    public TransactionSummationByDurationInput(int personId, DateTime start, DateTime end, Frequency grouping, bool summarize, params int[] categories)
     {
       PersonId = personId;
       Start = start.Date;
@@ -34,6 +34,6 @@ namespace MoneyEntry.Model
     public Frequency Grouping { get; set; }
     [XmlAttribute]
     public bool Summarize { get; set; }
-    public byte[] Categories { get; set; }
+    public int[] Categories { get; set; }
   }
 }
