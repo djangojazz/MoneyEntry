@@ -17,18 +17,21 @@ namespace MoneyEntry.ViewModel
     Person _person;
     RelayCommand _testCommand;
     private bool _loaded = false;
+    private List<spTransactionSummationByDuration_Result> _data;
 
     public ChartViewModel(Person person)
     {
       //Setup
       _person = person;
       _testCommand = new RelayCommand(param => this.Test());
+      _data = new List<spTransactionSummationByDuration_Result>();
+
       Categories = new ObservableCollectionContentNotifying<Category>();
       Start = DateTime.Now.Date.AddMonths(-2);
       End = DateTime.Now.Date;
       Ceiling = 100;
-      
-      UpdateDataForCharting();
+
+      UpdateChartDataForPlotTrends();
       _loaded = true;
     }
 
@@ -46,10 +49,9 @@ namespace MoneyEntry.ViewModel
       set
       {
         _open = value;
-        if (_loaded)
-        {
-          //UpdateHeader();
-          UpdateDataForCharting();
+        if (_loaded  && !_open)
+        {                            
+          UpdateChartDataForPlotTrends();
         }
         OnPropertyChanged("Open");
         _loaded = true;
@@ -80,7 +82,7 @@ namespace MoneyEntry.ViewModel
       set
       {
         _start = value;
-        UpdateDataForCharting();
+        UpdateChartDataForPlotTrends();
         OnPropertyChanged("Start");
       }
     }
@@ -95,7 +97,7 @@ namespace MoneyEntry.ViewModel
       set
       {
         _end = value;
-        UpdateDataForCharting();
+        UpdateChartDataForPlotTrends();
         OnPropertyChanged("End");
       }
     }
@@ -110,7 +112,7 @@ namespace MoneyEntry.ViewModel
       set
       {
         _ceiling = value;
-        UpdateDataForCharting();
+        UpdateChartDataForPlotTrends();
         OnPropertyChanged("Ceiling");
       }
     }
@@ -132,7 +134,13 @@ namespace MoneyEntry.ViewModel
     #endregion
 
     #region Methods
-    private void UpdateDataForCharting()
+    private void UpdateChartDataForPlotTrends()
+    {
+      UpdateData();
+      UpdatePlotTrendsFromData();
+    }
+
+    private void UpdateData()
     {
       if (!_loaded) return;
 
@@ -147,11 +155,29 @@ namespace MoneyEntry.ViewModel
         var newInput = new TransactionSummationByDurationInput(_person.PersonId, _start, _end, Frequency.Month, false, results);
         var serialization = newInput.SerializeToXml();
 
-        var data = context.spTransactionSummationByDuration(serialization).ToList();
-        var more = data.Select(x => x.Amount).ToList().First();
+        _data.ClearAndAddRange(context.spTransactionSummationByDuration(serialization).ToList());
       }
                      
       UpdateHeader();
+    }
+
+    private void UpdatePlotTrendsFromData()
+    {
+      if (!(_data.Any())) return;
+
+      //Dim demands = Selects.GetDemandTrends(New DemandTrendInput(2278, New Date(2017, 2, 25), New Date(2017, 5, 1), SelectedItem.ToString, New List(Of Integer)({ 2, 25})))
+
+      //Dim demand = demands.Select(Function(x) New PlotPoints(New PlotPoint(Of Double)(x.Grouping), New PlotPoint(Of Double)(x.DemandQty)))
+      //Dim ad = demands.Select(Function(x) New PlotPoints(New PlotPoint(Of Double)(x.Grouping), New PlotPoint(Of Double)(x.DemandAdQty)))
+
+      //  XTicks = If(demands.Count > 0, demands.Count - 1, 1)
+      //  DecimalConverter.OptionalHeader = SelectedItem.ToString
+      //  DecimalConverter.FirstPosition = demands.Select(Function(x) x.Grouping).First()
+
+      //  ChartData.ClearAndAddRange({ New PlotTrend("Demand", Brushes.Blue, New Thickness(2), demand), New PlotTrend("Ad", Brushes.Red, New Thickness(2), ad)})
+
+      //var stuff = _data.GroupBy(x => x.CategoryId).ToList().Select(x => x.Select(y => new PlotPoints(new PlotPoint<DateTime>(y.Grouping.Value), new PlotPoint<decimal>(y.Amount.Value))));
+      //var z = stuff;
     }
 
     private void UpdateHeader()
