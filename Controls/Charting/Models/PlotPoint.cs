@@ -10,7 +10,9 @@ namespace Controls.Charting
   {
     public PlotPoint(T point)
     {
-      if ((typeof(T) != typeof(decimal)) || (typeof(T) != typeof(double)) || (typeof(T) != typeof(int)) || (typeof(T) != typeof(DateTime)) || (typeof(T) != typeof(DateTime)))
+      var typ = typeof(T);
+
+      if (!(typeof(DateTime) == typ || typeof(double) == typ || typeof(decimal) == typ || typeof(int) == typ))
         throw new ArgumentException("Cannot have a plot point that is not Decimal, Double, Integer, Date or DateTime");
 
       this.Point = point;

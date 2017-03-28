@@ -24,7 +24,7 @@ namespace Controls.Charting
       get
       {
         if ((X.PointType == typeof(int)) || (X.PointType == typeof(double)) || (X.PointType == typeof(decimal)))
-          return Convert.ToDouble(((PlotPoint<int>)X).Point);
+          return Convert.ToDouble(((PlotPoint<double>)X).Point);
         else if (X.PointType == typeof(DateTime))
           return Convert.ToDouble(((PlotPoint<DateTime>)X).Point.Ticks);
         else
@@ -37,7 +37,7 @@ namespace Controls.Charting
       get
       {
         if ((Y.PointType == typeof(int)) || (Y.PointType == typeof(double)) || (Y.PointType == typeof(decimal)))
-          return Convert.ToDouble(((PlotPoint<int>)Y).Point);
+          return Convert.ToDouble(((PlotPoint<double>)Y).Point);
         else if (Y.PointType == typeof(DateTime))
           return Convert.ToDouble(((PlotPoint<DateTime>)Y).Point.Ticks);
         else
