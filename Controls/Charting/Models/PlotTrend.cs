@@ -50,6 +50,8 @@ namespace Controls.Charting
 
     public PlotTrend(string seriesName, Brush lineColor, Thickness pointThickness, IEnumerable<PlotPoints> points)
     {
+      Points = new ObservableCollection<PlotPoints>();
+
       this.SeriesName = seriesName;
       this.LineColor = lineColor;
       this.PointThickness = pointThickness;

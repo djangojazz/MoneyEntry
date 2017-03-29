@@ -27,6 +27,7 @@ namespace MoneyEntry.ViewModel
       _data = new List<spTransactionSummationByDuration_Result>();
 
       Categories = new ObservableCollectionContentNotifying<Category>();
+      ChartData = new ObservableCollectionContentNotifying<PlotTrend>();
       Start = DateTime.Now.Date.AddMonths(-2);
       End = DateTime.Now.Date;
       Ceiling = 100;
@@ -116,9 +117,23 @@ namespace MoneyEntry.ViewModel
         OnPropertyChanged("Ceiling");
       }
     }
-#endregion
+    #endregion
 
-    public ObservableCollectionContentNotifying<PlotTrend> ChartData;
+    #region ChartData
+    private ObservableCollectionContentNotifying<PlotTrend> _chartData;
+
+    public ObservableCollectionContentNotifying<PlotTrend> ChartData
+    {
+      get { return _chartData; }
+      set
+      {
+        _chartData = value;
+        OnPropertyChanged("ChartData");
+      }
+    } 
+    #endregion
+
+
 
     #endregion
 
@@ -176,8 +191,22 @@ namespace MoneyEntry.ViewModel
 
       //  ChartData.ClearAndAddRange({ New PlotTrend("Demand", Brushes.Blue, New Thickness(2), demand), New PlotTrend("Ad", Brushes.Red, New Thickness(2), ad)})
 
-      //var stuff = _data.GroupBy(x => x.CategoryId).ToList().Select(x => x.Select(y => new PlotPoints(new PlotPoint<DateTime>(y.Grouping.Value), new PlotPoint<decimal>(y.Amount.Value))));
-      //var z = stuff;
+      var plotTrends = new List<PlotTrend>();
+
+      _data.Select(cat => new { CategoryId = cat.CategoryId, CategoryName = cat.CategoryName })
+        .Distinct()
+        .ToList()
+        .ForEach(cat =>
+        {
+          var itemsForCategory = _data.Where(x => x.CategoryId == cat.CategoryId);
+          var points = itemsForCategory.Select(x => new PlotPoints(new PlotPoint<DateTime>(x.Grouping.Value), new PlotPoint<decimal>(x.Amount.Value)));
+
+          plotTrends.Add(new PlotTrend(cat.CategoryName, ColorDictionary.Color[cat.CategoryId.Value], new Thickness(2), points));        
+        });
+
+      ChartData.ClearAndAddRange(plotTrends);
+
+      var zzz = "hello";
     }
 
     private void UpdateHeader()
