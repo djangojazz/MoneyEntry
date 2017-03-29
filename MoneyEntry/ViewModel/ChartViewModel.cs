@@ -22,16 +22,16 @@ namespace MoneyEntry.ViewModel
     public ChartViewModel(Person person)
     {
       //Setup
-      _person = person;
-      _testCommand = new RelayCommand(param => this.Test());
+      _person = person;                                           
       _data = new List<spTransactionSummationByDuration_Result>();
-
-      Categories = new ObservableCollectionContentNotifying<Category>();
-      ChartData = new ObservableCollectionContentNotifying<PlotTrend>();
       Start = DateTime.Now.Date.AddMonths(-2);
       End = DateTime.Now.Date;
       Ceiling = 100;
 
+      Categories = new ObservableCollectionContentNotifying<Category>();
+      InitialCategorySet();
+                         
+      ChartData = new ObservableCollectionContentNotifying<PlotTrend>();
       UpdateChartDataForPlotTrends();
       _loaded = true;
     }
@@ -51,7 +51,8 @@ namespace MoneyEntry.ViewModel
       {
         _open = value;
         if (_loaded  && !_open)
-        {                            
+        {                                   
+          UpdateHeader();
           UpdateChartDataForPlotTrends();
         }
         OnPropertyChanged("Open");
@@ -132,9 +133,7 @@ namespace MoneyEntry.ViewModel
       }
     } 
     #endregion
-
-
-
+              
     #endregion
 
     #region TestCommandAndMethod
@@ -155,17 +154,27 @@ namespace MoneyEntry.ViewModel
       UpdatePlotTrendsFromData();
     }
 
+    private void InitialCategorySet()
+    {
+      using (var context = new ExpensesEntities())
+      {
+        var results = context.spCategoryUseOverDuration(_start, _end, 2, _person.PersonId, _ceiling).ToList().Select(x => (int)x.CategoryID).ToArray();
+
+        Categories.ClearAndAddRange(context.tdCategory.ToList().Select(x => new Category(x.CategoryID, x.Description, false)).ToList());
+
+        Categories.Where(x => results.Contains(x.CategoryId))
+                  .ToList()
+                  .ForEach(x => x.IsUsed = true);
+      }
+    }
+
     private void UpdateData()
     {
       if (!_loaded) return;
 
       using (var context = new ExpensesEntities())
-      { 
-        var results = context.spCategoryUseOverDuration(_start, _end, 2, _person.PersonId, _ceiling).ToList().Select(x => (int)x.CategoryID).ToArray();
-        Categories.ClearAndAddRange(context.tdCategory.ToList().Select(x => new Category(x.CategoryID, x.Description, false)).ToList());
-        Categories.Where(x => results.Contains(x.CategoryId))
-                  .ToList()
-                  .ForEach(x => x.IsUsed = true);
+      {
+        var results = Categories.Where(x => x.IsUsed == true).Select(x => (int)x.CategoryId).ToArray();
 
         var newInput = new TransactionSummationByDurationInput(_person.PersonId, _start, _end, Frequency.Month, false, results);
         var serialization = newInput.SerializeToXml();
