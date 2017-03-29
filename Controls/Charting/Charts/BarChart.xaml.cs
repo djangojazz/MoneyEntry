@@ -138,6 +138,10 @@ namespace Controls.Charting
 
       if (ChartData.Count > 1)
       {
+        PART_CanvasPoints.LayoutTransform = new ScaleTransform(1, -1);
+        PART_CanvasPoints.UpdateLayout();
+        ResetTicksForSpecificDateRange();
+
         //Uniformity check of X and Y types.  EG: You cannot have a DateTime and a Number for different X axis or Y axis sets.
         if (ChartData.ToList().Select(x => x.Points[0].X.GetType()).Distinct().GroupBy(x => x).Count() > 1 || ChartData.ToList().Select(x => x.Points[0].Y.GetType()).Distinct().GroupBy(x => x).Count() > 1)
         {
