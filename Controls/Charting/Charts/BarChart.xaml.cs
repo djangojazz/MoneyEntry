@@ -32,26 +32,26 @@ namespace Controls.Charting
     {
       get => PART_CanvasBorder.ActualHeight / PART_CanvasBorder.ActualWidth;
     }
-                                                                            
+
     private double SegmentLength
     {
       get => _viewWidth / _xNumberOfTicks;
     }
-                     
+
     public BarChart()
     {
       InitializeComponent();
       Part_Layout.DataContext = this;
     }
-           
+
     #region "DataChangedAndTimingEvents"
-    public override void OnTick(object o)
+    public override void OnTick(object o, EventArgs e)
     {
       Timer.Stop();
-      ResizeAndPlotPoints(o);
+      ResizeAndPlotPoints(o, null);
     }
 
-    public override void Resized()
+    public override void Resized(object o, EventArgs e)
     {
       Timer.Stop();
       Timer.Start();
@@ -59,12 +59,12 @@ namespace Controls.Charting
     #endregion
 
     #region "ResivingAndPlotPoints"
-    public override void ResizeAndPlotPoints(object o)
+    public override void ResizeAndPlotPoints(object o, EventArgs e)
     {
       SetupInternalHeightAndWidths();
       SetupHeightAndWidthsOfObjects();
       ResetTicksForSpecificDateRange();
-      CalculatePlotTrends();
+      CalculatePlotTrends(this, null);
     }
 
     private void ResetTicksForSpecificDateRange()
@@ -72,7 +72,7 @@ namespace Controls.Charting
       _explicitTicks = ChartData.SelectMany(x => x.Points).Select(x => x.XAsDouble).Distinct().OrderBy(x => x).ToList();
       _xNumberOfTicks = _explicitTicks.Count();
     }
-              
+
     private void SetupHeightAndWidthsOfObjects()
     {
       PART_CanvasYAxisLabels.Height = _viewHeight;
@@ -120,7 +120,7 @@ namespace Controls.Charting
       }
     }
 
-    public override void CalculatePlotTrends()
+    public override void CalculatePlotTrends(object sender, EventArgs e)
     {
       if (PART_CanvasPoints == null) return;
 
@@ -168,7 +168,7 @@ namespace Controls.Charting
         if (_xNumberOfTicks == 0)
         {
           //want at the very least to see a beginning and an end and redraw to show this.
-          _xNumberOfTicks = 1;                                                                           
+          _xNumberOfTicks = 1;
         }
       }
 
@@ -177,7 +177,7 @@ namespace Controls.Charting
     }
     #endregion
 
-#region "Drawing Methods"
+    #region "Drawing Methods"
 
     protected override void DrawXAxis(Canvas partCanvasXTicks, Canvas partCanvasXLabels, double xCeiling, double xFloor, int xTicks, double viewWidth, double labelHeight)
     {
@@ -195,46 +195,46 @@ namespace Controls.Charting
       });
 
       //Sizing should be done from the ceiling
-      dynamic lastText = XValueConverter == null ? xCeiling.ToString() : XValueConverter.Convert(xCeiling, typeof(string), null, System.Globalization.CultureInfo.InvariantCulture);
-      dynamic spacingForText = lastText.Count * 6;
-      dynamic totalLength = spacingForText * xTicks;
-      dynamic fontSize = 0;
-      dynamic spacing = 0;
+      var lastText = XValueConverter == null ? xCeiling.ToString() : (string)XValueConverter.Convert(xCeiling, typeof(string), null, System.Globalization.CultureInfo.InvariantCulture);
+      var spacingForText = lastText.Length * 6;
+      var totalLength = spacingForText * xTicks;
+      var fontSize = 0;
+      var spacing = 0;
 
-      if (totalLength == 200)
+      if (totalLength <= 200)
       {
         fontSize = 30;
-        spacing = spacingForText * 1.2;
+        spacing = (int)(spacingForText * 1.2);
       }
-      else if (totalLength == 250)
+      else if (totalLength <= 250)
       {
         fontSize = 20;
-        spacing = spacingForText * 0.9;
+        spacing = (int)(spacingForText * 0.9);
       }
-      else if (totalLength == 500)
+      else if (totalLength <= 500)
       {
         fontSize = 16;
-        spacing = spacingForText * 0.6;
+        spacing = (int)(spacingForText * 0.6);
       }
-      else if (totalLength == 750)
+      else if (totalLength <= 750)
       {
         fontSize = 12;
-        spacing = spacingForText * 0.45;
+        spacing = (int)(spacingForText * 0.45);
       }
       else
       {
         fontSize = 8;
-        spacing = spacingForText * 0.3;
+        spacing = (int)(spacingForText * 0.3);
       }
-        
+
       for (int i = 0; i <= xTicks - 1; i++)
       {
-        dynamic segment = GetSegment(i);
+        var segment = GetSegment(i);
 
-        dynamic xSegmentLabel = _explicitTicks[i];
-        dynamic textForLabel = new string(XValueConverter == null ? xSegmentLabel.ToString : XValueConverter.Convert(xSegmentLabel, typeof(string), null, System.Globalization.CultureInfo.InvariantCulture));
+        var xSegmentLabel = _explicitTicks[i];
+        var textForLabel = (XValueConverter == null) ? xSegmentLabel.ToString() : (string)XValueConverter.Convert(xSegmentLabel, typeof(string), null, System.Globalization.CultureInfo.InvariantCulture);
 
-        dynamic lineSegment = new Line
+        var lineSegment = new Line
         {
           X1 = segment,
           X2 = segment,
@@ -261,7 +261,7 @@ namespace Controls.Charting
       var widthOfBar = viewWidth / ((_xNumberOfTicks + 2) * ChartData.Count);
       var yFactor = (viewHeight / (yCeiling - yFloor));
 
-      yFactor = double.IsNaN(yFactor) || double.IsInfinity(yFactor) ? 1 : yFactor;
+      yFactor = (double.IsNaN(yFactor) || double.IsInfinity(yFactor)) ? 1 : yFactor;
 
       for (int i = 0; i <= _xNumberOfTicks - 1; i++)
       {
@@ -282,10 +282,10 @@ namespace Controls.Charting
         var segment = GetSegment(segmentIndex);
 
         //If I have two sets or more on the same day I need to see that
-        segment = segment + t.Index > 0 ? (t.Index) * widthOfBar : 0;
+        segment = segment + (t.Index > 0 ? (t.Index) * widthOfBar : 0);
 
         var matches = ChartData.Where((x, ind) => x.Points.ToList().Exists(y => y.XAsDouble == t.XAsDouble & y.YAsDouble == t.YAsDouble));
-        var color = matches.Count() > 1 ? matches.Skip(t.Index).Take(1).First().LineColor : matches.First().LineColor;
+        var color = (matches.Count() > 1 ? matches.Skip(t.Index).Take(1).First().LineColor : matches.First().LineColor);
 
         var toDraw = new Line
         {
@@ -304,7 +304,7 @@ namespace Controls.Charting
     {
       return (index * SegmentLength) + (SegmentLength / 2);
     }
-                                                           
+
     private void ClearCanvasOfAllData()
     {
       PART_CanvasPoints.Children.Clear();

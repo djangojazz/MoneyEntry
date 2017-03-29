@@ -10,7 +10,13 @@ using System.Windows.Threading;
 namespace Controls.Charting
 {
   public abstract class BaseChart : UserControl
-  {          
+  {
+    //public delegate void CollectionChangedEventHandler(object sender, ObservableCollectionContentChangedArgs e);
+    //public event CollectionChangedEventHandler OnCollectionChanged;
+
+    //public delegate void LoadedEventHandler(object sender, EventArgs e);
+    //public event LoadedEventHandler OnLoaded;
+
     private TimeSpan _defaultTimeSpan = new TimeSpan(1000);
 
     internal DispatcherTimer Timer = new DispatcherTimer();
@@ -232,35 +238,42 @@ namespace Controls.Charting
     #endregion
 
     #region "Override Methods"
+
+
+    //public abstract void NotifyCollectionChanged(object sender, ObservableCollectionContentChangedArgs e);
+
     public static void ChartDataChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
-      dynamic o = (BaseChart)d;
+      var o = (BaseChart)d;
 
       if ((e.OldValue != null))
       {
-        dynamic OldCollection = e.OldValue as ObservableCollectionContentNotifying<PlotTrend>;
-        //RemoveHandler OldCollection.OnCollectionItemChanged, AddressOf o.CalculatePlotTrends
+        var OldCollection = e.OldValue as ObservableCollectionContentNotifying<PlotTrend>;
+        OldCollection.OnCollectionItemChanged -= o.CalculatePlotTrends;
         OldCollection.CollectionChanged -= o.CalculatePlotTrends;
+
       }
 
       if ((e.NewValue != null))
       {
-        dynamic NewCollection = e.NewValue as ObservableCollectionContentNotifying<PlotTrend>;
-        //AddHandler NewCollection.OnCollectionItemChanged, AddressOf o.CalculatePlotTrends
+        var NewCollection = e.NewValue as ObservableCollectionContentNotifying<PlotTrend>;
+        NewCollection.OnCollectionItemChanged += o.CalculatePlotTrends;
         NewCollection.CollectionChanged += o.CalculatePlotTrends;
-        o.Loaded += o.ResizeAndPlotPoints(o);
-        o.SizeChanged += o.Resized();
-        o.Timer.Tick += o.OnTick(o);
+        o.Loaded += o.ResizeAndPlotPoints;
+        o.SizeChanged += o.Resized;
+        o.Timer.Tick += o.OnTick;
       }
     }
 
-    public abstract void OnTick(object o);
+    public abstract void OnTick(object o, EventArgs e);
 
-    public abstract void Resized();
+    public abstract void Resized(object o, EventArgs e);
 
-    public abstract void ResizeAndPlotPoints(object o);
+    public abstract void ResizeAndPlotPoints(object o, EventArgs e);
 
-    public abstract void CalculatePlotTrends();
+    public abstract void CalculatePlotTrends(object sender, EventArgs e);
+
+
     #endregion
 
     #region "Protected Methods to be used by inheriting classes"
@@ -284,7 +297,7 @@ namespace Controls.Charting
         StrokeThickness = 2,
         Stroke = Brushes.Black
       });
-                    
+
       //Sizing should be done from the ceiling
       var lastText = YValueConverter == null ? yCeiling.ToString() : (string)YValueConverter.Convert(yCeiling, typeof(string), null, System.Globalization.CultureInfo.InvariantCulture);
       var spacingForText = lastText.Length;
@@ -292,37 +305,37 @@ namespace Controls.Charting
       var finalSpacing = 0.0;
       var lastSpaceFactor = 0.0;
 
-      if (spacingForText == 7)
+      if (spacingForText <= 7)
       {
         fontSize = 30;
         finalSpacing = spacingForText * 0.3;
         lastSpaceFactor = finalSpacing * 1.2;
       }
-      else if (spacingForText == 9)
+      else if (spacingForText <= 9)
       {
         fontSize = 24;
         finalSpacing = spacingForText * 0.5;
         lastSpaceFactor = finalSpacing * 1.5;
       }
-      else if (spacingForText == 11)
+      else if (spacingForText <= 11)
       {
         fontSize = 18;
         finalSpacing = spacingForText * 0.68;
         lastSpaceFactor = finalSpacing * 1.45;
       }
-      else if (spacingForText == 13)
+      else if (spacingForText <= 13)
       {
         fontSize = 16;
         finalSpacing = spacingForText * 0.7;
         lastSpaceFactor = finalSpacing * 1.44;
       }
-      else if (spacingForText == 14)
+      else
       {
         fontSize = 14;
         finalSpacing = spacingForText * 0.7;
         lastSpaceFactor = finalSpacing * 1.44;
       }
-     
+
       for (int i = 0; i <= YNumberOfTicks; i++)
       {
         var ySegment = i == 0 ? 0 : i * (viewHeight / YNumberOfTicks);
@@ -344,7 +357,7 @@ namespace Controls.Charting
         {
           Text = textForLabel,
           FontSize = fontSize,
-          Margin = new Thickness(0, viewHeight - 20 - (ySegment - i == 0 ? 0 : i == YNumberOfTicks ? lastSpaceFactor : finalSpacing), 0, 0)
+          Margin = new Thickness(0, viewHeight - 20 - (ySegment - (i == 0 ? 0 : (i == YNumberOfTicks) ? lastSpaceFactor : finalSpacing)), 0, 0)
         };
 
         partCanvasYLabels.Children.Add(labelSegment);
@@ -376,25 +389,25 @@ namespace Controls.Charting
       var finalSpacing = 0.0;
       var lastSpaceFactor = 0.0;
 
-      if (totalLength == 200)
+      if (totalLength <= 200)
       {
         fontSize = 30;
         finalSpacing = spacingForText * 1.2;
         lastSpaceFactor = finalSpacing * 2;
       }
-      else if (totalLength == 250)
+      else if (totalLength <= 250)
       {
         fontSize = 20;
         finalSpacing = spacingForText * 0.9;
         lastSpaceFactor = finalSpacing * 1.75;
       }
-      else if (totalLength == 500)
+      else if (totalLength <= 500)
       {
         fontSize = 16;
         finalSpacing = spacingForText * 0.6;
         lastSpaceFactor = finalSpacing * 2;
       }
-      else if (totalLength == 750)
+      else if (totalLength <= 750)
       {
         fontSize = 12;
         finalSpacing = spacingForText * 0.45;
@@ -428,7 +441,7 @@ namespace Controls.Charting
         {
           Text = textForLabel,
           FontSize = fontSize,
-          Margin = new Thickness(xSegment - i == 0 ? 0 : i == xTicks ? lastSpaceFactor : finalSpacing, 0, 0, 0)
+          Margin = new Thickness(xSegment - (i == 0 ? 0 : (i == xTicks) ? lastSpaceFactor : finalSpacing), 0, 0, 0)
         };
 
         partCanvasXLabels.Children.Add(labelSegment);
@@ -438,7 +451,7 @@ namespace Controls.Charting
     protected virtual void DrawTrends(Canvas partCanvas, double viewWidth, double viewHeight, double xCeiling, double xFloor, double yCeiling, double yFloor)
     {
       foreach (PlotTrend t in ChartData)
-      {                         
+      {
         if (t.Points != null)
         {
           var xFactor = (viewWidth / (xCeiling - xFloor));
@@ -448,9 +461,9 @@ namespace Controls.Charting
           yFactor = double.IsNaN(yFactor) || double.IsInfinity(yFactor) ? 1 : yFactor;
 
           for (int i = 1; i <= t.Points.Count - 1; i++)
-          { 
+          {
             var toDraw = new Line
-            {  
+            {
               X1 = (t.Points[i - 1].XAsDouble - xFloor) * xFactor,
               Y1 = (t.Points[i - 1].YAsDouble - yFloor) * yFactor,
               X2 = (t.Points[i].XAsDouble - xFloor) * xFactor,

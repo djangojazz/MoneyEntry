@@ -20,7 +20,6 @@ namespace Controls.Charting
   /// </summary>
   public partial class LineChart
   {
-
     //VARIABLES
     private double _xFloor = 0;
     private double _xCeiling = 0;
@@ -30,7 +29,7 @@ namespace Controls.Charting
     private double _viewWidth = 0;
     private double _tickWidth = 0;
     private double _tickHeight = 0;
-    private double _labelWidth = 0;  
+    private double _labelWidth = 0;
     private double _labelHeight = 0;
 
     private double Ratio
@@ -54,14 +53,24 @@ namespace Controls.Charting
     }
     #endregion
 
+    #region "X"
+
+    public static readonly DependencyProperty XTicksDynamicProperty = DependencyProperty.Register(nameof(XTicksDynamic), typeof(bool), typeof(LineChart), new UIPropertyMetadata(false));
+    public bool XTicksDynamic
+    {
+      get { return (bool)GetValue(XTicksDynamicProperty); }
+      set { SetValue(XTicksDynamicProperty, value); }
+    }
+    #endregion
+
     #region "DataChangedAndTimingEvents"
-    public override void OnTick(object o)
+    public override void OnTick(object o, EventArgs e)
     {
       Timer.Stop();
-      ResizeAndPlotPoints(o);
+      ResizeAndPlotPoints(o, null);
     }
 
-    public override void Resized()
+    public override void Resized(object o, EventArgs e)
     {
       Timer.Stop();
       Timer.Start();
@@ -69,11 +78,11 @@ namespace Controls.Charting
     #endregion
 
     #region "ResivingAndPlotPoints"
-    public override void ResizeAndPlotPoints(object o)
+    public override void ResizeAndPlotPoints(object o, EventArgs e)
     {
       SetupInternalHeightAndWidths();
       SetupHeightAndWidthsOfObjects();
-      CalculatePlotTrends();
+      CalculatePlotTrends(o, null);
     }
 
     private void SetupHeightAndWidthsOfObjects()
@@ -123,7 +132,7 @@ namespace Controls.Charting
       }
     }
 
-    public override void CalculatePlotTrends()
+    public override void CalculatePlotTrends(object sender, EventArgs e)
     {
       if (PART_CanvasPoints == null) return;
 
@@ -155,6 +164,8 @@ namespace Controls.Charting
         }
       }
 
+      var xTicks = XTicksDynamic ? ChartData.SelectMany(x => x.Points).Select(x => x.XAsDouble).Distinct().Count() - 1 : XNumberOfTicks;
+
       PART_CanvasPoints.LayoutTransform = new ScaleTransform(1, -1);
       PART_CanvasPoints.UpdateLayout();
 
@@ -178,7 +189,7 @@ namespace Controls.Charting
         }
       }
 
-      DrawXAxis(PART_CanvasXAxisTicks, PART_CanvasXAxisLabels, _xCeiling, _xFloor, XNumberOfTicks, _viewWidth, _labelHeight);
+      DrawXAxis(PART_CanvasXAxisTicks, PART_CanvasXAxisLabels, _xCeiling, _xFloor, xTicks, _viewWidth, _labelHeight);
       DrawYAxis(PART_CanvasYAxisTicks, PART_CanvasYAxisLabels, _yCeiling, _yFloor, _viewHeight, _labelHeight);
     }
 
