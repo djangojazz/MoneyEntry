@@ -18,7 +18,7 @@ namespace Controls.Converters.Instances
         return string.Empty;
       var val = (double)value;
       
-      var final = (val == FirstPosition) ? "Current" : ((int)(val - FirstPosition + 1)).DisplayNumberWithStringSuffix();
+      var final = (val == FirstPosition) ? "First" : ((int)(val - FirstPosition + 1)).DisplayNumberWithStringSuffix();
 
       return $"{final} {OptionalHeader}";
     }

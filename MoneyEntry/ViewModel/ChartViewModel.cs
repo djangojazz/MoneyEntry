@@ -185,7 +185,8 @@ namespace MoneyEntry.ViewModel
         var newInput = new TransactionSummationByDurationInput(_person.PersonId, _start, _end, _selectedFrequency, false, results);
         var serialization = newInput.SerializeToXml();
 
-        _data.ClearAndAddRange(context.spTransactionSummationByDuration(serialization).ToList().Where(x => x.Amount >= _ceiling));
+        //TODO: fix the positioning that must readjusted once a ceiling is applied or grouping will be screwed up.
+        _data.ClearAndAddRange(context.spTransactionSummationByDuration(serialization).ToList());//.Where(x => x.Amount >= _ceiling));
       }
                      
       UpdateHeader();
@@ -196,7 +197,7 @@ namespace MoneyEntry.ViewModel
       if (!(_data.Any())) return;
 
       if (InstanceConverter != null)
-      {
+      { 
         InstanceConverter.OptionalHeader = SelectedFrequency.ToString();
         InstanceConverter.FirstPosition = _data.Select(x => x.Position.Value).First();
               
