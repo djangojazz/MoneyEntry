@@ -28,7 +28,7 @@ namespace MoneyEntry.ViewModel
       _data = new List<spTransactionSummationByDuration_Result>();
       Start = DateTime.Now.Date.AddMonths(-2);
       End = DateTime.Now.Date;
-      Ceiling = 100;
+      Floor = 100;
       SelectedFrequency = GroupingFrequency.Month;
 
       Categories = new ObservableCollectionContentNotifying<Category>();
@@ -122,17 +122,17 @@ namespace MoneyEntry.ViewModel
     }
     #endregion
 
-    #region Ceiling
-    private int _ceiling;
+    #region Floor
+    private int _floor;
 
-    public int Ceiling
+    public int Floor
     {
-      get { return _ceiling; }
+      get { return _floor; }
       set
       {
-        _ceiling = value;
+        _floor = value;
         UpdateChartDataForPlotTrends();
-        OnPropertyChanged(nameof(Ceiling));
+        OnPropertyChanged(nameof(Floor));
       }
     }
     #endregion
@@ -164,7 +164,7 @@ namespace MoneyEntry.ViewModel
     {
       using (var context = new ExpensesEntities())
       {
-        var results = context.spCategoryUseOverDuration(_start, _end, 2, _person.PersonId, _ceiling).ToList().Select(x => (int)x.CategoryID).ToArray();
+        var results = context.spCategoryUseOverDuration(_start, _end, 2, _person.PersonId, _floor).ToList().Select(x => (int)x.CategoryID).ToArray();
 
         Categories.ClearAndAddRange(context.tdCategory.ToList().Select(x => new Category(x.CategoryID, x.Description, false)).ToList());
 
@@ -182,11 +182,10 @@ namespace MoneyEntry.ViewModel
       {
         var results = Categories.Where(x => x.IsUsed == true).Select(x => (int)x.CategoryId).ToArray();
 
-        var newInput = new TransactionSummationByDurationInput(_person.PersonId, _start, _end, _selectedFrequency, false, results);
+        var newInput = new TransactionSummationByDurationInput(_person.PersonId, _start, _end, _selectedFrequency, _floor, false, results);
         var serialization = newInput.SerializeToXml();
-
-        //TODO: fix the positioning that must readjusted once a ceiling is applied or grouping will be screwed up.
-        _data.ClearAndAddRange(context.spTransactionSummationByDuration(serialization).ToList());//.Where(x => x.Amount >= _ceiling));
+                                                                                                                  
+        _data.ClearAndAddRange(context.spTransactionSummationByDuration(serialization).ToList());
       }
                      
       UpdateHeader();

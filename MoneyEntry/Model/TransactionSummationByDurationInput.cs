@@ -14,12 +14,13 @@ namespace MoneyEntry.Model
     { 
     }
 
-    public TransactionSummationByDurationInput(int personId, DateTime start, DateTime end, GroupingFrequency grouping, bool summarize, params int[] categories)
+    public TransactionSummationByDurationInput(int personId, DateTime start, DateTime end, GroupingFrequency grouping, decimal floor, bool summarize, params int[] categories)
     {
       PersonId = personId;
       Start = start.Date;
       End = end.Date;
       Grouping = grouping;
+      Floor = floor;
       Summarize = summarize;
       Categories = categories;
     }
@@ -34,6 +35,8 @@ namespace MoneyEntry.Model
     public GroupingFrequency Grouping { get; set; }
     [XmlAttribute]
     public bool Summarize { get; set; }
+    [XmlAttribute]
+    public decimal Floor { get; set; }
     public int[] Categories { get; set; }
   }
 }

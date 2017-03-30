@@ -245,7 +245,7 @@ warning 6002: The table/view 'Expenses.dbo.vTrans' does not have a primary key d
             <Parameter Name="Minimum" Mode="In" Type="Decimal" />
           </FunctionImport>
           <FunctionImport Name="spTransactionSummationByDuration" ReturnType="Collection(ExpensesModel.spTransactionSummationByDuration_Result)">
-            <Parameter Name="Xml" Mode="In" Type="String" />
+          <Parameter Name="Xml" Mode="In" Type="String" />
           </FunctionImport>
         </EntityContainer>
         <EntityType Name="vTrans">
