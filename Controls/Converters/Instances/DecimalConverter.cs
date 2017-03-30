@@ -22,7 +22,7 @@ namespace Controls.Converters.Instances
       if (DecimalPositions > 0)
         FormatString += "." + Strings.StrDup(DecimalPositions, '0');
 
-      return $"{OptionalHeader} {((decimal)value).ToString(FormatString)}";
+      return $"{OptionalHeader} {System.Convert.ToDecimal(value).ToString(FormatString)}";
     }
 
     public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

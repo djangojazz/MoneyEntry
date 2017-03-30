@@ -14,7 +14,7 @@ namespace MoneyEntry.Model
     { 
     }
 
-    public TransactionSummationByDurationInput(int personId, DateTime start, DateTime end, Frequency grouping, bool summarize, params int[] categories)
+    public TransactionSummationByDurationInput(int personId, DateTime start, DateTime end, GroupingFrequency grouping, bool summarize, params int[] categories)
     {
       PersonId = personId;
       Start = start.Date;
@@ -31,7 +31,7 @@ namespace MoneyEntry.Model
     [XmlAttribute]
     public DateTime End { get; set; }
     [XmlAttribute]
-    public Frequency Grouping { get; set; }
+    public GroupingFrequency Grouping { get; set; }
     [XmlAttribute]
     public bool Summarize { get; set; }
     public int[] Categories { get; set; }

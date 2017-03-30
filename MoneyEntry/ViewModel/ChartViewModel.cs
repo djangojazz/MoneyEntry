@@ -9,6 +9,7 @@ using System.Linq;
 using Controls.Types;
 using Controls;
 using Controls.Charting;
+using Controls.Converters.Instances;
 
 namespace MoneyEntry.ViewModel
 {
@@ -22,6 +23,7 @@ namespace MoneyEntry.ViewModel
     public ChartViewModel(Person person)
     {
       //Setup
+      InstanceConverter = new InstanceInSetToStringConverter();
       _person = person;                                           
       _data = new List<spTransactionSummationByDuration_Result>();
       Start = DateTime.Now.Date.AddMonths(-2);
@@ -37,8 +39,23 @@ namespace MoneyEntry.ViewModel
     }
 
     #region Properties
-    public Frequency[] Array { get => Enum.GetValues(typeof(Frequency)).Cast<Frequency>().ToArray(); }
+    public GroupingFrequency[] Array { get => Enum.GetValues(typeof(GroupingFrequency)).Cast<GroupingFrequency>().ToArray(); }
 
+    #region SelectedItem
+    private GroupingFrequency _selectedItem;
+    public GroupingFrequency SelectedItem
+    {
+      get { return _selectedItem; }
+      set
+      {
+        _selectedItem = value;
+        UpdateChartDataForPlotTrends();
+        MessageBox.Show(SelectedItem.ToString());
+        OnPropertyChanged(nameof(SelectedItem));
+      }
+    }
+    #endregion              
+    public InstanceInSetToStringConverter InstanceConverter { get; }
     public ObservableCollectionContentNotifying<Category> Categories { get; }
 
     #region OpenProperty
@@ -55,7 +72,7 @@ namespace MoneyEntry.ViewModel
           UpdateHeader();
           UpdateChartDataForPlotTrends();
         }
-        OnPropertyChanged("Open");
+        OnPropertyChanged(nameof(Open));
         _loaded = true;
       }
     }
@@ -70,7 +87,7 @@ namespace MoneyEntry.ViewModel
       set
       {
         _categoryHeader = value;
-        OnPropertyChanged("CategoryHeader");
+        OnPropertyChanged(nameof(CategoryHeader));
       }
     }
     #endregion
@@ -85,7 +102,7 @@ namespace MoneyEntry.ViewModel
       {
         _start = value;
         UpdateChartDataForPlotTrends();
-        OnPropertyChanged("Start");
+        OnPropertyChanged(nameof(Start));
       }
     }
     #endregion
@@ -100,7 +117,7 @@ namespace MoneyEntry.ViewModel
       {
         _end = value;
         UpdateChartDataForPlotTrends();
-        OnPropertyChanged("End");
+        OnPropertyChanged(nameof(End));
       }
     }
     #endregion
@@ -115,7 +132,7 @@ namespace MoneyEntry.ViewModel
       {
         _ceiling = value;
         UpdateChartDataForPlotTrends();
-        OnPropertyChanged("Ceiling");
+        OnPropertyChanged(nameof(Ceiling));
       }
     }
     #endregion
@@ -129,24 +146,13 @@ namespace MoneyEntry.ViewModel
       set
       {
         _chartData = value;
-        OnPropertyChanged("ChartData");
+        OnPropertyChanged(nameof(ChartData));
       }
     } 
     #endregion
               
     #endregion
-
-    #region TestCommandAndMethod
-    public ICommand TestCommand { get => _testCommand; }
-
-    private void Test()
-    {
-      var s = String.Empty;
-      Categories.Where(x => x.IsUsed == true).ToList().ForEach(x => s += x + Environment.NewLine);
-      MessageBox.Show(s);
-    }
-    #endregion
-
+                       
     #region Methods
     private void UpdateChartDataForPlotTrends()
     {
@@ -176,7 +182,7 @@ namespace MoneyEntry.ViewModel
       {
         var results = Categories.Where(x => x.IsUsed == true).Select(x => (int)x.CategoryId).ToArray();
 
-        var newInput = new TransactionSummationByDurationInput(_person.PersonId, _start, _end, Frequency.Month, false, results);
+        var newInput = new TransactionSummationByDurationInput(_person.PersonId, _start, _end, GroupingFrequency.Month, false, results);
         var serialization = newInput.SerializeToXml();
 
         _data.ClearAndAddRange(context.spTransactionSummationByDuration(serialization).ToList());
@@ -187,35 +193,17 @@ namespace MoneyEntry.ViewModel
 
     private void UpdatePlotTrendsFromData()
     {
-      if (!(_data.Any())) return;
-
-      //Dim demands = Selects.GetDemandTrends(New DemandTrendInput(2278, New Date(2017, 2, 25), New Date(2017, 5, 1), SelectedItem.ToString, New List(Of Integer)({ 2, 25})))
-
-      //Dim demand = demands.Select(Function(x) New PlotPoints(New PlotPoint(Of Double)(x.Grouping), New PlotPoint(Of Double)(x.DemandQty)))
-      //Dim ad = demands.Select(Function(x) New PlotPoints(New PlotPoint(Of Double)(x.Grouping), New PlotPoint(Of Double)(x.DemandAdQty)))
-
-      //  XTicks = If(demands.Count > 0, demands.Count - 1, 1)
-      //  DecimalConverter.OptionalHeader = SelectedItem.ToString
-      //  DecimalConverter.FirstPosition = demands.Select(Function(x) x.Grouping).First()
-
-      //  ChartData.ClearAndAddRange({ New PlotTrend("Demand", Brushes.Blue, New Thickness(2), demand), New PlotTrend("Ad", Brushes.Red, New Thickness(2), ad)})
-
-      var plotTrends = new List<PlotTrend>();
-
-      _data.Select(cat => new { CategoryId = cat.CategoryId, CategoryName = cat.CategoryName })
+      if (!(_data.Any())) return;   
+            
+      ChartData.ClearAndAddRange(_data.Select(cat => new { CategoryId = cat.CategoryId, CategoryName = cat.CategoryName })
         .Distinct()
+        .OrderBy(x => x.CategoryName)
         .ToList()
-        .ForEach(cat =>
-        {
-          var itemsForCategory = _data.Where(x => x.CategoryId == cat.CategoryId);
-          var points = itemsForCategory.Select(x => new PlotPoints(new PlotPoint<DateTime>(x.Grouping.Value), new PlotPoint<decimal>(x.Amount.Value)));
-
-          plotTrends.Add(new PlotTrend(cat.CategoryName, ColorDictionary.Color[cat.CategoryId.Value], new Thickness(2), points));        
-        });
-
-      ChartData.ClearAndAddRange(plotTrends);
-
-      var zzz = "hello";
+        .Select((x, ind) => new { x.CategoryId, x.CategoryName, Index = ind })
+        .ToList()
+        .Select(cat => new PlotTrend(cat.CategoryName, ColorDictionary.Color[cat.Index + 1], new Thickness(2),
+                    _data.Where(x => x.CategoryId == cat.CategoryId).Select(x => new PlotPoints(new PlotPoint<int>(x.Position.Value), new PlotPoint<decimal>(x.Amount.Value))))
+        ));      
     }
 
     private void UpdateHeader()

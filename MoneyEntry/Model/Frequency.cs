@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MoneyEntry.Model
 {
-  public enum Frequency
+  public enum GroupingFrequency
   {
     Year = 0,
     Quarter = 1,

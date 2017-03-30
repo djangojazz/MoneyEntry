@@ -5,8 +5,12 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MoneyEntry.View"
              xmlns:cntrls="clr-namespace:Controls;assembly=Controls"
+             xmlns:conv="clr-namespace:Controls.Converters;assembly=Controls"
              xmlns:charting="clr-namespace:Controls.Charting;assembly=Controls"
              mc:Ignorable="d" >
+  <UserControl.Resources>
+        <ResourceDictionary Source="..\MainWindowResources.xaml" />
+    </UserControl.Resources>
   <Grid>
     <Grid.RowDefinitions>
       <RowDefinition Height="Auto"/>
@@ -16,6 +20,7 @@
     <Border>
       <Grid>
         <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="*"/>
           <ColumnDefinition Width="*"/>
           <ColumnDefinition Width="*"/>
           <ColumnDefinition Width="*"/>
@@ -48,12 +53,16 @@
         <Border Grid.Row="1" Grid.Column="3">
           <TextBox Height="30" Margin="10" Foreground="{StaticResource FontBrush}" FontSize="20" Text="{Binding Ceiling}" />
         </Border>
+
+        <Label Grid.Row="0" Grid.Column="4" Content="Duration Grouping: " HorizontalAlignment="Center"/>
+        <Border Grid.Row="1" Grid.Column="4">
+          <ComboBox Margin="10" ItemsSource="{Binding Array}" SelectedItem="{Binding SelectedItem}" />
+        </Border>
       </Grid>
     </Border>
 
-    <charting:LineChart Grid.Row="1"
+    <charting:BarChart Grid.Row="1"
       MaxHeight="700"
-      XNumberOfTicks="{Binding XTicks}"
       ChartData="{Binding ChartData}"
       ChartTitle="Expense By Category"
       ChartForeground="{StaticResource ButtonBrush}"
@@ -61,19 +70,16 @@
       BackGroundColorCanvas="White" 
       BackGroundColorLegend="White"    
       YNumberOfTicks="3"
+      XValueConverter="{Binding InstanceConverter}"
+      YValueConverter="{x:Static conv:Converters.DecimalConverter}"
       FontType="Tahoma"
       />
-    <!--XValueConverter="{Binding DecimalConverter}"
-      YValueConverter="{x:Static cntrls:Converters.DecimalConverter}"-->
-    
-    <Border Grid.Row="2" Margin="50">
-      <Button Margin="10" Command="{Binding TestCommand}" Content="Test" />
-    </Border>
-    
-  </Grid>
-  
 
-    
-    
-  
+
+  </Grid>
+
+
+
+
+
 </UserControl>

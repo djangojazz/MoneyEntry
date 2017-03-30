@@ -20,7 +20,7 @@ namespace Controls.Converters.Instances
       
       var final = (val == FirstPosition) ? "Current" : ((int)(val - FirstPosition + 1)).DisplayNumberWithStringSuffix();
 
-      return "{final} {OptionalHeader}";
+      return $"{final} {OptionalHeader}";
     }
 
     public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
