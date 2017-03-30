@@ -56,7 +56,7 @@
 
         <Label Grid.Row="0" Grid.Column="4" Content="Duration Grouping: " HorizontalAlignment="Center"/>
         <Border Grid.Row="1" Grid.Column="4">
-          <ComboBox Margin="10" ItemsSource="{Binding Array}" SelectedItem="{Binding SelectedItem}" />
+          <ComboBox Margin="10" ItemsSource="{Binding Frequencies}" SelectedItem="{Binding SelectedFrequency}" />
         </Border>
       </Grid>
     </Border>

@@ -29,6 +29,7 @@ namespace MoneyEntry.ViewModel
       Start = DateTime.Now.Date.AddMonths(-2);
       End = DateTime.Now.Date;
       Ceiling = 100;
+      SelectedFrequency = GroupingFrequency.Month;
 
       Categories = new ObservableCollectionContentNotifying<Category>();
       InitialCategorySet();
@@ -39,19 +40,18 @@ namespace MoneyEntry.ViewModel
     }
 
     #region Properties
-    public GroupingFrequency[] Array { get => Enum.GetValues(typeof(GroupingFrequency)).Cast<GroupingFrequency>().ToArray(); }
+    public GroupingFrequency[] Frequencies { get => Enum.GetValues(typeof(GroupingFrequency)).Cast<GroupingFrequency>().ToArray(); }
 
     #region SelectedItem
-    private GroupingFrequency _selectedItem;
-    public GroupingFrequency SelectedItem
+    private GroupingFrequency _selectedFrequency;
+    public GroupingFrequency SelectedFrequency
     {
-      get { return _selectedItem; }
+      get { return _selectedFrequency; }
       set
       {
-        _selectedItem = value;
-        UpdateChartDataForPlotTrends();
-        MessageBox.Show(SelectedItem.ToString());
-        OnPropertyChanged(nameof(SelectedItem));
+        _selectedFrequency = value;
+        UpdateChartDataForPlotTrends();                 
+        OnPropertyChanged(nameof(SelectedFrequency));
       }
     }
     #endregion              
@@ -182,10 +182,10 @@ namespace MoneyEntry.ViewModel
       {
         var results = Categories.Where(x => x.IsUsed == true).Select(x => (int)x.CategoryId).ToArray();
 
-        var newInput = new TransactionSummationByDurationInput(_person.PersonId, _start, _end, GroupingFrequency.Month, false, results);
+        var newInput = new TransactionSummationByDurationInput(_person.PersonId, _start, _end, _selectedFrequency, false, results);
         var serialization = newInput.SerializeToXml();
 
-        _data.ClearAndAddRange(context.spTransactionSummationByDuration(serialization).ToList());
+        _data.ClearAndAddRange(context.spTransactionSummationByDuration(serialization).ToList().Where(x => x.Amount >= _ceiling));
       }
                      
       UpdateHeader();
@@ -193,17 +193,23 @@ namespace MoneyEntry.ViewModel
 
     private void UpdatePlotTrendsFromData()
     {
-      if (!(_data.Any())) return;   
-            
-      ChartData.ClearAndAddRange(_data.Select(cat => new { CategoryId = cat.CategoryId, CategoryName = cat.CategoryName })
-        .Distinct()
-        .OrderBy(x => x.CategoryName)
-        .ToList()
-        .Select((x, ind) => new { x.CategoryId, x.CategoryName, Index = ind })
-        .ToList()
-        .Select(cat => new PlotTrend(cat.CategoryName, ColorDictionary.Color[cat.Index + 1], new Thickness(2),
-                    _data.Where(x => x.CategoryId == cat.CategoryId).Select(x => new PlotPoints(new PlotPoint<int>(x.Position.Value), new PlotPoint<decimal>(x.Amount.Value))))
-        ));      
+      if (!(_data.Any())) return;
+
+      if (InstanceConverter != null)
+      {
+        InstanceConverter.OptionalHeader = SelectedFrequency.ToString();
+        InstanceConverter.FirstPosition = _data.Select(x => x.Position.Value).First();
+              
+        ChartData.ClearAndAddRange(_data.Select(cat => new { CategoryId = cat.CategoryId, CategoryName = cat.CategoryName })
+          .Distinct()
+          .OrderBy(x => x.CategoryName)
+          .ToList()
+          .Select((x, ind) => new { x.CategoryId, x.CategoryName, Index = ind })
+          .ToList()
+          .Select(cat => new PlotTrend(cat.CategoryName, ColorDictionary.Color[cat.Index + 1], new Thickness(2),
+                      _data.Where(x => x.CategoryId == cat.CategoryId).Select(x => new PlotPoints(new PlotPoint<int>(x.Position.Value), new PlotPoint<decimal>(x.Amount.Value))))
+          ));
+      }
     }
 
     private void UpdateHeader()
