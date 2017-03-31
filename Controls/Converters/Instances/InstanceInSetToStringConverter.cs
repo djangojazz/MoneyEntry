@@ -16,8 +16,8 @@ namespace Controls.Converters.Instances
     {
       if (!Information.IsNumeric(value) | FirstPosition <= 0)
         return string.Empty;
-      var val = (double)value;
-      
+      var val = System.Convert.ToDouble(value);
+
       var final = (val == FirstPosition) ? "First" : ((int)(val - FirstPosition + 1)).DisplayNumberWithStringSuffix();
 
       return $"{final} {OptionalHeader}";

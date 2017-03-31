@@ -111,7 +111,6 @@
     </Compile>
     <Compile Include="Model\Category.cs" />
     <Compile Include="Model\ColorDictionary.cs" />
-    <Compile Include="Model\Frequency.cs" />
     <Compile Include="Model\MoneyEntryModel.cs" />
     <Compile Include="Model\Person.cs" />
     <Compile Include="Model\TransactionSummationByDurationInput.cs" />

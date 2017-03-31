@@ -26,6 +26,7 @@
           <ColumnDefinition Width="*"/>
           <ColumnDefinition Width="*"/>
           <ColumnDefinition Width="*"/>
+          <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
           <RowDefinition Height="Auto"/>
@@ -44,63 +45,53 @@
         <Border Grid.Row="1" Grid.Column="1">
           <DatePicker  Height="30" Margin="10" Foreground="{StaticResource FontBrush}" FontSize="20" SelectedDate="{Binding Start}" />
         </Border>
-
         <Label Grid.Row="0" Grid.Column="2" Content="EndDate: " HorizontalAlignment="Center"/>
         <Border Grid.Row="1" Grid.Column="2">
           <DatePicker Height="30" Margin="10" Foreground="{StaticResource FontBrush}" FontSize="20" SelectedDate="{Binding End}" />
         </Border>
-
         <Label Grid.Row="0" Grid.Column="3" Content="Minimum Money Use: " HorizontalAlignment="Center"/>
         <Border Grid.Row="1" Grid.Column="3">
           <TextBox Height="30" Margin="10" Foreground="{StaticResource FontBrush}" FontSize="20" Text="{Binding Floor}" />
         </Border>
-
         <Label Grid.Row="0" Grid.Column="4" Content="Duration Grouping: " HorizontalAlignment="Center"/>
         <Border Grid.Row="1" Grid.Column="4">
-          <ComboBox Margin="10" ItemsSource="{Binding Frequencies}" SelectedItem="{Binding SelectedFrequency}" />
+          <ComboBox Margin="10" ItemsSource="{Binding Groupings}" SelectedItem="{Binding SelectedGrouping}" />
         </Border>
-
-        <CheckBox  Grid.Row="0" Grid.Column="5" x:Name="checkSummary"  IsChecked="{Binding Summarize}" Content="Show Summary" Margin="10"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <Label Grid.Row="0" Grid.Column="5" Content="Chart Type: " HorizontalAlignment="Center"/>
         <Border Grid.Row="1" Grid.Column="5">
-          <ToggleButton  x:Name="switchViewsToggleButton" Margin="10">
-            <ToggleButton.Style>
-              <Style TargetType="ToggleButton">
-                <Setter Property="Background" Value="Transparent" />
-                <Setter Property="BorderThickness" Value="0" />
-                <Style.Triggers>
-                  <Trigger Property="IsChecked" Value="True">
-                    <Setter Property="Content" Value="Show BarChart" />
-                  </Trigger>
-                  <Trigger Property="IsChecked" Value="False">
-                    <Setter Property="Content" Value="Show LineChart" />
-                  </Trigger>
-                </Style.Triggers>
-              </Style>
-            </ToggleButton.Style>
-          </ToggleButton>
+          <ComboBox Margin="10" ItemsSource="{Binding ChartTypes}" SelectedItem="{Binding SelectedChart}" />
         </Border>
+        <CheckBox Grid.Row="1" Grid.Column="6" x:Name="checkSummary"  IsChecked="{Binding Summarize}" Content="Show Summary" Margin="10" HorizontalAlignment="Center" VerticalAlignment="Center" />
       </Grid>
     </Border>
 
     <charting:BarChart Grid.Row="1"
-      MaxHeight="700"
       ChartData="{Binding ChartData}"
       ChartTitle="Expense By Category"
       ChartForeground="{StaticResource ButtonBrush}"
       BackGroundColor="{StaticResource MoneyBrush}" 
       BackGroundColorCanvas="White" 
       BackGroundColorLegend="White"    
-      YNumberOfTicks="3"
+      YNumberOfTicks="6"
       XValueConverter="{Binding InstanceConverter}"
       YValueConverter="{x:Static conv:Converters.DecimalConverter}"
       FontType="Tahoma"
+      Visibility="{Binding SelectedChart, Converter={x:Static conv:Converters.ChartTypeToVisibilityConverter}, ConverterParameter={x:Static charting:ChartType.BarChart}}"
       />
-
-
+    <charting:LineChart Grid.Row="1"
+      MaxHeight="700"
+      XTicksDynamic="True"
+      ChartData="{Binding ChartData}"
+      ChartTitle="Expense By Category"
+      ChartForeground="{StaticResource ButtonBrush}"
+      BackGroundColor="{StaticResource MoneyBrush}" 
+      BackGroundColorCanvas="White" 
+      BackGroundColorLegend="White"    
+      YNumberOfTicks="6"
+      XValueConverter="{Binding InstanceConverter}"
+      YValueConverter="{x:Static conv:Converters.DecimalConverter}"
+      FontType="Tahoma"
+      Visibility="{Binding SelectedChart, Converter={x:Static conv:Converters.ChartTypeToVisibilityConverter}, ConverterParameter={x:Static charting:ChartType.LineChart}}"
+      />
   </Grid>
-
-
-
-
-
 </UserControl>

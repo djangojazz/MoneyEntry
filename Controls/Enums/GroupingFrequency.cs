@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MoneyEntry.Model
+namespace Controls.Enums
 {
   public enum GroupingFrequency
   {

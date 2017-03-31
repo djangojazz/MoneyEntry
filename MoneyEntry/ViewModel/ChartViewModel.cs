@@ -10,6 +10,7 @@ using Controls.Types;
 using Controls;
 using Controls.Charting;
 using Controls.Converters.Instances;
+using Controls.Enums;
 
 namespace MoneyEntry.ViewModel
 {
@@ -29,7 +30,8 @@ namespace MoneyEntry.ViewModel
       Start = DateTime.Now.Date.AddMonths(-2);
       End = DateTime.Now.Date;
       Floor = 100;
-      SelectedFrequency = GroupingFrequency.Month;
+      SelectedGrouping = GroupingFrequency.Month;
+      SelectedChart = ChartType.BarChart;
 
       Categories = new ObservableCollectionContentNotifying<Category>();
       InitialCategorySet();
@@ -40,24 +42,39 @@ namespace MoneyEntry.ViewModel
     }
 
     #region Properties
-    public GroupingFrequency[] Frequencies { get => Enum.GetValues(typeof(GroupingFrequency)).Cast<GroupingFrequency>().ToArray(); }
-
-    #region SelectedItem
-    private GroupingFrequency _selectedFrequency;
-    public GroupingFrequency SelectedFrequency
-    {
-      get { return _selectedFrequency; }
-      set
-      {
-        _selectedFrequency = value;
-        UpdateChartDataForPlotTrends();                 
-        OnPropertyChanged(nameof(SelectedFrequency));
-      }
-    }
-    #endregion              
+    public GroupingFrequency[] Groupings { get => Enum.GetValues(typeof(GroupingFrequency)).Cast<GroupingFrequency>().ToArray(); }
+    public ChartType[] ChartTypes { get => Enum.GetValues(typeof(ChartType)).Cast<ChartType>().ToArray(); }
     public InstanceInSetToStringConverter InstanceConverter { get; }
     public ObservableCollectionContentNotifying<Category> Categories { get; }
 
+    #region SelectedChart		
+    private ChartType _selectedChart;
+
+    public ChartType SelectedChart
+    {
+      get { return _selectedChart; }
+      set
+      {
+        _selectedChart = value;
+        OnPropertyChanged(nameof(SelectedChart));
+      }
+    }
+    #endregion
+
+    #region SelectedGrouping
+    private GroupingFrequency _selectedGrouping;
+    public GroupingFrequency SelectedGrouping
+    {
+      get { return _selectedGrouping; }
+      set
+      {
+        _selectedGrouping = value;
+        UpdateChartDataForPlotTrends();                 
+        OnPropertyChanged(nameof(SelectedGrouping));
+      }
+    }
+    #endregion              
+                                                                             
     #region OpenProperty
     private bool _open;
 
@@ -151,8 +168,7 @@ namespace MoneyEntry.ViewModel
       }
     }
     #endregion
-
-
+                 
     #region ChartData
     private ObservableCollectionContentNotifying<PlotTrend> _chartData;
 
@@ -198,7 +214,7 @@ namespace MoneyEntry.ViewModel
       {
         var results = Categories.Where(x => x.IsUsed == true).Select(x => (int)x.CategoryId).ToArray();
 
-        var newInput = new TransactionSummationByDurationInput(_person.PersonId, _start, _end, _selectedFrequency, _floor, _summarize, results);
+        var newInput = new TransactionSummationByDurationInput(_person.PersonId, _start, _end, _selectedGrouping, _floor, _summarize, results);
         var serialization = newInput.SerializeToXml();
                                                                                                                   
         _data.ClearAndAddRange(context.spTransactionSummationByDuration(serialization).ToList());
@@ -213,7 +229,7 @@ namespace MoneyEntry.ViewModel
 
       if (InstanceConverter != null)
       { 
-        InstanceConverter.OptionalHeader = SelectedFrequency.ToString();
+        InstanceConverter.OptionalHeader = SelectedGrouping.ToString();
         InstanceConverter.FirstPosition = _data.Select(x => x.Position.Value).First();
               
         ChartData.ClearAndAddRange(_data.Select(cat => new { CategoryId = cat.CategoryId, CategoryName = cat.CategoryName })

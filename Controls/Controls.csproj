@@ -82,6 +82,7 @@
     <Compile Include="Charting\Charts\LineChart.xaml.cs">
       <DependentUpon>LineChart.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Charting\ChartType.cs" />
     <Compile Include="Charting\Models\PlotPoint.cs" />
     <Compile Include="Charting\Models\PlotPoints.cs" />
     <Compile Include="Charting\Models\PlotTrend.cs" />
@@ -94,9 +95,11 @@
     </Compile>
     <Compile Include="Converters\Converters.cs" />
     <Compile Include="Converters\Instances\ChartAdditionalInfoAndPointMultiConverter.cs" />
+    <Compile Include="Converters\Instances\ChartTypeToVisibilityConverter.cs" />
     <Compile Include="Converters\Instances\InstanceInSetToStringConverter.cs" />
     <Compile Include="Converters\Instances\DecimalConverter.cs" />
     <Compile Include="Converters\Instances\DateFormatConverter.cs" />
+    <Compile Include="Enums\GroupingFrequency.cs" />
     <Compile Include="Extensions\ListView\DoubleClickBehavior.cs" />
     <Compile Include="Extensions\ListView\EnterReleaseBehavior.cs" />
     <Compile Include="Extensions\ListView\EscapeReleaseBehavior.cs" />
