@@ -137,6 +137,22 @@ namespace MoneyEntry.ViewModel
     }
     #endregion
 
+    #region Summarize		
+    private bool _summarize;
+
+    public bool Summarize
+    {
+      get { return _summarize; }
+      set
+      {
+        _summarize = value;
+        UpdateChartDataForPlotTrends();
+        OnPropertyChanged(nameof(Summarize));
+      }
+    }
+    #endregion
+
+
     #region ChartData
     private ObservableCollectionContentNotifying<PlotTrend> _chartData;
 
@@ -182,7 +198,7 @@ namespace MoneyEntry.ViewModel
       {
         var results = Categories.Where(x => x.IsUsed == true).Select(x => (int)x.CategoryId).ToArray();
 
-        var newInput = new TransactionSummationByDurationInput(_person.PersonId, _start, _end, _selectedFrequency, _floor, false, results);
+        var newInput = new TransactionSummationByDurationInput(_person.PersonId, _start, _end, _selectedFrequency, _floor, _summarize, results);
         var serialization = newInput.SerializeToXml();
                                                                                                                   
         _data.ClearAndAddRange(context.spTransactionSummationByDuration(serialization).ToList());

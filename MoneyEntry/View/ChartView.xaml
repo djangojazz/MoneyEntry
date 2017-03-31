@@ -9,8 +9,8 @@
              xmlns:charting="clr-namespace:Controls.Charting;assembly=Controls"
              mc:Ignorable="d" >
   <UserControl.Resources>
-        <ResourceDictionary Source="..\MainWindowResources.xaml" />
-    </UserControl.Resources>
+    <ResourceDictionary Source="..\MainWindowResources.xaml" />
+  </UserControl.Resources>
   <Grid>
     <Grid.RowDefinitions>
       <RowDefinition Height="Auto"/>
@@ -20,6 +20,7 @@
     <Border>
       <Grid>
         <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="*"/>
           <ColumnDefinition Width="*"/>
           <ColumnDefinition Width="*"/>
           <ColumnDefinition Width="*"/>
@@ -57,6 +58,26 @@
         <Label Grid.Row="0" Grid.Column="4" Content="Duration Grouping: " HorizontalAlignment="Center"/>
         <Border Grid.Row="1" Grid.Column="4">
           <ComboBox Margin="10" ItemsSource="{Binding Frequencies}" SelectedItem="{Binding SelectedFrequency}" />
+        </Border>
+
+        <CheckBox  Grid.Row="0" Grid.Column="5" x:Name="checkSummary"  IsChecked="{Binding Summarize}" Content="Show Summary" Margin="10"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <Border Grid.Row="1" Grid.Column="5">
+          <ToggleButton  x:Name="switchViewsToggleButton" Margin="10">
+            <ToggleButton.Style>
+              <Style TargetType="ToggleButton">
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="BorderThickness" Value="0" />
+                <Style.Triggers>
+                  <Trigger Property="IsChecked" Value="True">
+                    <Setter Property="Content" Value="Show BarChart" />
+                  </Trigger>
+                  <Trigger Property="IsChecked" Value="False">
+                    <Setter Property="Content" Value="Show LineChart" />
+                  </Trigger>
+                </Style.Triggers>
+              </Style>
+            </ToggleButton.Style>
+          </ToggleButton>
         </Border>
       </Grid>
     </Border>

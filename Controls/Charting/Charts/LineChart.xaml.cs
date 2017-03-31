@@ -147,8 +147,7 @@ namespace Controls.Charting
         PART_CanvasPoints.Children.Add(stackPanel);
         return;
       }
-
-      if (ChartData.Count > 1)
+      else
       {
         //Uniformity check of X and Y types.  EG: You cannot have a DateTime and a Number for different X axis or Y axis sets.
         if (ChartData.ToList().Select(x => x.Points[0].X.GetType()).Distinct().GroupBy(x => x).Count() > 1 || ChartData.ToList().Select(x => x.Points[0].Y.GetType()).Distinct().GroupBy(x => x).Count() > 1)
@@ -162,35 +161,35 @@ namespace Controls.Charting
           PART_CanvasPoints.Children.Add(stackPanel);
           return;
         }
-      }
 
-      var xTicks = XTicksDynamic ? ChartData.SelectMany(x => x.Points).Select(x => x.XAsDouble).Distinct().Count() - 1 : XNumberOfTicks;
+        var xTicks = XTicksDynamic ? ChartData.SelectMany(x => x.Points).Select(x => x.XAsDouble).Distinct().Count() - 1 : XNumberOfTicks;
 
-      PART_CanvasPoints.LayoutTransform = new ScaleTransform(1, -1);
-      PART_CanvasPoints.UpdateLayout();
+        PART_CanvasPoints.LayoutTransform = new ScaleTransform(1, -1);
+        PART_CanvasPoints.UpdateLayout();
 
-      _xFloor = ChartData.SelectMany(x => x.Points).Select(x => x.XAsDouble).OrderBy(x => x).FirstOrDefault();
-      _xCeiling = ChartData.SelectMany(x => x.Points).Select(x => x.XAsDouble).OrderByDescending(x => x).FirstOrDefault();
-      _yFloor = 0;
-      _yCeiling = ChartData.SelectMany(x => x.Points).Select(x => x.YAsDouble).OrderByDescending(x => x).FirstOrDefault();
+        _xFloor = ChartData.SelectMany(x => x.Points).Select(x => x.XAsDouble).OrderBy(x => x).FirstOrDefault();
+        _xCeiling = ChartData.SelectMany(x => x.Points).Select(x => x.XAsDouble).OrderByDescending(x => x).FirstOrDefault();
+        _yFloor = 0;
+        _yCeiling = ChartData.SelectMany(x => x.Points).Select(x => x.YAsDouble).OrderByDescending(x => x).FirstOrDefault();
 
-      PART_CanvasPoints.Children.RemoveRange(0, PART_CanvasPoints.Children.Count);
-      DrawTrends(PART_CanvasPoints, _viewWidth, _viewHeight, _xCeiling, _xFloor, _yCeiling, _yFloor);
+        PART_CanvasPoints.Children.RemoveRange(0, PART_CanvasPoints.Children.Count);
+        DrawTrends(PART_CanvasPoints, _viewWidth, _viewHeight, _xCeiling, _xFloor, _yCeiling, _yFloor);
 
-      if (PART_CanvasXAxisTicks != null && PART_CanvasYAxisTicks != null)
-      {
-        if (XNumberOfTicks == 0)
+        if (PART_CanvasXAxisTicks != null && PART_CanvasYAxisTicks != null)
         {
-          //want at the very least to see a beginning and an end and redraw to show this.
-          XNumberOfTicks = 1;
-          var pt = ChartData[0].Points[0];
-          ChartData[0].Points.Add(pt);
-          DrawTrends(PART_CanvasPoints, _viewWidth, _viewHeight, _xCeiling, _xFloor, _yCeiling, _yFloor);
+          if (XNumberOfTicks == 0)
+          {
+            //want at the very least to see a beginning and an end and redraw to show this.
+            XNumberOfTicks = 1;
+            var pt = ChartData[0].Points[0];
+            ChartData[0].Points.Add(pt);
+            DrawTrends(PART_CanvasPoints, _viewWidth, _viewHeight, _xCeiling, _xFloor, _yCeiling, _yFloor);
+          }
         }
-      }
 
-      DrawXAxis(PART_CanvasXAxisTicks, PART_CanvasXAxisLabels, _xCeiling, _xFloor, xTicks, _viewWidth, _labelHeight);
-      DrawYAxis(PART_CanvasYAxisTicks, PART_CanvasYAxisLabels, _yCeiling, _yFloor, _viewHeight, _labelHeight);
+        DrawXAxis(PART_CanvasXAxisTicks, PART_CanvasXAxisLabels, _xCeiling, _xFloor, xTicks, _viewWidth, _labelHeight);
+        DrawYAxis(PART_CanvasYAxisTicks, PART_CanvasYAxisLabels, _yCeiling, _yFloor, _viewHeight, _labelHeight);
+      }
     }
 
     private void ClearCanvasOfAllData()

@@ -135,8 +135,7 @@ namespace Controls.Charting
         PART_CanvasPoints.Children.Add(stackPanel);
         return;
       }
-
-      if (ChartData.Count > 1)
+      else
       {
         PART_CanvasPoints.LayoutTransform = new ScaleTransform(1, -1);
         PART_CanvasPoints.UpdateLayout();
@@ -154,30 +153,30 @@ namespace Controls.Charting
           PART_CanvasPoints.Children.Add(stackPanel);
           return;
         }
-      }
 
-      PART_CanvasPoints.LayoutTransform = new ScaleTransform(1, -1);
-      PART_CanvasPoints.UpdateLayout();
+        PART_CanvasPoints.LayoutTransform = new ScaleTransform(1, -1);
+        PART_CanvasPoints.UpdateLayout();
 
-      _xFloor = ChartData.SelectMany(x => x.Points).Select(x => x.XAsDouble).OrderBy(x => x).FirstOrDefault();
-      _xCeiling = ChartData.SelectMany(x => x.Points).Select(x => x.XAsDouble).OrderByDescending(x => x).FirstOrDefault();
-      _yFloor = 0;
-      _yCeiling = ChartData.SelectMany(x => x.Points).Select(x => x.YAsDouble).OrderByDescending(x => x).FirstOrDefault();
+        _xFloor = ChartData.SelectMany(x => x.Points).Select(x => x.XAsDouble).OrderBy(x => x).FirstOrDefault();
+        _xCeiling = ChartData.SelectMany(x => x.Points).Select(x => x.XAsDouble).OrderByDescending(x => x).FirstOrDefault();
+        _yFloor = 0;
+        _yCeiling = ChartData.SelectMany(x => x.Points).Select(x => x.YAsDouble).OrderByDescending(x => x).FirstOrDefault();
 
-      PART_CanvasPoints.Children.RemoveRange(0, PART_CanvasPoints.Children.Count);
-      DrawTrends(PART_CanvasPoints, _viewWidth, _viewHeight, _xCeiling, _xFloor, _yCeiling, _yFloor);
+        PART_CanvasPoints.Children.RemoveRange(0, PART_CanvasPoints.Children.Count);
+        DrawTrends(PART_CanvasPoints, _viewWidth, _viewHeight, _xCeiling, _xFloor, _yCeiling, _yFloor);
 
-      if (PART_CanvasXAxisTicks != null && PART_CanvasYAxisTicks != null)
-      {
-        if (_xNumberOfTicks == 0)
+        if (PART_CanvasXAxisTicks != null && PART_CanvasYAxisTicks != null)
         {
-          //want at the very least to see a beginning and an end and redraw to show this.
-          _xNumberOfTicks = 1;
+          if (_xNumberOfTicks == 0)
+          {
+            //want at the very least to see a beginning and an end and redraw to show this.
+            _xNumberOfTicks = 1;
+          }
         }
-      }
 
-      DrawXAxis(PART_CanvasXAxisTicks, PART_CanvasXAxisLabels, _xCeiling, 0, _xNumberOfTicks, _viewWidth, _labelHeight);
-      DrawYAxis(PART_CanvasYAxisTicks, PART_CanvasYAxisLabels, _yCeiling, _yFloor, _viewHeight, _labelHeight);
+        DrawXAxis(PART_CanvasXAxisTicks, PART_CanvasXAxisLabels, _xCeiling, 0, _xNumberOfTicks, _viewWidth, _labelHeight);
+        DrawYAxis(PART_CanvasYAxisTicks, PART_CanvasYAxisLabels, _yCeiling, _yFloor, _viewHeight, _labelHeight);
+      }   
     }
     #endregion
 
