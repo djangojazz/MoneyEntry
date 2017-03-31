@@ -80,7 +80,6 @@
       Visibility="{Binding SelectedChart, Converter={x:Static conv:Converters.ChartTypeToVisibilityConverter}, ConverterParameter={x:Static charting:ChartType.BarChart}}"
       />
     <charting:LineChart Grid.Row="1"
-      MaxHeight="700"
       XTicksDynamic="True"
       ChartData="{Binding ChartData}"
       ChartTitle="Expense By Category"
