@@ -61,6 +61,27 @@ namespace MoneyEntry.ViewModel
     }
     #endregion
 
+    #region ShowAllProperties		
+    private bool _showAllProperties;
+
+    public bool ShowAllProperties
+    {
+      get { return _showAllProperties; }
+      set
+      {
+        _showAllProperties = value;
+        if(_showAllProperties)
+        {
+          Categories.ToList().ForEach(x => x.IsUsed = true);
+          UpdateChartDataForPlotTrends();
+        }
+          
+        OnPropertyChanged(nameof(ShowAllProperties));
+      }
+    }
+    #endregion
+
+
     #region SelectedGrouping
     private GroupingFrequency _selectedGrouping;
     public GroupingFrequency SelectedGrouping
@@ -191,7 +212,7 @@ namespace MoneyEntry.ViewModel
       UpdateData();
       UpdatePlotTrendsFromData();
     }
-
+    
     private void InitialCategorySet()
     {
       using (var context = new ExpensesEntities())

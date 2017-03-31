@@ -61,7 +61,8 @@
         <Border Grid.Row="1" Grid.Column="5">
           <ComboBox Margin="10" ItemsSource="{Binding ChartTypes}" SelectedItem="{Binding SelectedChart}" />
         </Border>
-        <CheckBox Grid.Row="1" Grid.Column="6" x:Name="checkSummary"  IsChecked="{Binding Summarize}" Content="Show Summary" Margin="10" HorizontalAlignment="Center" VerticalAlignment="Center" />
+        <CheckBox Grid.Row="0" Grid.Column="6" IsChecked="{Binding ShowAllProperties}" Content="Select All Properties" Margin="10" HorizontalAlignment="Center" VerticalAlignment="Center" />
+        <CheckBox Grid.Row="1" Grid.Column="6" IsChecked="{Binding Summarize}" Content="Show Summary" Margin="10" HorizontalAlignment="Center" VerticalAlignment="Center" />
       </Grid>
     </Border>
 
