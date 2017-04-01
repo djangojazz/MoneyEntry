@@ -57,7 +57,7 @@ namespace MoneyEntry.ViewModel
             DateTime dt = DateTime.Now;
 
             // Start the initial backup
-            _BackupLocation = "D:\\SQLServer\\Backups";
+            _BackupLocation = "C:\\SQLServer\\Backups";
             _InitialBackupLocation = _BackupLocation +  "\\ExpensesStart_" + dt.Year + "-" + dt.Month + "-" + dt.Day + ".bak";
 
             if (!File.Exists(_InitialBackupLocation))

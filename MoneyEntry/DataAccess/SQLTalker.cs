@@ -81,7 +81,7 @@ namespace MoneyEntry.DataAccess
                 {
                     case MessageBoxResult.Yes:
                         {
-                            this.openFileDialog.InitialDirectory = "D:\\SQLServer\\Backups\\";
+                            this.openFileDialog.InitialDirectory = "C:\\SQLServer\\Backups\\";
                             this.openFileDialog.Filter = "Backup Files (.bak)|*.bak|All Files (*.*)|*.*";
 
                             // per online this should be WPF method : bool? result = dlg.ShowDialog();
