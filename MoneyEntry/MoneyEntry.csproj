@@ -94,6 +94,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DataAccess\ExpensesRepo.cs" />
     <Compile Include="DataAccess\SQLTalker.cs" />
     <Compile Include="Expenses.Context.cs">
       <AutoGen>True</AutoGen>

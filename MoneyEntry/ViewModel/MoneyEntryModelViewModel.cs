@@ -33,7 +33,6 @@ namespace MoneyEntry.ViewModel
             set
             {
                 _MoneyEntry.PersonId = value;
-
                 OnPropertyChanged("PersonId");
             }
         }
@@ -70,14 +69,10 @@ namespace MoneyEntry.ViewModel
                             _MoneyEntry.Name);
 
                         ee.spUpdateTotals();
-
                         transaction.Complete();
                     }
-
                 }
-
                 _MoneyEntry.Amount = value;
-
                 OnPropertyChanged("Amount");
             }
         }
@@ -106,9 +101,7 @@ namespace MoneyEntry.ViewModel
                         transaction.Complete();
                     }
                 }
-
                 _MoneyEntry.TransactionDesc = value;
-
                 OnPropertyChanged("TransactionDesc");
             }
         }
@@ -137,7 +130,6 @@ namespace MoneyEntry.ViewModel
                                 _MoneyEntry.Name);
 
                             ee.spUpdateTotals();
-
                             transaction.Complete();
                         }
                     }
@@ -145,17 +137,12 @@ namespace MoneyEntry.ViewModel
                     {
                         string s = "";
                         _MoneyEntry.Ts.ToList().ForEach(n => s += n + "\n");
-
                         MessageBox.Show("You may only choose: \n\n" + s + "\n\n Resetting value to original reference");
-
                         OnPropertyChanged("Type");
-
                         return;
                     }
                 }
-
                 _MoneyEntry.TypeName = value;
-
                 OnPropertyChanged("Type");
             }
         }
@@ -201,17 +188,12 @@ namespace MoneyEntry.ViewModel
                     {
                         string s = "";
                         _MoneyEntry.Cs.ToList().ForEach(n => s += n + "\n");
-
                         MessageBox.Show("You may only choose: \n\n" + s + "\n\n Resetting value to original reference");
-
                         OnPropertyChanged("Type");
-
                         return;
                     }
                 }
-
                 _MoneyEntry.CategoryName = value;
-
                 OnPropertyChanged("Category");
             }
         }
@@ -240,9 +222,7 @@ namespace MoneyEntry.ViewModel
                         transaction.Complete();
                     }
                 }
-
                 _MoneyEntry.CreatedDate = value;
-
                 OnPropertyChanged("CreatedDate");
             }
         }
@@ -253,7 +233,6 @@ namespace MoneyEntry.ViewModel
             set
             {
                 _MoneyEntry.RunningTotal = value;
-
                 OnPropertyChanged("RunningTotal");
             }
         }
@@ -282,12 +261,9 @@ namespace MoneyEntry.ViewModel
                         transaction.Complete();
                     }
                 }
-
                 _MoneyEntry.Reconciled = value;
-
                 OnPropertyChanged("CreatedDate");
             }
         }
-
     }
 }

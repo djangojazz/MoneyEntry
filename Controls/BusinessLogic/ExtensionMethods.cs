@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data;
 using System.Diagnostics;
 using System.IO;
@@ -24,6 +25,12 @@ namespace Controls
       {                        
         input.Add(o);
       }
+    }
+
+    public static void ClearAndAddRange<T>(this ObservableCollection<T> input, IEnumerable<T> array)
+    {
+      input.Clear();
+      input.AddRange(array);
     }
 
     public static void ClearAndAddRange<T>(this ObservableCollectionContentNotifying<T> input, IEnumerable<T> array)

@@ -46,7 +46,6 @@ namespace MoneyEntry.ViewModel
             if (TypeDescriptor.GetProperties(this)[propertyName] == null)
             {
                 string msg = "Invalid property name: " + propertyName;
-
                 if (this.ThrowOnInvalidPropertyName)
                     throw new Exception(msg);
                 else
