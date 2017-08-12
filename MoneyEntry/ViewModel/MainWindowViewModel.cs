@@ -6,7 +6,6 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Security.Principal;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
@@ -17,13 +16,8 @@ using System.Configuration;
 
 namespace MoneyEntry.ViewModel
 {
-  /// <summary>
-  /// The ViewModel for the application's main window.
-  /// </summary>
   public class MainWindowViewModel : WorkspaceViewModel
   {
-    #region Fields
-
     ReadOnlyCollection<CommandViewModel> _commands;
     RelayCommand _Exit;
     RelayCommand _OpenLoc;
@@ -36,154 +30,59 @@ namespace MoneyEntry.ViewModel
 
     private string _BackupLocation { get; set; }
     private string _InitialBackupLocation { get; set; }
-
-    public string CurrentUser { get; set; }
-
-
-    ExpensesEntities ee = new ExpensesEntities();
     SQLTalker s = new SQLTalker();
+    
 
-    #endregion // Fields
-
-    #region Constructor
-
-    public MainWindowViewModel(string customerDataFile)
+    //TODO Unsure if this is needed or not
+    public MainWindowViewModel()
+      //string customerDataFile)
     {
       base.DisplayName = Strings.MainWindowViewModel_DisplayName;
-      
-      CurrentUser = ee.tePerson.Where(n => n.FirstName == "Shared").Select(x => x.PersonID).FirstOrDefault().ToString();
-      
+      People = new ReadOnlyCollection<Person>(Repository.GetPeople());
+
+      CurrentUser = _people.FirstOrDefault(x => x.FirstName == "Shared");
+
       // Start the initial backup
       _BackupLocation = ConfigurationManager.AppSettings["DatabaseBackupsLocation"];
 
-      if (!Directory.Exists(_BackupLocation))
-        Directory.CreateDirectory(_BackupLocation);
-      
+      if (!Directory.Exists(_BackupLocation)) { Directory.CreateDirectory(_BackupLocation); }
+
       DateTime dt = DateTime.Now;
       _InitialBackupLocation = _BackupLocation + "\\ExpensesStart_" + dt.Year + "-" + dt.Month + "-" + dt.Day + ".bak";
 
-      if (!File.Exists(_InitialBackupLocation))
-      {
-        BackUpDB(true);  // initial backup on startup
-      }
+      if (!File.Exists(_InitialBackupLocation)) { BackUpDB(true); }  // initial backup on startup
     }
-
-    #endregion // Constructor
-
-    #region People
-
+    
     public ReadOnlyCollection<Person> People
     {
-      get
+      get => _people;
+      set
       {
-        if (_people == null)
-        {
-          List<Person> persns = this.GetPeople();
-          _people = new ReadOnlyCollection<Person>(persns);
-        }
-        return _people;
+        _people = value;
+        OnPropertyChanged(nameof(People));
+      }
+    }
+    private Person _currentUser;
+
+    public Person CurrentUser
+    {
+      get { return _currentUser; }
+      set
+      {
+        _currentUser = value;
+        OnPropertyChanged(nameof(CurrentUser));
       }
     }
 
-
-    List<Person> GetPeople()
-    {
-      return ee.tePerson.Select(x => new Person
-      {
-        PersonId = x.PersonID,
-        FirstName = x.FirstName
-      }).ToList();
-    }
-
-    #endregion
-
-    #region Commands
-
-    /// <summary>
-    /// Returns a read-only list of commands 
-    /// that the UI can display and execute.
-    /// </summary>
-    public ReadOnlyCollection<CommandViewModel> Commands
-    {
-      get
-      {
-        if (_commands == null)
-        {
-          List<CommandViewModel> cmds = this.CreateCommands();
-          _commands = new ReadOnlyCollection<CommandViewModel>(cmds);
-        }
-        return _commands;
-      }
-    }
-
-    List<CommandViewModel> CreateCommands()
-    {
-      return new List<CommandViewModel>
-            {
-                new CommandViewModel("Add Category", new RelayCommand(param => this.Categories())),
-                new CommandViewModel("MoneyEntry",   new RelayCommand(param => this.MoneyEntry())),
-                new CommandViewModel("Reconciliation", new RelayCommand(param => this.Reconciliation())),
-                new CommandViewModel("Search",  new RelayCommand(param => this.Query())),
-                new CommandViewModel("Charting",  new RelayCommand(param => this.Chart())),
-            };
-    }
-
-    public ICommand ExitCommand
-    {
-      get
-      {
-        if (_Exit == null)
-        {
-          _Exit = new RelayCommand(param => this.Exit());
-        }
-        return _Exit;
-      }
-    }
-
-    public ICommand OpenLocationCommand
-    {
-      get
-      {
-        if (_OpenLoc == null)
-        {
-          _OpenLoc = new RelayCommand(param => this.OpenBackupLocation());
-        }
-        return _OpenLoc;
-      }
-    }
-
-    public ICommand BackupDBCommand
-    {
-      get
-      {
-        if (_BackUp == null)
-        {
-          _BackUp = new RelayCommand(param => this.BackUpDB(false));
-        }
-        return _BackUp;
-      }
-    }
-
-    public ICommand RestoreDBCommand
-    {
-      get
-      {
-        if (_Restore == null)
-        {
-          _Restore = new RelayCommand(param => this.RestoreDB());
-        }
-        return _Restore;
-      }
-    }
-
-    #endregion // Commands
+    public ReadOnlyCollection<CommandViewModel> Commands { get => (_commands == null)  ? _commands = new ReadOnlyCollection<CommandViewModel>(CreateCommands()) : _commands;  }
+    public ICommand ExitCommand { get => (_Exit == null) ? _Exit = new RelayCommand(param => Exit()) : _Exit; }
+    public ICommand OpenLocationCommand { get => (_OpenLoc == null) ? _OpenLoc = new RelayCommand(param => OpenBackupLocation()) : _OpenLoc; }
+    public ICommand BackupDBCommand { get => (_BackUp == null) ? _BackUp = new RelayCommand(param => this.BackUpDB(false)) : _BackUp; }
+    public ICommand RestoreDBCommand { get => (_Restore == null) ? _Restore = new RelayCommand(param => this.RestoreDB()) : _Restore; }
+    
 
     #region Workspaces
-
-    /// <summary>
-    /// Returns the collection of available workspaces to display.
-    /// A 'workspace' is a ViewModel that can request to be closed.
-    /// </summary>
+    
     public ObservableCollection<WorkspaceViewModel> Workspaces
     {
       get
@@ -191,7 +90,7 @@ namespace MoneyEntry.ViewModel
         if (_workspaces == null)
         {
           _workspaces = new ObservableCollection<WorkspaceViewModel>();
-          _workspaces.CollectionChanged += this.OnWorkspacesChanged;
+          _workspaces.CollectionChanged += OnWorkspacesChanged;
         }
         return _workspaces;
       }
@@ -199,7 +98,7 @@ namespace MoneyEntry.ViewModel
 
     void OnWorkspacesChanged(object sender, NotifyCollectionChangedEventArgs e)
     {
-      if (e.NewItems != null && e.NewItems.Count != 0)
+      if (e.NewItems != null && e.NewItems.Count != 0) 
         foreach (WorkspaceViewModel workspace in e.NewItems)
           workspace.RequestClose += this.OnWorkspaceRequestClose;
 
@@ -212,84 +111,71 @@ namespace MoneyEntry.ViewModel
     {
       WorkspaceViewModel workspace = sender as WorkspaceViewModel;
       workspace.Dispose();
-      this.Workspaces.Remove(workspace);
+      Workspaces.Remove(workspace);
     }
+
 
     #endregion // Workspaces
 
     #region Private Helpers
+    private List<CommandViewModel> CreateCommands()
+    {
+      return new List<CommandViewModel>
+      {
+          new CommandViewModel("Add Category", new RelayCommand(param => Categories())),
+          new CommandViewModel("MoneyEntry",   new RelayCommand(param => MoneyEntry())),
+          new CommandViewModel("Reconciliation", new RelayCommand(param => Reconciliation())),
+          new CommandViewModel("Search",  new RelayCommand(param => Query())),
+          new CommandViewModel("Charting",  new RelayCommand(param => Chart())),
+      };
+    }
 
     int ConvertToNumber(string s)
     {
-      try
-      {
-        return Convert.ToInt32(s);
-      }
-      catch (FormatException)
-      {
-        return 0;
-      }
+      try { return Convert.ToInt32(s); }
+      catch (FormatException) { return 0; }
     }
-
-    void SetCurrentUser()
-    {
-      int currentID = ConvertToNumber(CurrentUser);
-
-      _currentPerson = ee.tePerson
-                         .Where(i => i.PersonID == currentID)
-                         .Select(p => new Person
-                         {
-                           PersonId = p.PersonID,
-                           FirstName = p.FirstName
-                         }).FirstOrDefault();
-    }
-
+    
     private void MoneyEntry()
     {
-      SetCurrentUser();
       MoneyEntryViewModel money = new MoneyEntryViewModel(_currentPerson);
-      this.Workspaces.Add(money);
-      this.SetActiveWorkspace(money);
+      Workspaces.Add(money);
+      SetActiveWorkspace(money);
     }
 
     private void Query()
     {
-      SetCurrentUser();
       QueryViewModel query = new QueryViewModel(_currentPerson);
-      this.Workspaces.Add(query);
-      this.SetActiveWorkspace(query);
+      Workspaces.Add(query);
+      SetActiveWorkspace(query);
     }
 
     private void Reconciliation()
     {
-      SetCurrentUser();
       ReconcilationViewModel reconcile = new ReconcilationViewModel(_currentPerson);
-      this.Workspaces.Add(reconcile);
-      this.SetActiveWorkspace(reconcile);
+      Workspaces.Add(reconcile);
+      SetActiveWorkspace(reconcile);
     }
 
     private void Categories()
     {
-      SetCurrentUser();
       CategoryViewModel category = new CategoryViewModel(_currentPerson);
-      this.Workspaces.Add(category);
-      this.SetActiveWorkspace(category);
+      Workspaces.Add(category);
+      SetActiveWorkspace(category);
     }
 
     private void Chart()
     {
-      SetCurrentUser();
       ChartViewModel chart = new ChartViewModel(_currentPerson);
-      this.Workspaces.Add(chart);
-      this.SetActiveWorkspace(chart);
+      Workspaces.Add(chart);
+      SetActiveWorkspace(chart);
     }
-
-
+    
     void SetActiveWorkspace(WorkspaceViewModel workspace)
     {
-      Debug.Assert(this.Workspaces.Contains(workspace));
+      Debug.Assert(Workspaces.Contains(workspace));
 
-      ICollectionView collectionView = CollectionViewSource.GetDefaultView(this.Workspaces);
+      ICollectionView collectionView = CollectionViewSource.GetDefaultView(Workspaces);
       if (collectionView != null)
         collectionView.MoveCurrentTo(workspace);
     }
@@ -314,6 +200,6 @@ namespace MoneyEntry.ViewModel
       s.RestoreDB(_BackupLocation);
     }
 
-    #endregion // Private Helpers
+    #endregion
   }
 }

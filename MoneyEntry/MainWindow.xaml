@@ -43,7 +43,7 @@
                     ItemsSource="{Binding People}"
                     DisplayMemberPath="FirstName"
                     SelectedValuePath="PersonId"
-                    SelectedValue="{Binding Path=CurrentUser}"
+                    SelectedValue="{Binding CurrentUser}"
                     Foreground="{StaticResource FontBrush}">
                     </ComboBox>
                 </Border>

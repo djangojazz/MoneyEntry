@@ -17,7 +17,6 @@ namespace MoneyEntry.ViewModel
   public class ChartViewModel : WorkspaceViewModel
   {
     Person _person;
-    RelayCommand _testCommand;
     private bool _loaded = false;
     private List<spTransactionSummationByDuration_Result> _data;
 
@@ -219,7 +218,7 @@ namespace MoneyEntry.ViewModel
       {
         var results = context.spCategoryUseOverDuration(_start, _end, 2, _person.PersonId, _floor).ToList().Select(x => (int)x.CategoryID).ToArray();
 
-        Categories.ClearAndAddRange(context.tdCategory.ToList().Select(x => new Category(x.CategoryID, x.Description, false)).ToList());
+        Categories.ClearAndAddRange(context.tdCategory.ToList().Select(x => new Category(x.CategoryID, x.Description)).ToList());
 
         Categories.Where(x => results.Contains(x.CategoryId))
                   .ToList()
@@ -274,7 +273,7 @@ namespace MoneyEntry.ViewModel
 
     public override string DisplayName
     {
-      get { return "Charting (" + _person.FirstName + ")"; }
+      get { return "Charting (" + _person.FullName + ")"; }
     }
     #endregion
   }

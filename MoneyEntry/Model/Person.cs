@@ -6,9 +6,25 @@ using System.Text;
 
 namespace MoneyEntry.Model
 {
-    public class Person 
+  public class Person
+  {
+    public int PersonId { get; set; }
+    public string FirstName { get; set; }
+    public string LastName { get; set; }
+    public string FullName { get; set; }
+
+    public Person(vTrans tran)
     {
-        public int PersonId { get; set; }
-        public string FirstName { get; set; }
+      PersonId = tran.PersonID;
+      FullName = tran.Name;
     }
+
+    public Person(tePerson person)
+    {
+      PersonId = person.PersonID;
+      FirstName = person.FirstName;
+      LastName = person.LastName;
+      FullName = $"{person.FirstName} {person.LastName}";
+    }
+  }
 }

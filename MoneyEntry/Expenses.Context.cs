@@ -38,7 +38,7 @@ namespace MoneyEntry
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("spCategoryLines");
         }
     
-        public virtual int spInsertOrUpdateTransaction(Nullable<int> transactionID, Nullable<decimal> amount, string transactionDesc, Nullable<int> typeId, Nullable<int> categoryId, Nullable<System.DateTime> createdDt, Nullable<int> personID)
+        public virtual int spInsertOrUpdateTransaction(Nullable<int> transactionID, Nullable<decimal> amount, string transactionDesc, Nullable<int> typeId, Nullable<int> categoryId, Nullable<System.DateTime> createdDt, Nullable<int> personID, Nullable<bool> reconciled)
         {
             var transactionIDParameter = transactionID.HasValue ?
                 new ObjectParameter("TransactionID", transactionID) :
@@ -68,7 +68,11 @@ namespace MoneyEntry
                 new ObjectParameter("PersonID", personID) :
                 new ObjectParameter("PersonID", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("spInsertOrUpdateTransaction", transactionIDParameter, amountParameter, transactionDescParameter, typeIdParameter, categoryIdParameter, createdDtParameter, personIDParameter);
+            var reconciledParameter = reconciled.HasValue ?
+                new ObjectParameter("Reconciled", reconciled) :
+                new ObjectParameter("Reconciled", typeof(bool));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("spInsertOrUpdateTransaction", transactionIDParameter, amountParameter, transactionDescParameter, typeIdParameter, categoryIdParameter, createdDtParameter, personIDParameter, reconciledParameter);
         }
     
         public virtual int spMoneyEntry(Nullable<decimal> amount, string description, string type, string category, Nullable<System.DateTime> created, Nullable<int> personID)

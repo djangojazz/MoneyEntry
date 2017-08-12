@@ -1,130 +1,69 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Windows;
 using System.Windows.Input;
-using System.Transactions;
 using MoneyEntry.Model;
-using MoneyEntry.DataAccess;
-using MoneyEntry.Properties;
 using MessageBox = System.Windows.Forms.MessageBox;
-
 
 namespace MoneyEntry.ViewModel
 {
-    class CategoryViewModel : WorkspaceViewModel, IDataErrorInfo
+  class CategoryViewModel : WorkspaceViewModel, IDataErrorInfo
+  {
+    private Person _Person;
+    private RelayCommand _Addcommand;
+    private string _Desc;
+    private string _CurrentCategory;
+
+    public CategoryViewModel(Person person)
     {
-        Person _Person;
-        ObservableCollection<tdCategory> _categories;
-
-        RelayCommand _Addcommand;
-
-        private string _Desc;
-        private string _CurrentCategory;
-
-        ExpensesEntities ee = new ExpensesEntities();
-
-        public CategoryViewModel(Person person)
-        {
-            _Person = person;
-        }
-
-        public string Desc
-        {
-            get { return _Desc; }
-            set
-            {
-                _Desc = value;          
-                OnPropertyChanged("Desc");
-            }
-        }
-
-
-        public ObservableCollection<tdCategory> Categories
-        {
-            get
-            {
-                if (_categories == null)
-                {
-                    List<MoneyEntry.tdCategory> cats = this.GetCats();
-                    
-                    _categories = new ObservableCollection<tdCategory>(cats);
-                }
-
-                return _categories;
-            }
-            set
-            {
-                _categories = value;
-
-                OnPropertyChanged("Categories");
-            }
-        }
-
-        List<tdCategory> GetCats()
-        {
-            return ee.tdCategory.ToList();
-        }
-
-        public string CurrentCategory
-        {
-            get { return _CurrentCategory; }
-            set
-            {
-                _CurrentCategory = value;
-
-                OnPropertyChanged("CurrentCategory");
-            }
-        }
-
-        public override string DisplayName
-        {
-            get { return  "Add Category (" + _Person.FirstName + ")"; }
-        }
-
-        public ICommand AddCommand
-        {
-            get
-            {
-                if (_Addcommand == null)
-                {
-                    _Addcommand = new RelayCommand(param => this.Add());
-                }
-                return _Addcommand;
-            }
-        }
-
-        private void Add()
-        {
-            tdCategory newcat = new tdCategory {Description = _Desc};
-
-            ee.tdCategory.Add(newcat);
-            ee.SaveChanges();
-            GetCats();
-            
-            MessageBox.Show("Added " + _Desc);
-        }
-
-        #region IDataErrorInfo Members
-
-        string IDataErrorInfo.Error
-        {
-            get { return (_Person as IDataErrorInfo).Error; }
-        }
-
-        string IDataErrorInfo.this[string propertyName]
-        {
-            get
-            {
-                string error = null;
-
-                return error;
-            }
-        }
-
-        #endregion // IDataErrorInfo Members
+      _Person = person;
     }
+
+    #region Properties
+    public IEnumerable<Category> Categories { get => Repository.Categories; }
+    public override string DisplayName { get => "Add Category (" + _Person.FullName + ")"; }
+    public ICommand AddCommand { get => (_Addcommand == null) ? _Addcommand = new RelayCommand(param => Add()) : _Addcommand; }
+
+    public string CurrentCategory
+    {
+      get => _CurrentCategory;
+      set
+      {
+        _CurrentCategory = value;
+        OnPropertyChanged(nameof(CurrentCategory));
+      }
+    }
+
+    public string Desc
+    {
+      get => _Desc;
+      set
+      {
+        _Desc = value;
+        OnPropertyChanged(nameof(Desc));
+      }
+    } 
+    #endregion
+
+    private void Add()
+    {
+      Repository.AddAndResetCategories(_Desc);
+      MessageBox.Show("Added " + _Desc);
+    }
+
+    #region IDataErrorInfo Members
+
+    //TODO Hookup IDataError for description
+    string IDataErrorInfo.Error { get => (_Person as IDataErrorInfo).Error; }
+
+    string IDataErrorInfo.this[string propertyName]
+    {
+      get
+      {
+        string error = null;
+        return error;
+      }
+    }
+
+    #endregion // IDataErrorInfo Members
+  }
 }

@@ -116,7 +116,8 @@
     <Compile Include="Model\MoneyEntryModel.cs" />
     <Compile Include="Model\Person.cs" />
     <Compile Include="Model\TransactionSummationByDurationInput.cs" />
-    <Compile Include="Model\Types.cs" />
+    <Compile Include="Model\TransactionView.cs" />
+    <Compile Include="Model\TypeTran.cs" />
     <Compile Include="spCategoryUseOverDuration_Result.cs">
       <DependentUpon>Expenses.tt</DependentUpon>
     </Compile>

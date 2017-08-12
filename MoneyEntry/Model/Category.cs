@@ -5,13 +5,18 @@ namespace MoneyEntry.Model
   public class Category : ViewModelBase
   {                    
     public Category() {}
-    public Category(byte categoryId, string categoryName, bool isUsed)
+    public Category(byte categoryId, string categoryName)
     {
       CategoryId = categoryId;
       CategoryName = categoryName;
-      IsUsed = isUsed;
     }
 
+    public Category(vTrans dbTran)
+    {
+      CategoryId = dbTran.CategoryID;
+      CategoryName = dbTran.Category;
+    }
+    
     public byte CategoryId { get; set; }
     public string CategoryName { get; set; }
 

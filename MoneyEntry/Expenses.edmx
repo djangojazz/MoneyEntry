@@ -94,6 +94,7 @@ warning 6002: The table/view 'Expenses.dbo.vTrans' does not have a primary key d
           <Parameter Name="CategoryId" Type="int" Mode="In" />
           <Parameter Name="CreatedDt" Type="datetime" Mode="In" />
           <Parameter Name="PersonID" Type="int" Mode="In" />
+          <Parameter Name="Reconciled" Type="bit" Mode="In" />
         </Function>
         <Function Name="spMoneyEntry" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Amount" Type="money" Mode="In" />
@@ -216,6 +217,7 @@ warning 6002: The table/view 'Expenses.dbo.vTrans' does not have a primary key d
             <Parameter Name="CategoryId" Mode="In" Type="Int32" />
             <Parameter Name="CreatedDt" Mode="In" Type="DateTime" />
             <Parameter Name="PersonID" Mode="In" Type="Int32" />
+            <Parameter Name="Reconciled" Mode="In" Type="Boolean" />
           </FunctionImport>
           <FunctionImport Name="spMoneyEntry">
             <Parameter Name="Amount" Mode="In" Type="Decimal" />
@@ -236,7 +238,6 @@ warning 6002: The table/view 'Expenses.dbo.vTrans' does not have a primary key d
             <Parameter Name="Person" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="spUpdateTotals" />
-          <EntitySet Name="vTrans" EntityType="ExpensesModel.vTrans" />
           <FunctionImport Name="spCategoryUseOverDuration" ReturnType="Collection(ExpensesModel.spCategoryUseOverDuration_Result)">
             <Parameter Name="Start" Mode="In" Type="DateTime" />
             <Parameter Name="End" Mode="In" Type="DateTime" />
@@ -247,7 +248,23 @@ warning 6002: The table/view 'Expenses.dbo.vTrans' does not have a primary key d
           <FunctionImport Name="spTransactionSummationByDuration" ReturnType="Collection(ExpensesModel.spTransactionSummationByDuration_Result)">
           <Parameter Name="Xml" Mode="In" Type="String" />
           </FunctionImport>
+          <EntitySet Name="vTrans" EntityType="ExpensesModel.vTrans" />
         </EntityContainer>
+        <ComplexType Name="spCategoryUseOverDuration_Result">
+          <Property Type="Byte" Name="CategoryID" Nullable="false" />
+          <Property Type="Byte" Name="TypeID" Nullable="false" />
+          <Property Type="String" Name="TypeDesc" Nullable="true" MaxLength="128" />
+          <Property Type="String" Name="CategoryDesc" Nullable="true" MaxLength="128" />
+          <Property Type="Decimal" Name="Amount" Nullable="true" Precision="19" />
+        </ComplexType>
+        <ComplexType Name="spTransactionSummationByDuration_Result">
+          <Property Type="Byte" Name="CategoryId" Nullable="true" />
+          <Property Type="String" Name="CategoryName" Nullable="true" MaxLength="128" />
+          <Property Type="String" Name="GroupName" Nullable="true" MaxLength="32" />
+          <Property Type="DateTime" Name="Grouping" Nullable="true" />
+          <Property Type="Int32" Name="Position" Nullable="true" />
+          <Property Type="Decimal" Name="Amount" Nullable="true" Precision="19" />
+        </ComplexType>
         <EntityType Name="vTrans">
           <Key>
             <PropertyRef Name="PersonID" />
@@ -270,21 +287,6 @@ warning 6002: The table/view 'Expenses.dbo.vTrans' does not have a primary key d
           <Property Name="RunningTotal" Type="Decimal" Precision="19" Scale="4" />
           <Property Name="reconciled" Type="Boolean" />
         </EntityType>
-        <ComplexType Name="spCategoryUseOverDuration_Result">
-          <Property Type="Byte" Name="CategoryID" Nullable="false" />
-          <Property Type="Byte" Name="TypeID" Nullable="false" />
-          <Property Type="String" Name="TypeDesc" Nullable="true" MaxLength="128" />
-          <Property Type="String" Name="CategoryDesc" Nullable="true" MaxLength="128" />
-          <Property Type="Decimal" Name="Amount" Nullable="true" Precision="19" />
-        </ComplexType>
-        <ComplexType Name="spTransactionSummationByDuration_Result">
-          <Property Type="Byte" Name="CategoryId" Nullable="true" />
-          <Property Type="String" Name="CategoryName" Nullable="true" MaxLength="128" />
-          <Property Type="String" Name="GroupName" Nullable="true" MaxLength="32" />
-          <Property Type="DateTime" Name="Grouping" Nullable="true" />
-          <Property Type="Int32" Name="Position" Nullable="true" />
-          <Property Type="Decimal" Name="Amount" Nullable="true" Precision="19" />
-        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -337,24 +339,6 @@ warning 6002: The table/view 'Expenses.dbo.vTrans' does not have a primary key d
           <FunctionImportMapping FunctionImportName="spMoneyEntry" FunctionName="ExpensesModel.Store.spMoneyEntry" />
           <FunctionImportMapping FunctionImportName="spMoneyUpdate" FunctionName="ExpensesModel.Store.spMoneyUpdate" />
           <FunctionImportMapping FunctionImportName="spUpdateTotals" FunctionName="ExpensesModel.Store.spUpdateTotals" />
-          <EntitySetMapping Name="vTrans">
-            <EntityTypeMapping TypeName="ExpensesModel.vTrans">
-              <MappingFragment StoreEntitySet="vTrans">
-                <ScalarProperty Name="reconciled" ColumnName="reconciled" />
-                <ScalarProperty Name="RunningTotal" ColumnName="RunningTotal" />
-                <ScalarProperty Name="TransactionID" ColumnName="TransactionID" />
-                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
-                <ScalarProperty Name="Category" ColumnName="Category" />
-                <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
-                <ScalarProperty Name="Type" ColumnName="Type" />
-                <ScalarProperty Name="TypeID" ColumnName="TypeID" />
-                <ScalarProperty Name="TransactionDesc" ColumnName="TransactionDesc" />
-                <ScalarProperty Name="Amount" ColumnName="Amount" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="PersonID" ColumnName="PersonID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="spCategoryUseOverDuration" FunctionName="ExpensesModel.Store.spCategoryUseOverDuration">
             <ResultMapping>
               <ComplexTypeMapping TypeName="ExpensesModel.spCategoryUseOverDuration_Result">
@@ -378,6 +362,24 @@ warning 6002: The table/view 'Expenses.dbo.vTrans' does not have a primary key d
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <EntitySetMapping Name="vTrans">
+            <EntityTypeMapping TypeName="ExpensesModel.vTrans">
+              <MappingFragment StoreEntitySet="vTrans">
+                <ScalarProperty Name="reconciled" ColumnName="reconciled" />
+                <ScalarProperty Name="RunningTotal" ColumnName="RunningTotal" />
+                <ScalarProperty Name="TransactionID" ColumnName="TransactionID" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="Category" ColumnName="Category" />
+                <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="TypeID" ColumnName="TypeID" />
+                <ScalarProperty Name="TransactionDesc" ColumnName="TransactionDesc" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="PersonID" ColumnName="PersonID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
