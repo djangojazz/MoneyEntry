@@ -23,9 +23,8 @@ namespace MoneyEntry.ViewModel
     RelayCommand _OpenLoc;
     RelayCommand _BackUp;
     RelayCommand _Restore;
-
-    Person _currentPerson;
-    ReadOnlyCollection<Person> _people;
+    ObservableCollection<Person> _people;
+    private Person _currentUser;
     ObservableCollection<WorkspaceViewModel> _workspaces;
 
     private string _BackupLocation { get; set; }
@@ -38,9 +37,9 @@ namespace MoneyEntry.ViewModel
       //string customerDataFile)
     {
       base.DisplayName = Strings.MainWindowViewModel_DisplayName;
-      People = new ReadOnlyCollection<Person>(Repository.GetPeople());
+      People = new ObservableCollection<Person>(Repository.GetPeople());
 
-      CurrentUser = _people.FirstOrDefault(x => x.FirstName == "Shared");
+      _currentUser = _people.FirstOrDefault(x => x.FirstName == "Shared");
 
       // Start the initial backup
       _BackupLocation = ConfigurationManager.AppSettings["DatabaseBackupsLocation"];
@@ -53,7 +52,7 @@ namespace MoneyEntry.ViewModel
       if (!File.Exists(_InitialBackupLocation)) { BackUpDB(true); }  // initial backup on startup
     }
     
-    public ReadOnlyCollection<Person> People
+    public ObservableCollection<Person> People
     {
       get => _people;
       set
@@ -62,7 +61,7 @@ namespace MoneyEntry.ViewModel
         OnPropertyChanged(nameof(People));
       }
     }
-    private Person _currentUser;
+    
 
     public Person CurrentUser
     {
@@ -138,35 +137,35 @@ namespace MoneyEntry.ViewModel
     
     private void MoneyEntry()
     {
-      MoneyEntryViewModel money = new MoneyEntryViewModel(_currentPerson);
+      MoneyEntryViewModel money = new MoneyEntryViewModel(_currentUser);
       Workspaces.Add(money);
       SetActiveWorkspace(money);
     }
 
     private void Query()
     {
-      QueryViewModel query = new QueryViewModel(_currentPerson);
+      QueryViewModel query = new QueryViewModel(_currentUser);
       Workspaces.Add(query);
       SetActiveWorkspace(query);
     }
 
     private void Reconciliation()
     {
-      ReconcilationViewModel reconcile = new ReconcilationViewModel(_currentPerson);
+      ReconcilationViewModel reconcile = new ReconcilationViewModel(_currentUser);
       Workspaces.Add(reconcile);
       SetActiveWorkspace(reconcile);
     }
 
     private void Categories()
     {
-      CategoryViewModel category = new CategoryViewModel(_currentPerson);
+      CategoryViewModel category = new CategoryViewModel(_currentUser);
       Workspaces.Add(category);
       SetActiveWorkspace(category);
     }
 
     private void Chart()
     {
-      ChartViewModel chart = new ChartViewModel(_currentPerson);
+      ChartViewModel chart = new ChartViewModel(_currentUser);
       Workspaces.Add(chart);
       SetActiveWorkspace(chart);
     }

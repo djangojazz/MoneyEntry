@@ -57,6 +57,7 @@ namespace MoneyEntry.DataAccess
 
     public List<Person> GetPeople() => GetEntities<tePerson>().Select(x => new Person(x)).ToList();
     
+
     public List<MoneyEntryModelViewModel> QueryMoneyEntries(DateTime start, DateTime end, int personId, int categoryId, int typeId, string description = null, decimal? moneyAmount = null)
     {
       var list = GetEntities<vTrans>(x => x.CreatedDate >= start && x.CreatedDate <= end && x.PersonID == personId && x.TypeID == typeId && x.CategoryID == categoryId);

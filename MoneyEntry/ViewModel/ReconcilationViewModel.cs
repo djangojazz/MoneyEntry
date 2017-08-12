@@ -33,6 +33,7 @@ namespace MoneyEntry.ViewModel
       var lastdate = Repository.LastDateEnteredByPerson(_person.PersonId, false);
       RefreshStart = (lastreconciledate != null) ? lastreconciledate.Value : lastdate ?? DateTime.MinValue;
       RefreshEnd = DateTime.Now;
+      Repository.Refresh(RefreshStart, RefreshEnd, _person.PersonId);
       MoneyEnts = new ReadOnlyCollection<MoneyEntryModelViewModel>(Repository.MoneyEntryContainer);
     }
 
@@ -109,7 +110,8 @@ namespace MoneyEntry.ViewModel
     
     private void Refresh()
     {
-      RefreshStart = _onReconciled ? Repository.LastDateEnteredByPerson(_person.PersonId, true) ?? DateTime.MinValue : Repository.LastDateEnteredByPerson(_person.PersonId, false) ?? DateTime.MinValue;
+      //TODO: fix this for refresh click on checkbox
+      //RefreshStart = _onReconciled ? Repository.LastDateEnteredByPerson(_person.PersonId, true) ?? DateTime.MinValue : Repository.LastDateEnteredByPerson(_person.PersonId, false) ?? DateTime.MinValue;
       Repository.Refresh(RefreshStart, RefreshEnd, _person.PersonId);
     }
     

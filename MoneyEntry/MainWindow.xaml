@@ -42,7 +42,6 @@
                     FontSize="20"
                     ItemsSource="{Binding People}"
                     DisplayMemberPath="FirstName"
-                    SelectedValuePath="PersonId"
                     SelectedValue="{Binding CurrentUser}"
                     Foreground="{StaticResource FontBrush}">
                     </ComboBox>
