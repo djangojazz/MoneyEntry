@@ -12,9 +12,7 @@ namespace MoneyEntry.ViewModel
   class ReconcilationViewModel : WorkspaceViewModel
   {
     Person _person;
-    ReadOnlyCollection<Category> _categories;
-    ReadOnlyCollection<TypeTran> _types;
-    ObservableCollection<MoneyEntryModelViewModel> _moneyentries;
+    ObservableCollection<MoneyEntryModelViewModel> _moneyEnts;
     RelayCommand _refreshCommand;
     string _desc;
     decimal _moneyAmount;
@@ -34,11 +32,19 @@ namespace MoneyEntry.ViewModel
       RefreshStart = (lastreconciledate != null) ? lastreconciledate.Value : lastdate ?? DateTime.MinValue;
       RefreshEnd = DateTime.Now;
       Repository.Refresh(RefreshStart, RefreshEnd, _person.PersonId);
-      MoneyEnts = new ReadOnlyCollection<MoneyEntryModelViewModel>(Repository.MoneyEntryContainer);
+      MoneyEnts = new ObservableCollection<MoneyEntryModelViewModel>(Repository.MoneyEntryContainer);
     }
 
     #region MoneyEntry Properties
-    public ReadOnlyCollection<MoneyEntryModelViewModel> MoneyEnts { get; }
+    public ObservableCollection<MoneyEntryModelViewModel> MoneyEnts
+    {
+      get => _moneyEnts;
+      set
+      {
+        _moneyEnts = value;
+        OnPropertyChanged(nameof(MoneyEnts));
+      }
+    }
 
     public string Desc
     {
@@ -110,9 +116,9 @@ namespace MoneyEntry.ViewModel
     
     private void Refresh()
     {
-      //TODO: fix this for refresh click on checkbox
-      //RefreshStart = _onReconciled ? Repository.LastDateEnteredByPerson(_person.PersonId, true) ?? DateTime.MinValue : Repository.LastDateEnteredByPerson(_person.PersonId, false) ?? DateTime.MinValue;
+      RefreshStart = _onReconciled ? Repository.LastDateEnteredByPerson(_person.PersonId, true) ?? DateTime.MinValue : RefreshStart;
       Repository.Refresh(RefreshStart, RefreshEnd, _person.PersonId);
+      MoneyEnts.ClearAndAddRange(Repository.MoneyEntryContainer);
     }
     
   }

@@ -69,7 +69,7 @@ namespace MoneyEntry.DataAccess
       GetEntities<vTrans>(x => x.CreatedDate >= start && x.CreatedDate <= end && x.PersonID == personId)
       .OrderBy(d => d.CreatedDate).Select(dbTran => new TransactionView(dbTran)).ToList();
     
-    public DateTime? LastDateEnteredByPerson(int personId, bool? reconciled = null) => (DateTime)GetEntities<vTrans>(x => x.PersonID == personId && x.reconciled == reconciled)
+    public DateTime? LastDateEnteredByPerson(int personId, bool? reconciled = null) => (DateTime)GetEntities<vTrans>(x => x.PersonID == personId && x.reconciled == (reconciled ?? false))
       .OrderByDescending(x => x.CreatedDate).Select(x => x.CreatedDate).First();
     #endregion
 
