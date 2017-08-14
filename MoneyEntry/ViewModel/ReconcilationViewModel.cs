@@ -12,7 +12,6 @@ namespace MoneyEntry.ViewModel
   class ReconcilationViewModel : WorkspaceViewModel
   {
     Person _person;
-    ObservableCollection<MoneyEntryModelViewModel> _moneyEnts;
     RelayCommand _refreshCommand;
     string _desc;
     decimal _moneyAmount;
@@ -36,15 +35,7 @@ namespace MoneyEntry.ViewModel
     }
 
     #region MoneyEntry Properties
-    public ObservableCollection<MoneyEntryModelViewModel> MoneyEnts
-    {
-      get => _moneyEnts;
-      set
-      {
-        _moneyEnts = value;
-        OnPropertyChanged(nameof(MoneyEnts));
-      }
-    }
+    public ObservableCollection<MoneyEntryModelViewModel> MoneyEnts { get; set; }
 
     public string Desc
     {

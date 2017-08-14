@@ -6,6 +6,7 @@ using System.Windows.Input;
 using MoneyEntry.Model;
 using MoneyEntry.Properties;
 using MoneyEntry.DataAccess;
+using Controls;
 
 namespace MoneyEntry.ViewModel
 {
@@ -23,23 +24,23 @@ namespace MoneyEntry.ViewModel
       _person = person ?? throw new ArgumentNullException("person");
       CurrentType = Repository.Types.Single(x => x.TypeId == 2); //Debit
       CurrentCategory = Repository.Categories.Single(x => x.CategoryId == 2); //Food
-      DateEntry = DateTime.Now.Subtract(TimeSpan.FromDays(28));
-
-      RefreshStart = Repository.LastDateEnteredByPerson(_person.PersonId) ?? DateTime.Now.Date.AddDays(-7);
+      DateEntry = Repository.LastDateEnteredByPerson(_person.PersonId) ?? DateTime.Now.Date.AddDays(-7);
+      RefreshStart = DateEntry;
       RefreshEnd = DateTime.Now;
-      MoneyEnts = new ReadOnlyCollection<MoneyEntryModelViewModel>(Repository.MoneyEntryContainer);
+      Repository.Refresh(RefreshStart, RefreshEnd, _person.PersonId);
+      MoneyEnts = new ObservableCollection<MoneyEntryModelViewModel>(Repository.MoneyEntryContainer);
     }
 
     #endregion // Constructor
 
     #region MoneyEntry Properties
-    public ReadOnlyCollection<MoneyEntryModelViewModel> MoneyEnts { get; }
+    public ObservableCollection<MoneyEntryModelViewModel> MoneyEnts { get; }
 
     #region CurrentType
     TypeTran _currentType;
     public TypeTran CurrentType
     {
-      get => _currentType; 
+      get => _currentType;
       set
       {
         _currentType = value;
@@ -52,7 +53,7 @@ namespace MoneyEntry.ViewModel
     Category _CurrentCategory;
     public Category CurrentCategory
     {
-      get => _CurrentCategory; 
+      get => _CurrentCategory;
       set
       {
         _CurrentCategory = value;
@@ -65,7 +66,7 @@ namespace MoneyEntry.ViewModel
     string _Desc;
     public string Desc
     {
-      get => _Desc; 
+      get => _Desc;
       set
       {
         _Desc = value;
@@ -78,7 +79,7 @@ namespace MoneyEntry.ViewModel
     decimal _MoneyAmount;
     public decimal MoneyAmount
     {
-      get => _MoneyAmount; 
+      get => _MoneyAmount;
       set
       {
         _MoneyAmount = value;
@@ -91,7 +92,7 @@ namespace MoneyEntry.ViewModel
     DateTime _DateEntry;
     public DateTime DateEntry
     {
-      get => _DateEntry; 
+      get => _DateEntry;
       set
       {
         _DateEntry = value;
@@ -105,7 +106,7 @@ namespace MoneyEntry.ViewModel
 
     public DateTime RefreshStart
     {
-      get => _RefreshStart; 
+      get => _RefreshStart;
       set
       {
         _RefreshStart = value;
@@ -119,7 +120,7 @@ namespace MoneyEntry.ViewModel
 
     public DateTime RefreshEnd
     {
-      get => _RefreshEnd; 
+      get => _RefreshEnd;
       set
       {
         _RefreshEnd = value;
@@ -132,7 +133,7 @@ namespace MoneyEntry.ViewModel
     bool _isSelected;
     public bool IsSelected
     {
-      get => _isSelected; 
+      get => _isSelected;
       set
       {
         if (value == _isSelected)
@@ -143,12 +144,12 @@ namespace MoneyEntry.ViewModel
       }
     }
     #endregion
-    
+
     #endregion
 
     #region Presentation Properties
     public override string DisplayName { get => Strings.MoneyEntryViewModel_DisplayName + "(" + _person.FullName + ")"; }
-    
+
     public ICommand SaveCommand { get => (_SaveCommand == null) ? _SaveCommand = new RelayCommand(param => SaveAndResetAmount()) : _SaveCommand; }
 
     public ICommand RefreshCommand { get => (_RefreshCommand == null) ? _RefreshCommand = new RelayCommand(param => Refresh()) : _RefreshCommand; }
@@ -161,7 +162,11 @@ namespace MoneyEntry.ViewModel
 
     #region Private Helpers
 
-    private void Refresh() => Repository.Refresh(RefreshStart, RefreshEnd, _person.PersonId);
+    private void Refresh()
+    {
+      Repository.Refresh(RefreshStart, RefreshEnd, _person.PersonId);
+      MoneyEnts.ClearAndAddRange(Repository.MoneyEntryContainer);
+    }
     
     private void SaveAndResetAmount()
     {
