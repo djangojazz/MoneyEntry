@@ -22,9 +22,6 @@ namespace MoneyEntry.Model
     public byte TypeId { get; set; }
     public string TypeName { get; set; }
 
-    public override string ToString()
-    {
-      return TypeName;
-    }
+    public override string ToString() => TypeName;
   }
 }

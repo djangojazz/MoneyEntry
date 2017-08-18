@@ -32,9 +32,6 @@ namespace MoneyEntry.Model
       }
     }
                        
-    public override string ToString()
-    {
-      return CategoryName;
-    }
+    public override string ToString() => CategoryName;
   }
 }
