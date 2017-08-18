@@ -8,8 +8,13 @@
              mc:Ignorable="d" 
              Background="Black">
     <UserControl.Resources>
-        <ResourceDictionary Source="..\MainWindowResources.xaml" />
-    </UserControl.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/MoneyEntry;component/MainWindowResources.xaml"/>
+      </ResourceDictionary.MergedDictionaries>
+      <CollectionViewSource x:Key="Types" Source="{Binding Types}"/>
+    </ResourceDictionary>
+  </UserControl.Resources>
     <Grid>
         <DockPanel>
             <Border DockPanel.Dock="Top">
@@ -94,7 +99,8 @@
                     <DataGridTextColumn Header="TransactionId" Binding="{Binding TransactionId}" CanUserReorder="True"/>
                     <DataGridTextColumn Header="EntryDate" Binding="{Binding CreatedDate, StringFormat={}{0:M/d/yyyy}}" CanUserReorder="True"/>
                     <DataGridTextColumn Header="Description" Binding="{Binding TransactionDesc}" />
-                    <DataGridTextColumn Header="TypeName" Binding="{Binding Type}"/>
+                    <!--<DataGridTextColumn Header="TypeName" Binding="{Binding Type}"/>-->
+          <DataGridComboBoxColumn Header="Type" ItemsSource="{Binding Source={StaticResource Types}}" DisplayMemberPath="TypeName" SelectedValueBinding="{Binding Type}" />
                     <DataGridTextColumn Header="CategoryName" Binding="{Binding Category}" CanUserReorder="True"/>
                     <DataGridTextColumn Header="Amount" Binding="{Binding Amount, StringFormat={}{0:#.00}}"  />
                     <DataGridTextColumn Header="RunningTotal" Binding="{Binding RunningTotal, StringFormat={}{0:#.00}}" />
