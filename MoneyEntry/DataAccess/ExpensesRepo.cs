@@ -13,7 +13,10 @@ namespace MoneyEntry.DataAccess
   {
     private static readonly ExpensesRepo _instance = new ExpensesRepo();
     static ExpensesRepo() { }
-    private ExpensesRepo() { }
+    private ExpensesRepo()
+    {
+      Types = GetTypes();
+    }
     public static ExpensesRepo Instance { get => _instance; }
 
     private List<MoneyEntryModelViewModel> _moneyEntryContainer;
@@ -25,14 +28,13 @@ namespace MoneyEntry.DataAccess
     }
 
     #region Properties
-    public IEnumerable<TypeTran> _types;
-    public IEnumerable<TypeTran> Types { get => (_types == null) ? _types = GetTypes() : _types; }
-    
+    public IList<TypeTran> Types { get; }
+
     private List<Category> _categories;
-    public List<Category> Categories { get =>  (_categories == null) ? _categories = GetCurrentCategories() : _categories; }
+    public List<Category> Categories { get => (_categories == null) ? _categories = GetCurrentCategories() : _categories; }
 
     private List<Person> _people;
-    public List<Person> People  { get => (_people == null) ? _people = GetPeople() : _people; }
+    public List<Person> People { get => (_people == null) ? _people = GetPeople() : _people; }
     #endregion
 
     #region Methods
@@ -51,12 +53,12 @@ namespace MoneyEntry.DataAccess
     }
 
     #region RetreivalMethods
-    private IEnumerable<TypeTran> GetTypes() => GetEntities<tdType>(x => x.TypeID != 3).Select(x => new TypeTran(x.TypeID, x.Description));
+    private IList<TypeTran> GetTypes() => GetEntities<tdType>(x => x.TypeID != 3).Select(x => new TypeTran(x.TypeID, x.Description)).ToList();
 
     private List<Category> GetCurrentCategories() => GetEntities<tdCategory>().Select(x => new Category(x.CategoryID, x.Description)).ToList();
 
     public List<Person> GetPeople() => GetEntities<tePerson>().Select(x => new Person(x)).ToList();
-    
+
 
     public List<MoneyEntryModelViewModel> QueryMoneyEntries(DateTime start, DateTime end, int personId, int categoryId, int typeId, string description = null, decimal? moneyAmount = null)
     {
@@ -65,10 +67,16 @@ namespace MoneyEntry.DataAccess
       return final.OrderBy(d => d.CreatedDate).Select(dbTran => new MoneyEntryModelViewModel(new TransactionView(dbTran))).ToList();
     }
 
-    private List<TransactionView> GetTransactionViews(DateTime start, DateTime end, int personId) => 
+    private List<TransactionView> GetTransactionViews(DateTime start, DateTime end, int personId) =>
       GetEntities<vTrans>(x => x.CreatedDate >= start && x.CreatedDate <= end && x.PersonID == personId)
-      .OrderBy(d => d.CreatedDate).Select(dbTran => new TransactionView(dbTran)).ToList();
-    
+      .OrderBy(d => d.CreatedDate)
+      .Select(dbTran => new TransactionView(dbTran)
+        {
+          Type = Types.First(x => x.TypeId == dbTran.TypeID),
+          Category = Categories.First(x => x.CategoryId == dbTran.CategoryID),
+        })
+      .ToList();
+
     public DateTime? LastDateEnteredByPerson(int personId, bool? reconciled = null) => (DateTime)GetEntities<vTrans>(x => x.PersonID == personId && x.reconciled == (reconciled ?? false))
       .OrderByDescending(x => x.CreatedDate).Select(x => x.CreatedDate).First();
     #endregion

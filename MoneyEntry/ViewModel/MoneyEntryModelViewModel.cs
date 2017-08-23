@@ -48,23 +48,9 @@ namespace MoneyEntry.ViewModel
       get => _viewTransaction.Type;
       set
       {
-        if (string.Compare(value.TypeName, _viewTransaction.Type.TypeName, StringComparison.CurrentCultureIgnoreCase) == 0) { return; }
-        else
-        {
-          if (Repository.Types.Contains(value))
-          {
-            _viewTransaction.Type = value;
-            Repository.InsertOrUpdateTransaction(_viewTransaction);
-            OnPropertyChanged("Type");
-          }
-          else
-          {
-            string s = "";
-            Repository.Types.ToList().ForEach(n => s += n + "\n");
-            MessageBox.Show("You may only choose: \n\n" + s + "\n\n Resetting value to original reference");
-            OnPropertyChanged("Type");
-          }
-        }
+        _viewTransaction.Type = value;
+        Repository.InsertOrUpdateTransaction(_viewTransaction);
+        OnPropertyChanged("Type");
       }
     }
 
@@ -73,25 +59,9 @@ namespace MoneyEntry.ViewModel
       get => _viewTransaction.Category;
       set
       {
-        if (string.Compare(value.CategoryName, _viewTransaction.Category.CategoryName, StringComparison.CurrentCultureIgnoreCase) == 0) { return; }
-        else
-        {
-          if (Repository.Categories.Select(x => x.CategoryName).Contains(value.CategoryName))
-          {
-            _viewTransaction.Category = value;
-            Repository.InsertOrUpdateTransaction(_viewTransaction);
-            OnPropertyChanged("Category");
-          }
-          else
-          {
-            string s = "";
-            Repository.Categories.ToList().ForEach(n => s += n + "\n");
-            MessageBox.Show("You may only choose: \n\n" + s + "\n\n Resetting value to original reference");
-            OnPropertyChanged("Type");
-            return;
-          }
-        }
-
+        _viewTransaction.Category = value;
+        Repository.InsertOrUpdateTransaction(_viewTransaction);
+        OnPropertyChanged("Category");
       }
     }
 

@@ -36,6 +36,12 @@ namespace MoneyEntry.ViewModel
     #region MoneyEntry Properties
     public ObservableCollection<MoneyEntryModelViewModel> MoneyEnts { get; }
 
+    protected override void OnPropertyChanged(string propertyName)
+    {
+      //TODO: Get this working with a bubble up on the Collection changed
+      base.OnPropertyChanged(propertyName);
+    }
+
     #region CurrentType
     TypeTran _currentType;
     public TypeTran CurrentType

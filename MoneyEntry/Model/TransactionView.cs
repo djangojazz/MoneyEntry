@@ -32,8 +32,6 @@ namespace MoneyEntry.Model
       TransactionID = dbTran.TransactionID;
       TransactionDesc = dbTran.TransactionDesc;
       Person = new Person(dbTran);
-      Type = new TypeTran(dbTran);
-      Category = new Category(dbTran);
       Amount = dbTran.Amount;
       CreatedDate = dbTran.CreatedDate;
       RunningTotal = dbTran.RunningTotal;

@@ -7,82 +7,81 @@
              xmlns:w="clr-namespace:System.Windows.Controls;assembly=PresentationFramework"
              mc:Ignorable="d" 
              Background="Black">
-    <UserControl.Resources>
+  <UserControl.Resources>
     <ResourceDictionary Source="..\MainWindowResources.xaml" />
   </UserControl.Resources>
-    <Grid>
-        <DockPanel>
-            <Border DockPanel.Dock="Top">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    
-                    <StackPanel Grid.Column="0">
-                        <Label Content="Entry Date:" HorizontalContentAlignment="Stretch" />
-                    <Border>
-                            <DatePicker Margin="10" Foreground="{StaticResource FontBrush}" FontSize="20" SelectedDate="{Binding DateEntry}" HorizontalContentAlignment="Stretch"/>
-                    </Border>
-                        <Label Content="Type of Transaction: " HorizontalContentAlignment="Stretch"/>
-                    <Border>
-                        <ComboBox x:Name="comboType" Margin="10" ItemsSource="{Binding Types}" DisplayMemberPath="TypeName" SelectedValue="{Binding CurrentType}"
+  <Grid>
+    <DockPanel>
+      <Border DockPanel.Dock="Top">
+        <Grid>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+          </Grid.ColumnDefinitions>
+
+          <StackPanel Grid.Column="0">
+            <Label Content="Entry Date:" HorizontalContentAlignment="Stretch" />
+            <Border>
+              <DatePicker Margin="10" Foreground="{StaticResource FontBrush}" FontSize="20" SelectedDate="{Binding DateEntry}" HorizontalContentAlignment="Stretch"/>
+            </Border>
+            <Label Content="Type of Transaction: " HorizontalContentAlignment="Stretch"/>
+            <Border>
+              <ComboBox x:Name="comboType" Margin="10" ItemsSource="{Binding Types}" DisplayMemberPath="TypeName" SelectedValue="{Binding CurrentType}"
                                   HorizontalContentAlignment="Stretch" />
-                    </Border>
-                </StackPanel>
-
-                    <StackPanel Grid.Column="1">
-                    <Label Content="Amount: "  HorizontalAlignment="Center"/>
-                    <Border>
-                        <TextBox x:Name="txtMoney" Text="{Binding Path=MoneyAmount}"  Margin="16" />
-                    </Border>                        
-                    <Label Content="Category of Transaction: " Foreground="{StaticResource FontBrush}" HorizontalAlignment="Center"/>
-                    <Border>
-                        <ComboBox x:Name="comboCategory" Margin="10" ItemsSource="{Binding Categories}" DisplayMemberPath="CategoryName" SelectedValuePath="CategoryName" SelectedValue="{Binding CurrentCategory}" />
-                    </Border>
-                </StackPanel>
-
-                    <StackPanel Grid.Column="2">
-                    <Label Content="Description: " HorizontalAlignment="Center"/>
-                    <Border>
-                            <TextBox x:Name="txtDesc" Text="{Binding Path=Desc}" Margin="16"/>
-                    </Border>
-                    <Button x:Name="butSubmit" Content="Submit" Style="{StaticResource GlassButton}" Command="{Binding Path=SaveCommand}" Margin="16" />
-                    </StackPanel>
-
-                </Grid>
             </Border>
+          </StackPanel>
 
-            <Border DockPanel.Dock="Top" Margin="0,50,0,0" >
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*" />
-                    </Grid.RowDefinitions>
-                        <StackPanel Grid.Row="0" Grid.Column="0">
-                            <Label Content="StartDate: " HorizontalAlignment="Center"/>
-                            <Border>
-                            <DatePicker x:Name="calStartDate" Margin="10" Foreground="{StaticResource FontBrush}" FontSize="20" SelectedDate="{Binding RefreshStart}" />
-                        </Border>
-                        </StackPanel>
-
-                    <StackPanel Grid.Row="0" Grid.Column="1" >
-                            <Label Content="EndDate: " HorizontalAlignment="Center"/>
-                            <Border>
-                                <DatePicker Margin="10" Foreground="{StaticResource FontBrush}" FontSize="20" SelectedDate="{Binding RefreshEnd}"  />
-                            </Border>
-                        </StackPanel>
-                    <Button Grid.Row="0" Grid.Column="2" Content="Refresh"  Style="{StaticResource GlassButton}" Command="{Binding Path=RefreshCommand}" Margin="30"  />
-                </Grid>
+          <StackPanel Grid.Column="1">
+            <Label Content="Amount: "  HorizontalAlignment="Center"/>
+            <Border>
+              <TextBox x:Name="txtMoney" Text="{Binding Path=MoneyAmount}"  Margin="16" />
             </Border>
+            <Label Content="Category of Transaction: " Foreground="{StaticResource FontBrush}" HorizontalAlignment="Center"/>
+            <Border>
+              <ComboBox x:Name="comboCategory" Margin="10" ItemsSource="{Binding Categories}" DisplayMemberPath="CategoryName" SelectedValuePath="CategoryName" SelectedValue="{Binding CurrentCategory}" />
+            </Border>
+          </StackPanel>
 
-            <DataGrid DockPanel.Dock="Top" x:Name="datagrid" 
+          <StackPanel Grid.Column="2">
+            <Label Content="Description: " HorizontalAlignment="Center"/>
+            <Border>
+              <TextBox x:Name="txtDesc" Text="{Binding Path=Desc}" Margin="16"/>
+            </Border>
+            <Button x:Name="butSubmit" Content="Submit" Style="{StaticResource GlassButton}" Command="{Binding Path=SaveCommand}" Margin="16" />
+          </StackPanel>
+
+        </Grid>
+      </Border>
+
+      <Border DockPanel.Dock="Top" Margin="0,50,0,0" >
+        <Grid>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+          </Grid.ColumnDefinitions>
+          <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*" />
+          </Grid.RowDefinitions>
+          <StackPanel Grid.Row="0" Grid.Column="0">
+            <Label Content="StartDate: " HorizontalAlignment="Center"/>
+            <Border>
+              <DatePicker x:Name="calStartDate" Margin="10" Foreground="{StaticResource FontBrush}" FontSize="20" SelectedDate="{Binding RefreshStart}" />
+            </Border>
+          </StackPanel>
+
+          <StackPanel Grid.Row="0" Grid.Column="1" >
+            <Label Content="EndDate: " HorizontalAlignment="Center"/>
+            <Border>
+              <DatePicker Margin="10" Foreground="{StaticResource FontBrush}" FontSize="20" SelectedDate="{Binding RefreshEnd}"  />
+            </Border>
+          </StackPanel>
+          <Button Grid.Row="0" Grid.Column="2" Content="Refresh"  Style="{StaticResource GlassButton}" Command="{Binding Path=RefreshCommand}" Margin="30"  />
+        </Grid>
+      </Border>
+      <DataGrid DockPanel.Dock="Top" x:Name="datagrid" 
                               ItemsSource="{Binding MoneyEnts}"                   
                               AutoGenerateColumns="False" 
                               HorizontalAlignment="Left" 
@@ -90,18 +89,31 @@
                               IsSynchronizedWithCurrentItem="True"
                               MaxHeight="400"
                               >
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="TransactionId" Binding="{Binding TransactionId}" CanUserReorder="True"/>
-                    <DataGridTextColumn Header="EntryDate" Binding="{Binding CreatedDate, StringFormat={}{0:M/d/yyyy}}" CanUserReorder="True"/>
-                    <DataGridTextColumn Header="Description" Binding="{Binding TransactionDesc}" />
-                    <!--<DataGridTextColumn Header="TypeName" Binding="{Binding Type}"/>-->
-                  <DataGridComboBoxColumn Header="Type" ItemsSource="{Binding Source={StaticResource Types}}" DisplayMemberPath="TypeName" SelectedItemBinding="{Binding Type}" Width="100" />
-                    <DataGridTextColumn Header="CategoryName" Binding="{Binding Category}" CanUserReorder="True"/>
-                    <DataGridTextColumn Header="Amount" Binding="{Binding Amount, StringFormat={}{0:#.00}}"  />
-                    <DataGridTextColumn Header="RunningTotal" Binding="{Binding RunningTotal, StringFormat={}{0:#.00}}" />
-                    <DataGridCheckBoxColumn Header="IsReconciled" Binding="{Binding Reconciled}" CanUserReorder="True"/>
-                </DataGrid.Columns>
-            </DataGrid>
-        </DockPanel>
-    </Grid>
+        <DataGrid.Columns>
+          <DataGridTextColumn Header="TransactionId" Binding="{Binding TransactionId}" CanUserReorder="True"/>
+          <DataGridTextColumn Header="EntryDate" Binding="{Binding CreatedDate, StringFormat={}{0:M/d/yyyy}}" CanUserReorder="True"/>
+          <DataGridTextColumn Header="Description" Binding="{Binding TransactionDesc}" />
+          <DataGridTemplateColumn Header="Type">
+            <DataGridTemplateColumn.CellTemplate>
+              <DataTemplate>
+                <ComboBox ItemsSource="{Binding Path=DataContext.Types, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
+                              DisplayMemberPath="TypeName" SelectedItem="{Binding Path=Type, UpdateSourceTrigger=PropertyChanged}"/>
+              </DataTemplate>
+            </DataGridTemplateColumn.CellTemplate>
+          </DataGridTemplateColumn>
+          <DataGridTemplateColumn Header="Category">
+            <DataGridTemplateColumn.CellTemplate>
+              <DataTemplate>
+                <ComboBox ItemsSource="{Binding Path=DataContext.Categories, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
+                              DisplayMemberPath="CategoryName" SelectedItem="{Binding Path=Category, UpdateSourceTrigger=PropertyChanged}"/>
+              </DataTemplate>
+            </DataGridTemplateColumn.CellTemplate>
+          </DataGridTemplateColumn>
+          <DataGridTextColumn Header="Amount" Binding="{Binding Amount, StringFormat={}{0:#.00}}"  />
+          <DataGridTextColumn Header="RunningTotal" Binding="{Binding RunningTotal, StringFormat={}{0:#.00}}" />
+          <DataGridCheckBoxColumn Header="IsReconciled" Binding="{Binding Reconciled}" CanUserReorder="True"/>
+        </DataGrid.Columns>
+      </DataGrid>
+    </DockPanel>
+  </Grid>
 </UserControl>
