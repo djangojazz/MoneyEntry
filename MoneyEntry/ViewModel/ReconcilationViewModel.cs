@@ -31,12 +31,10 @@ namespace MoneyEntry.ViewModel
       RefreshStart = (lastreconciledate != null) ? lastreconciledate.Value : lastdate ?? DateTime.MinValue;
       RefreshEnd = DateTime.Now;
       Repository.Refresh(RefreshStart, RefreshEnd, _person.PersonId);
-      MoneyEnts = new ObservableCollection<MoneyEntryModelViewModel>(Repository.MoneyEntryContainer);
     }
 
     #region MoneyEntry Properties
-    public ObservableCollection<MoneyEntryModelViewModel> MoneyEnts { get; set; }
-
+    
     public string Desc
     {
       get => _desc;
@@ -103,14 +101,11 @@ namespace MoneyEntry.ViewModel
     public override string DisplayName { get => Strings.ReconciliationViewModel_DisplayName + "(" + _person.FirstName + ")"; }
     #endregion
    
-    public ICommand RefreshCommand { get => (_refreshCommand == null) ? _refreshCommand = new RelayCommand(param => Refresh()) : _refreshCommand; }
-    
-    private void Refresh()
+    public ICommand RefreshCommand { get => (_refreshCommand == null) ? _refreshCommand = new RelayCommand(param => Refresh(RefreshStart, RefreshEnd, _person.PersonId)) : _refreshCommand; }
+
+    protected override void OnPropertyChanged(string propertyName)
     {
-      RefreshStart = _onReconciled ? Repository.LastDateEnteredByPerson(_person.PersonId, true) ?? DateTime.MinValue : RefreshStart;
-      Repository.Refresh(RefreshStart, RefreshEnd, _person.PersonId);
-      MoneyEnts.ClearAndAddRange(Repository.MoneyEntryContainer);
+      if (propertyName == "Amount") { Refresh(RefreshStart, RefreshEnd, _person.PersonId); }
     }
-    
   }
 }
