@@ -16,6 +16,8 @@ namespace MoneyEntry.ViewModel
     //ReadOnlyCollection<Category> _categories;
     RelayCommand _SaveCommand;
     RelayCommand _RefreshCommand;
+    TypeTran _currentType;
+    Category _CurrentCategory;
 
     #region Constructor
 
@@ -28,13 +30,12 @@ namespace MoneyEntry.ViewModel
       RefreshStart = DateEntry;
       RefreshEnd = DateTime.Now;
       Repository.Refresh(RefreshStart, RefreshEnd, _person.PersonId);
-      MoneyEnts = new ObservableCollection<MoneyEntryModelViewModel>(Repository.MoneyEntryContainer);
     }
 
     #endregion // Constructor
 
     #region MoneyEntry Properties
-    public ObservableCollection<MoneyEntryModelViewModel> MoneyEnts { get; }
+    
 
     protected override void OnPropertyChanged(string propertyName)
     {
@@ -42,8 +43,6 @@ namespace MoneyEntry.ViewModel
       base.OnPropertyChanged(propertyName);
     }
 
-    #region CurrentType
-    TypeTran _currentType;
     public TypeTran CurrentType
     {
       get => _currentType;
@@ -53,10 +52,7 @@ namespace MoneyEntry.ViewModel
         OnPropertyChanged("CurrentType");
       }
     }
-    #endregion
 
-    #region CurrentCategory
-    Category _CurrentCategory;
     public Category CurrentCategory
     {
       get => _CurrentCategory;
@@ -66,7 +62,6 @@ namespace MoneyEntry.ViewModel
         OnPropertyChanged("CurrentCategory");
       }
     }
-    #endregion
 
     #region Desc
     string _Desc;
@@ -158,30 +153,16 @@ namespace MoneyEntry.ViewModel
 
     public ICommand SaveCommand { get => (_SaveCommand == null) ? _SaveCommand = new RelayCommand(param => SaveAndResetAmount()) : _SaveCommand; }
 
-    public ICommand RefreshCommand { get => (_RefreshCommand == null) ? _RefreshCommand = new RelayCommand(param => Refresh()) : _RefreshCommand; }
+    public ICommand RefreshCommand { get => (_RefreshCommand == null) ? _RefreshCommand = new RelayCommand(param => Refresh(RefreshStart, RefreshEnd, _person.PersonId)) : _RefreshCommand; }
 
     #endregion // Presentation Properties
 
-    #region Public Methods
-
-    #endregion // Public Methods
-
-    #region Private Helpers
-
-    private void Refresh()
-    {
-      Repository.Refresh(RefreshStart, RefreshEnd, _person.PersonId);
-      MoneyEnts.ClearAndAddRange(Repository.MoneyEntryContainer);
-    }
-    
     private void SaveAndResetAmount()
     {
       Repository.InsertOrUpdateTransaction(new TransactionView(_person, CurrentType, CurrentCategory, MoneyAmount, Desc, DateEntry));
       MoneyAmount = 0;
       Desc = String.Empty;
     }
-
-    #endregion // Private Helpers
 
     #region IDataErrorInfo Members
 

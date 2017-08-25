@@ -27,8 +27,7 @@
             </Border>
             <Label Content="Type of Transaction: " HorizontalContentAlignment="Stretch"/>
             <Border>
-              <ComboBox x:Name="comboType" Margin="10" ItemsSource="{Binding Types}" DisplayMemberPath="TypeName" SelectedValue="{Binding CurrentType}"
-                                  HorizontalContentAlignment="Stretch" />
+              <ComboBox x:Name="comboType" Margin="10" ItemsSource="{Binding Types}" DisplayMemberPath="TypeName" SelectedValue="{Binding CurrentType}" HorizontalContentAlignment="Stretch" />
             </Border>
           </StackPanel>
 
@@ -39,7 +38,7 @@
             </Border>
             <Label Content="Category of Transaction: " Foreground="{StaticResource FontBrush}" HorizontalAlignment="Center"/>
             <Border>
-              <ComboBox x:Name="comboCategory" Margin="10" ItemsSource="{Binding Categories}" DisplayMemberPath="CategoryName" SelectedValuePath="CategoryName" SelectedValue="{Binding CurrentCategory}" />
+              <ComboBox x:Name="comboCategory" Margin="10" ItemsSource="{Binding Categories}" DisplayMemberPath="CategoryName" SelectedValue="{Binding CurrentCategory}" HorizontalContentAlignment="Stretch" />
             </Border>
           </StackPanel>
 
@@ -90,7 +89,7 @@
                               MaxHeight="400"
                               >
         <DataGrid.Columns>
-          <DataGridTextColumn Header="TransactionId" Binding="{Binding TransactionId}" CanUserReorder="True"/>
+          <DataGridTextColumn Header="Id" Binding="{Binding TransactionId}" CanUserReorder="True"/>
           <DataGridTextColumn Header="EntryDate" Binding="{Binding CreatedDate, StringFormat={}{0:M/d/yyyy}}" CanUserReorder="True"/>
           <DataGridTextColumn Header="Description" Binding="{Binding TransactionDesc}" />
           <DataGridTemplateColumn Header="Type">

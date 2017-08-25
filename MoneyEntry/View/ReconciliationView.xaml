@@ -50,8 +50,22 @@
         <DataGridTextColumn Header="Id" Binding="{Binding TransactionId}" CanUserReorder="True"/>
         <DataGridTextColumn Header="EntryDate" Binding="{Binding CreatedDate, StringFormat={}{0:MM/dd/yyyy}}" CanUserReorder="True"/>
         <DataGridTextColumn Header="Description" Binding="{Binding TransactionDesc}" Width="250" />
-        <DataGridTextColumn Header="Type" Binding="{Binding Type}"/>
-        <DataGridTextColumn Header="Category" Binding="{Binding Category}" CanUserReorder="True"/>
+        <DataGridTemplateColumn Header="Type">
+          <DataGridTemplateColumn.CellTemplate>
+            <DataTemplate>
+              <ComboBox ItemsSource="{Binding Path=DataContext.Types, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
+                              DisplayMemberPath="TypeName" SelectedItem="{Binding Path=Type, UpdateSourceTrigger=PropertyChanged}"/>
+            </DataTemplate>
+          </DataGridTemplateColumn.CellTemplate>
+        </DataGridTemplateColumn>
+        <DataGridTemplateColumn Header="Category">
+          <DataGridTemplateColumn.CellTemplate>
+            <DataTemplate>
+              <ComboBox ItemsSource="{Binding Path=DataContext.Categories, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
+                              DisplayMemberPath="CategoryName" SelectedItem="{Binding Path=Category, UpdateSourceTrigger=PropertyChanged}"/>
+            </DataTemplate>
+          </DataGridTemplateColumn.CellTemplate>
+        </DataGridTemplateColumn>
         <DataGridTextColumn Header="Amount" Binding="{Binding Amount, StringFormat={}{0:#,0.00}}"  />
         <DataGridTextColumn Header="RunningTotal" Binding="{Binding RunningTotal, StringFormat={}{0:#,0.00}}" />
         <DataGridCheckBoxColumn Header="Reconciled" Binding="{Binding Reconciled}" CanUserReorder="True"/>
