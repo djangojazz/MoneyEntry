@@ -19,8 +19,6 @@ namespace MoneyEntry.ViewModel
     TypeTran _currentType;
     Category _CurrentCategory;
 
-    #region Constructor
-
     public MoneyEntryViewModel(Person person)
     {
       _person = person ?? throw new ArgumentNullException("person");
@@ -31,16 +29,13 @@ namespace MoneyEntry.ViewModel
       RefreshEnd = DateTime.Now;
       Repository.Refresh(RefreshStart, RefreshEnd, _person.PersonId);
     }
-
-    #endregion // Constructor
-
+    
     #region MoneyEntry Properties
     
 
     protected override void OnPropertyChanged(string propertyName)
     {
-      //TODO: Get this working with a bubble up on the Collection changed
-      base.OnPropertyChanged(propertyName);
+      if(propertyName == "Amount") { Refresh(RefreshStart, RefreshEnd, _person.PersonId);  }
     }
 
     public TypeTran CurrentType

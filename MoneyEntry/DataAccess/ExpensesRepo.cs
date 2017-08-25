@@ -19,9 +19,9 @@ namespace MoneyEntry.DataAccess
     }
     public static ExpensesRepo Instance { get => _instance; }
 
-    private List<MoneyEntryModelViewModel> _moneyEntryContainer;
+    private IList<MoneyEntryModelViewModel> _moneyEntryContainer;
 
-    public List<MoneyEntryModelViewModel> MoneyEntryContainer
+    public IList<MoneyEntryModelViewModel> MoneyEntryContainer
     {
       get => (_moneyEntryContainer == null) ? _moneyEntryContainer = new List<MoneyEntryModelViewModel>() : _moneyEntryContainer;
       set => _moneyEntryContainer = value;
@@ -119,7 +119,10 @@ namespace MoneyEntry.DataAccess
       }
     }
 
-    public void Refresh(DateTime start, DateTime end, int personId) => MoneyEntryContainer.ClearAndAddRange(GetTransactionViews(start, end, personId).ConvertAll(x => new MoneyEntryModelViewModel(x)));
+    public void Refresh(DateTime start, DateTime end, int personId)
+    {
+      MoneyEntryContainer.ClearAndAddRange(GetTransactionViews(start, end, personId).ConvertAll(x => new MoneyEntryModelViewModel(x)));
+    }
     #endregion
 
     #endregion

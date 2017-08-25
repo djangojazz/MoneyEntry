@@ -13,19 +13,19 @@ namespace MoneyEntry.ViewModel
     
     #region Debugging Aides
     
-    [Conditional("DEBUG")]
-    [DebuggerStepThrough]
-    public void VerifyPropertyName(string propertyName)
-    {
-      if (TypeDescriptor.GetProperties(this)[propertyName] == null)
-      {
-        string msg = "Invalid property name: " + propertyName;
-        if (ThrowOnInvalidPropertyName)
-          throw new Exception(msg);
-        else
-          Debug.Fail(msg);
-      }
-    }
+    //[Conditional("DEBUG")]
+    //[DebuggerStepThrough]
+    //public void VerifyPropertyName(string propertyName)
+    //{
+    //  if (TypeDescriptor.GetProperties(this)[propertyName] == null)
+    //  {
+    //    string msg = "Invalid property name: " + propertyName;
+    //    if (ThrowOnInvalidPropertyName)
+    //      throw new Exception(msg);
+    //    else
+    //      Debug.Fail(msg);
+    //  }
+    //}
 
     protected virtual bool ThrowOnInvalidPropertyName { get; private set; }
 
@@ -35,7 +35,7 @@ namespace MoneyEntry.ViewModel
     
     protected virtual void OnPropertyChanged(string propertyName)
     {
-      VerifyPropertyName(propertyName);
+      //VerifyPropertyName(propertyName);
 
       PropertyChangedEventHandler handler = this.PropertyChanged;
       if (handler != null)
