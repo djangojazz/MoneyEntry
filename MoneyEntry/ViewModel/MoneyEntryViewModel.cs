@@ -13,120 +13,102 @@ namespace MoneyEntry.ViewModel
   public class MoneyEntryViewModel : WorkspaceViewModel, IDataErrorInfo
   {
     Person _person;
-    //ReadOnlyCollection<Category> _categories;
-    RelayCommand _SaveCommand;
-    RelayCommand _RefreshCommand;
+    RelayCommand _saveCommand;
+    RelayCommand _refreshCommand;
     TypeTran _currentType;
-    Category _CurrentCategory;
+    Category _currentCategory;
+    string _desc;
+    decimal _moneyAmount;
+    DateTime _dateEntry;
+    DateTime _refreshStart;
+    DateTime _refreshEnd;
+    bool _isSelected;
 
     public MoneyEntryViewModel(Person person)
     {
       _person = person ?? throw new ArgumentNullException("person");
       CurrentType = Repository.Types.Single(x => x.TypeId == 2); //Debit
       CurrentCategory = Repository.Categories.Single(x => x.CategoryId == 2); //Food
-      DateEntry = Repository.LastDateEnteredByPerson(_person.PersonId) ?? DateTime.Now.Date.AddDays(-7);
-      RefreshStart = DateEntry;
+      Desc = "Anything";
+      DateEntry = Repository.LastDateEnteredByPerson(_person.PersonId)?.AddDays(1) ?? DateTime.Now.Date.AddDays(-7);
+      RefreshStart = DateEntry.AddDays(-7);
       RefreshEnd = DateTime.Now;
-      Repository.Refresh(RefreshStart, RefreshEnd, _person.PersonId);
+      Refresh(RefreshStart, RefreshEnd, _person.PersonId);
     }
     
     #region MoneyEntry Properties
     
-
-    protected override void OnPropertyChanged(string propertyName)
-    {
-      if(propertyName == "Amount") { Refresh(RefreshStart, RefreshEnd, _person.PersonId);  }
-    }
-
     public TypeTran CurrentType
     {
       get => _currentType;
       set
       {
         _currentType = value;
-        OnPropertyChanged("CurrentType");
+        OnPropertyChanged(nameof(CurrentType));
       }
     }
 
     public Category CurrentCategory
     {
-      get => _CurrentCategory;
+      get => _currentCategory;
       set
       {
-        _CurrentCategory = value;
-        OnPropertyChanged("CurrentCategory");
+        _currentCategory = value;
+        OnPropertyChanged(nameof(CurrentCategory));
       }
     }
-
-    #region Desc
-    string _Desc;
+    
     public string Desc
     {
-      get => _Desc;
+      get => _desc;
       set
       {
-        _Desc = value;
-        OnPropertyChanged("Desc");
+        _desc = value;
+        OnPropertyChanged(nameof(Desc));
       }
     }
-    #endregion
-
-    #region MoneyAmount
-    decimal _MoneyAmount;
+    
     public decimal MoneyAmount
     {
-      get => _MoneyAmount;
+      get => _moneyAmount;
       set
       {
-        _MoneyAmount = value;
-        OnPropertyChanged("MoneyAmount");
+        _moneyAmount = value;
+        OnPropertyChanged(nameof(MoneyAmount));
       }
     }
-    #endregion
-
-    #region DateEntry
-    DateTime _DateEntry;
+    
     public DateTime DateEntry
     {
-      get => _DateEntry;
+      get => _dateEntry;
       set
       {
-        _DateEntry = value;
-        OnPropertyChanged("DateEntry");
+        _dateEntry = value;
+        OnPropertyChanged(nameof(DateEntry));
       }
     }
-    #endregion
-
-    #region RefreshStart
-    DateTime _RefreshStart;
-
+    
     public DateTime RefreshStart
     {
-      get => _RefreshStart;
+      get => _refreshStart;
       set
       {
-        _RefreshStart = value;
-        OnPropertyChanged("RefreshStart");
+        _refreshStart = value;
+        OnPropertyChanged(nameof(RefreshStart));
       }
     }
-    #endregion
-
-    #region RefreshEnd
-    DateTime _RefreshEnd;
 
     public DateTime RefreshEnd
     {
-      get => _RefreshEnd;
+      get => _refreshEnd;
       set
       {
-        _RefreshEnd = value;
-        OnPropertyChanged("RefreshEnd");
+        _refreshEnd = value;
+        OnPropertyChanged(nameof(RefreshEnd));
       }
     }
-    #endregion
 
     #region IsSelected
-    bool _isSelected;
     public bool IsSelected
     {
       get => _isSelected;
@@ -136,7 +118,7 @@ namespace MoneyEntry.ViewModel
           return;
 
         _isSelected = value;
-        base.OnPropertyChanged("IsSelected");
+        base.OnPropertyChanged(nameof(IsSelected));
       }
     }
     #endregion
@@ -146,9 +128,9 @@ namespace MoneyEntry.ViewModel
     #region Presentation Properties
     public override string DisplayName { get => Strings.MoneyEntryViewModel_DisplayName + "(" + _person.FullName + ")"; }
 
-    public ICommand SaveCommand { get => (_SaveCommand == null) ? _SaveCommand = new RelayCommand(param => SaveAndResetAmount()) : _SaveCommand; }
+    public ICommand SaveCommand { get => (_saveCommand == null) ? _saveCommand = new RelayCommand(param => SaveAndResetAmount()) : _saveCommand; }
 
-    public ICommand RefreshCommand { get => (_RefreshCommand == null) ? _RefreshCommand = new RelayCommand(param => Refresh(RefreshStart, RefreshEnd, _person.PersonId)) : _RefreshCommand; }
+    public ICommand RefreshCommand { get => (_refreshCommand == null) ? _refreshCommand = new RelayCommand(param => Refresh(RefreshStart, RefreshEnd, _person.PersonId)) : _refreshCommand; }
 
     #endregion // Presentation Properties
 
@@ -157,6 +139,13 @@ namespace MoneyEntry.ViewModel
       Repository.InsertOrUpdateTransaction(new TransactionView(_person, CurrentType, CurrentCategory, MoneyAmount, Desc, DateEntry));
       MoneyAmount = 0;
       Desc = String.Empty;
+      Refresh(RefreshStart, RefreshEnd, _person.PersonId);
+    }
+
+    protected override void OnPropertyChanged(string propertyName)
+    {
+      if (propertyName == "Amount") { Refresh(RefreshStart, RefreshEnd, _person.PersonId); }
+      else { base.OnPropertyChanged(propertyName); }
     }
 
     #region IDataErrorInfo Members

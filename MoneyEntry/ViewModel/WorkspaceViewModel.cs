@@ -55,13 +55,5 @@ namespace MoneyEntry.ViewModel
     }
 
     private void CascadeEvent(object sender, PropertyChangedEventArgs e) => OnPropertyChanged(e.PropertyName);
-
-    protected override void OnPropertyChanged(string propertyName)
-    {
-      base.OnPropertyChanged(propertyName);
-    }
-
-
-    
   }
 }

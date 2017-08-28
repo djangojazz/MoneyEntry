@@ -27,27 +27,27 @@
             </Border>
             <Label Content="Type of Transaction: " HorizontalContentAlignment="Stretch"/>
             <Border>
-              <ComboBox x:Name="comboType" Margin="10" ItemsSource="{Binding Types}" DisplayMemberPath="TypeName" SelectedValue="{Binding CurrentType}" HorizontalContentAlignment="Stretch" />
+              <ComboBox Margin="10" ItemsSource="{Binding Types}" DisplayMemberPath="TypeName" SelectedValue="{Binding CurrentType}" HorizontalContentAlignment="Stretch" />
             </Border>
           </StackPanel>
 
           <StackPanel Grid.Column="1">
             <Label Content="Amount: "  HorizontalAlignment="Center"/>
             <Border>
-              <TextBox x:Name="txtMoney" Text="{Binding Path=MoneyAmount}"  Margin="16" />
+              <TextBox Text="{Binding MoneyAmount, Mode=TwoWay}"  Margin="16" />
             </Border>
             <Label Content="Category of Transaction: " Foreground="{StaticResource FontBrush}" HorizontalAlignment="Center"/>
             <Border>
-              <ComboBox x:Name="comboCategory" Margin="10" ItemsSource="{Binding Categories}" DisplayMemberPath="CategoryName" SelectedValue="{Binding CurrentCategory}" HorizontalContentAlignment="Stretch" />
+              <ComboBox Margin="10" ItemsSource="{Binding Categories}" DisplayMemberPath="CategoryName" SelectedValue="{Binding CurrentCategory}" HorizontalContentAlignment="Stretch" />
             </Border>
           </StackPanel>
 
           <StackPanel Grid.Column="2">
             <Label Content="Description: " HorizontalAlignment="Center"/>
             <Border>
-              <TextBox x:Name="txtDesc" Text="{Binding Path=Desc}" Margin="16"/>
+              <TextBox Text="{Binding Path=Desc, Mode=TwoWay}" Margin="16"/>
             </Border>
-            <Button x:Name="butSubmit" Content="Submit" Style="{StaticResource GlassButton}" Command="{Binding Path=SaveCommand}" Margin="16" />
+            <Button Content="Submit" Style="{StaticResource GlassButton}" Command="{Binding Path=SaveCommand}" Margin="16" />
           </StackPanel>
 
         </Grid>
@@ -67,7 +67,7 @@
           <StackPanel Grid.Row="0" Grid.Column="0">
             <Label Content="StartDate: " HorizontalAlignment="Center"/>
             <Border>
-              <DatePicker x:Name="calStartDate" Margin="10" Foreground="{StaticResource FontBrush}" FontSize="20" SelectedDate="{Binding RefreshStart}" />
+              <DatePicker Margin="10" Foreground="{StaticResource FontBrush}" FontSize="20" SelectedDate="{Binding RefreshStart}" />
             </Border>
           </StackPanel>
 
