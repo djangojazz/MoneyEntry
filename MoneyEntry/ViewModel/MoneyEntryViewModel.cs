@@ -29,7 +29,6 @@ namespace MoneyEntry.ViewModel
       _person = person ?? throw new ArgumentNullException("person");
       CurrentType = Repository.Types.Single(x => x.TypeId == 2); //Debit
       CurrentCategory = Repository.Categories.Single(x => x.CategoryId == 2); //Food
-      Desc = "Anything";
       DateEntry = Repository.LastDateEnteredByPerson(_person.PersonId)?.AddDays(1) ?? DateTime.Now.Date.AddDays(-7);
       RefreshStart = DateEntry.AddDays(-7);
       RefreshEnd = DateTime.Now;

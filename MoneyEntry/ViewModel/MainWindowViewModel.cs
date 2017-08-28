@@ -30,19 +30,15 @@ namespace MoneyEntry.ViewModel
     private string _BackupLocation { get; set; }
     private string _InitialBackupLocation { get; set; }
     SQLTalker s = new SQLTalker();
-    
-
-    //TODO Unsure if this is needed or not
+   
     public MainWindowViewModel()
-      //string customerDataFile)
     {
       base.DisplayName = Strings.MainWindowViewModel_DisplayName;
       People = new ObservableCollection<Person>(Repository.GetPeople());
 
       _currentUser = _people.FirstOrDefault(x => x.FirstName == "Shared");
-
-      // Start the initial backup
-      _BackupLocation = ConfigurationManager.AppSettings["DatabaseBackupsLocation"];
+      
+      _BackupLocation = ConfigurationManager.AppSettings["DatabaseBackupsLocation"]; // Start the initial backup
 
       if (!Directory.Exists(_BackupLocation)) { Directory.CreateDirectory(_BackupLocation); }
 

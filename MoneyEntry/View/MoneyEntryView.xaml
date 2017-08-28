@@ -34,7 +34,7 @@
           <StackPanel Grid.Column="1">
             <Label Content="Amount: "  HorizontalAlignment="Center"/>
             <Border>
-              <TextBox Text="{Binding MoneyAmount, Mode=TwoWay}"  Margin="16" />
+              <TextBox Text="{Binding MoneyAmount}"  Margin="16" />
             </Border>
             <Label Content="Category of Transaction: " Foreground="{StaticResource FontBrush}" HorizontalAlignment="Center"/>
             <Border>
@@ -45,7 +45,7 @@
           <StackPanel Grid.Column="2">
             <Label Content="Description: " HorizontalAlignment="Center"/>
             <Border>
-              <TextBox Text="{Binding Path=Desc, Mode=TwoWay}" Margin="16"/>
+              <TextBox Text="{Binding Path=Desc}" Margin="16"/>
             </Border>
             <Button Content="Submit" Style="{StaticResource GlassButton}" Command="{Binding Path=SaveCommand}" Margin="16" />
           </StackPanel>
