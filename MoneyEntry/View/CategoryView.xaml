@@ -34,8 +34,8 @@
                 <DataGrid  DockPanel.Dock="Top" x:Name="datagrid" ItemsSource="{Binding Categories}" AutoGenerateColumns="False" HorizontalAlignment="Left" VerticalAlignment="Top" 
                               IsSynchronizedWithCurrentItem="True" MaxHeight="700" >
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="CategoryID" Binding="{Binding CategoryID}" CanUserReorder="True"/>
-                <DataGridTextColumn Header="CategoryName" Binding="{Binding Description}" CanUserReorder="True"/>
+                        <DataGridTextColumn Header="CategoryID" Binding="{Binding CategoryId}" CanUserReorder="True"/>
+        <DataGridTextColumn Header="CategoryName" Binding="{Binding CategoryName}" CanUserReorder="True"/>
                     </DataGrid.Columns>
                 </DataGrid>
         </DockPanel>

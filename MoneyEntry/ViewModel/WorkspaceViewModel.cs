@@ -26,10 +26,10 @@ namespace MoneyEntry.ViewModel
       MoneyEnts.CollectionChanged += ModifyCollectionsBindings;
     }
     
-    public ICommand CloseCommand { get => (_closeCommand == null) ? _closeCommand = new RelayCommand(param => this.OnRequestClose()) : _closeCommand; }
+    public ICommand CloseCommand { get => (_closeCommand == null) ? _closeCommand = new RelayCommand(param => OnRequestClose()) : _closeCommand; }
     
     public event EventHandler RequestClose;
-    void OnRequestClose() => RequestClose?.Invoke(this, EventArgs.Empty);
+    protected void OnRequestClose() => RequestClose?.Invoke(this, EventArgs.Empty);
     
     public ReadOnlyCollection<TypeTran> Types { get; }
     public ObservableCollection<Category> Categories { get; set; }

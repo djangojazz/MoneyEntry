@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Windows.Input;
 using MoneyEntry.Model;
 using MessageBox = System.Windows.Forms.MessageBox;
+using System;
 
 namespace MoneyEntry.ViewModel
 {
@@ -19,7 +20,6 @@ namespace MoneyEntry.ViewModel
     }
 
     #region Properties
-    public IEnumerable<Category> Categories { get => Repository.Categories; }
     public override string DisplayName { get => "Add Category (" + _Person.FullName + ")"; }
     public ICommand AddCommand { get => (_Addcommand == null) ? _Addcommand = new RelayCommand(param => Add()) : _Addcommand; }
 
@@ -47,7 +47,8 @@ namespace MoneyEntry.ViewModel
     private void Add()
     {
       Repository.AddAndResetCategories(_Desc);
-      MessageBox.Show("Added " + _Desc);
+      MessageBox.Show($"Added {_Desc}{Environment.NewLine}Closing window");
+      OnRequestClose();
     }
 
     #region IDataErrorInfo Members
