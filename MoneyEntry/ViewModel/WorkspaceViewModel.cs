@@ -35,9 +35,11 @@ namespace MoneyEntry.ViewModel
     public ObservableCollection<Category> Categories { get; set; }
     public ItemObservableCollection<MoneyEntryModelViewModel> MoneyEnts { get; }
     
-    protected void Refresh(DateTime start, DateTime end, int personId)
+    protected void Refresh(DateTime start, DateTime end, int personId, bool lastReconciled = false)
     {
-      Repository.Refresh(start, end, personId);
+      var refreshStart = Repository.LastDateEnteredByPerson(personId, lastReconciled);
+
+      Repository.Refresh(lastReconciled ? (refreshStart ?? start) : start, end, personId);
       MoneyEnts.ClearAndAddRange(Repository.MoneyEntryContainer);
     }
 

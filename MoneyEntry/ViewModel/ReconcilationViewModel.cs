@@ -13,47 +13,21 @@ namespace MoneyEntry.ViewModel
   {
     Person _person;
     RelayCommand _refreshCommand;
-    string _desc;
-    decimal _moneyAmount;
-    private TypeTran _currentType;
-    private Category _currentCategory;
     DateTime _refreshStart;
     DateTime _refreshEnd;
-    bool _isSelected;
     private bool _onReconciled;
 
     public ReconcilationViewModel(Person person)
     {
       _person = person;
-      _currentType = Types.Single(x => x.TypeName == "Debit");
       var lastreconciledate = Repository.LastDateEnteredByPerson(_person.PersonId, true);
       var lastdate = Repository.LastDateEnteredByPerson(_person.PersonId, false);
       RefreshStart = (lastreconciledate != null) ? lastreconciledate.Value : lastdate ?? DateTime.MinValue;
       RefreshEnd = DateTime.Now;
-      Repository.Refresh(RefreshStart, RefreshEnd, _person.PersonId);
+      Refresh(RefreshStart, RefreshEnd, _person.PersonId);
     }
 
     #region MoneyEntry Properties
-    
-    public string Desc
-    {
-      get => _desc;
-      set
-      {
-        _desc = value;
-        OnPropertyChanged(nameof(Desc));
-      }
-    }
-
-    public decimal MoneyAmount
-    {
-      get => _moneyAmount;
-      set
-      {
-        _moneyAmount = value;
-        OnPropertyChanged(nameof(MoneyAmount));
-      }
-    }
 
     public DateTime RefreshStart
     {
@@ -74,20 +48,7 @@ namespace MoneyEntry.ViewModel
         OnPropertyChanged(nameof(RefreshEnd));
       }
     }
-
-    public bool IsSelected
-    {
-      get => _isSelected;
-      set
-      {
-        if (value == _isSelected)
-          return;
-
-        _isSelected = value;
-        base.OnPropertyChanged(nameof(IsSelected));
-      }
-    }
-
+    
     public bool OnReconciled
     {
       get => _onReconciled;
@@ -101,11 +62,12 @@ namespace MoneyEntry.ViewModel
     public override string DisplayName { get => Strings.ReconciliationViewModel_DisplayName + "(" + _person.FirstName + ")"; }
     #endregion
    
-    public ICommand RefreshCommand { get => (_refreshCommand == null) ? _refreshCommand = new RelayCommand(param => Refresh(RefreshStart, RefreshEnd, _person.PersonId)) : _refreshCommand; }
+    public ICommand RefreshCommand { get => (_refreshCommand == null) ? _refreshCommand = new RelayCommand(param => Refresh(RefreshStart, RefreshEnd, _person.PersonId, OnReconciled)) : _refreshCommand; }
 
     protected override void OnPropertyChanged(string propertyName)
     {
       if (propertyName == "Amount") { Refresh(RefreshStart, RefreshEnd, _person.PersonId); }
+      else { base.OnPropertyChanged(propertyName); }
     }
   }
 }
