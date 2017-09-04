@@ -17,7 +17,6 @@ namespace MoneyEntry.ViewModel
     public CategoryViewModel(Person person)
     {
       _Person = person;
-      //CanAdd = false;
       Validation();
     }
 

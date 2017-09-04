@@ -18,18 +18,14 @@
         <Grid.RowDefinitions>
           <RowDefinition Height="Auto"/>
           <RowDefinition Height="Auto"/>
-          <RowDefinition Height="*" />
+          <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <StackPanel Grid.Row="0" Grid.Column="0">
-          <Label Content="Description: " />
-          <Border>
-            <TextBox Margin="14" Text="{Binding Desc, ValidatesOnDataErrors=True, NotifyOnValidationError=True, ValidatesOnExceptions=True}"/>
-          </Border>
-        </StackPanel>
-        <StackPanel Grid.Row="0" Grid.Column="1">
-          <Button Style="{StaticResource GlassButton}" Content="Add Category" Command="{Binding AddCommand}"/>
-          <Label Content="{Binding ErrorText}" Visibility="{Binding ErrorVisible}" />
-        </StackPanel>
+        <Label Grid.Row="0" Grid.Column="0" Content="Description: " />
+        <Border Grid.Row="1" Grid.Column="0">
+          <TextBox  Margin="14" Text="{Binding Desc, ValidatesOnDataErrors=True, NotifyOnValidationError=True, ValidatesOnExceptions=True}"/>
+        </Border>
+        <Button Grid.RowSpan="2" Grid.Column="1" Style="{StaticResource GlassButton}" Content="Add Category" Command="{Binding AddCommand}"/>
+        <Label Grid.Row="2" Grid.ColumnSpan="2" Content="{Binding ErrorList}" Visibility="{Binding ErrorVisible}" Foreground="Red" />
       </Grid>
     </Border>
     <DataGrid  DockPanel.Dock="Top" x:Name="datagrid" ItemsSource="{Binding Categories}" AutoGenerateColumns="False" HorizontalAlignment="Left" VerticalAlignment="Top" 

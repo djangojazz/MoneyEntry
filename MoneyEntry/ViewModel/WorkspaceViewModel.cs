@@ -18,8 +18,7 @@ namespace MoneyEntry.ViewModel
     public ExpensesRepo Repository;
     RelayCommand _closeCommand;
     private readonly Dictionary<string, string> _errors = new Dictionary<string, string>();
-
-
+    
     protected WorkspaceViewModel()
     {
       Repository = ExpensesRepo.Instance;
@@ -29,23 +28,56 @@ namespace MoneyEntry.ViewModel
       MoneyEnts.ClearAndAddRange(Repository.MoneyEntryContainer);
       MoneyEnts.CollectionChanged += ModifyCollectionsBindings;
     }
-    
-    public ICommand CloseCommand { get => (_closeCommand == null) ? _closeCommand = new RelayCommand(param => OnRequestClose()) : _closeCommand; }
-    
-    public event EventHandler RequestClose;
-    protected void OnRequestClose() => RequestClose?.Invoke(this, EventArgs.Empty);
 
-    public string this[string PropertyName] { get => _errors.ContainsKey(PropertyName) ? _errors[PropertyName] : string.Empty; }
+    #region Properties
+    private string _errorList;
 
+    public string ErrorList
+    {
+      get => _errorList;
+      set
+      {
+        _errorList = value;
+        OnPropertyChanged(nameof(ErrorList));
+      }
+    }
 
-    public string ErrorList { get; private set; }
-    public bool HasError { get; private set; }
-    public ReadOnlyCollection<TypeTran> Types { get; }
-    public ObservableCollection<Category> Categories { get; set; }
-    public ItemObservableCollection<MoneyEntryModelViewModel> MoneyEnts { get; }
+    private System.Windows.Visibility _errorVisible;
+
+    public System.Windows.Visibility ErrorVisible
+    {
+      get => _errorVisible;
+      set
+      {
+        _errorVisible = value;
+        OnPropertyChanged(nameof(ErrorVisible));
+      }
+    }
+
+    private bool _hasError;
+
+    public bool HasError
+    {
+      get => _hasError;
+      set
+      {
+        _hasError = value;
+        ErrorVisible = !_hasError ? System.Windows.Visibility.Collapsed : System.Windows.Visibility.Visible;
+        OnPropertyChanged(nameof(HasError));
+      }
+    }
 
     public string Error => throw new NotImplementedException();
+    public ReadOnlyCollection<TypeTran> Types { get; }
+    public ObservableCollection<Category> Categories { get; set; }
+    public ItemObservableCollection<MoneyEntryModelViewModel> MoneyEnts { get; } 
+    #endregion
 
+    public ICommand CloseCommand { get => (_closeCommand == null) ? _closeCommand = new RelayCommand(param => OnRequestClose()) : _closeCommand; }
+
+    public event EventHandler RequestClose;
+    protected void OnRequestClose() => RequestClose?.Invoke(this, EventArgs.Empty);
+    
     protected void Refresh(DateTime start, DateTime end, int personId, bool lastReconciled = false)
     {
       var refreshStart = Repository.LastDateEnteredByPerson(personId, lastReconciled);
@@ -53,11 +85,12 @@ namespace MoneyEntry.ViewModel
       MoneyEnts.ClearAndAddRange(Repository.MoneyEntryContainer);
     }
 
+    #region CollectionChanges
     private void ModifyCollectionsBindings(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
     {
       if (e?.OldItems != null)
       {
-        foreach (var arg in e?.OldItems) {  ((INotifyPropertyChanged)arg).PropertyChanged -= CascadeEvent; base.OnPropertyChanged(arg.ToString()); }
+        foreach (var arg in e?.OldItems) { ((INotifyPropertyChanged)arg).PropertyChanged -= CascadeEvent; base.OnPropertyChanged(arg.ToString()); }
       }
 
       if (e?.NewItems != null)
@@ -67,7 +100,9 @@ namespace MoneyEntry.ViewModel
     }
 
     private void CascadeEvent(object sender, PropertyChangedEventArgs e) => OnPropertyChanged(e.PropertyName);
+    #endregion
 
+    #region DataErrorValidation
     public void SetError(string PropertyName, string PassedError)
     {
       if (PassedError.Length == 0 && _errors.ContainsKey(PropertyName)) { _errors.Remove(PropertyName.ToString()); }
@@ -79,6 +114,9 @@ namespace MoneyEntry.ViewModel
       ErrorList = _errors.GetStringListings();
     }
 
-    protected virtual void Validation() { }
+    public string this[string PropertyName] { get => _errors.ContainsKey(PropertyName) ? _errors[PropertyName] : string.Empty; }
+
+    protected virtual void Validation() { } 
+    #endregion
   }
 }
