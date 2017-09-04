@@ -33,6 +33,7 @@ namespace MoneyEntry.ViewModel
       RefreshStart = DateEntry.AddDays(-7);
       RefreshEnd = DateTime.Now;
       Refresh(RefreshStart, RefreshEnd, _person.PersonId);
+      Validation();
     }
     
     #region MoneyEntry Properties
@@ -63,6 +64,7 @@ namespace MoneyEntry.ViewModel
       set
       {
         _desc = value;
+        Validation();
         OnPropertyChanged(nameof(Desc));
       }
     }
@@ -73,6 +75,7 @@ namespace MoneyEntry.ViewModel
       set
       {
         _moneyAmount = value;
+        Validation();
         OnPropertyChanged(nameof(MoneyAmount));
       }
     }
@@ -127,7 +130,7 @@ namespace MoneyEntry.ViewModel
     #region Presentation Properties
     public override string DisplayName { get => Strings.MoneyEntryViewModel_DisplayName + "(" + _person.FullName + ")"; }
 
-    public ICommand SaveCommand { get => (_saveCommand == null) ? _saveCommand = new RelayCommand(param => SaveAndResetAmount()) : _saveCommand; }
+    public ICommand SaveCommand { get => (_saveCommand == null) ? _saveCommand = new RelayCommand(param => SaveAndResetAmount(), can => !HasError) : _saveCommand; }
 
     public ICommand RefreshCommand { get => (_refreshCommand == null) ? _refreshCommand = new RelayCommand(param => Refresh(RefreshStart, RefreshEnd, _person.PersonId)) : _refreshCommand; }
 
@@ -147,20 +150,10 @@ namespace MoneyEntry.ViewModel
       else { base.OnPropertyChanged(propertyName); }
     }
 
-    #region IDataErrorInfo Members
-
-    //TODO: Hookup IDataError properly for description, amount, category to be selected first.
-    string IDataErrorInfo.Error { get => (_person as IDataErrorInfo).Error; }
-
-    string IDataErrorInfo.this[string propertyName]
+    protected override void Validation()
     {
-      get
-      {
-        string error = null;
-        return error;
-      }
+      SetError("Description:", (String.IsNullOrEmpty(Desc)) ? "Need a description for the transaction" : String.Empty);
+      SetError("Amount:", (MoneyAmount == 0) ? "Need an amount." : String.Empty);
     }
-
-    #endregion // IDataErrorInfo Members
   }
 }

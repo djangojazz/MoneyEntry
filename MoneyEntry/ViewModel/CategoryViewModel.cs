@@ -55,7 +55,7 @@ namespace MoneyEntry.ViewModel
     
     protected override void Validation()
     {
-      SetError("CATEGORY NAME:", (String.IsNullOrEmpty(Desc)) ? "Need a category" : String.Empty);
+      SetError("Category:", (String.IsNullOrEmpty(Desc)) ? "Need a category name." : String.Empty);
     }
   }
 }
