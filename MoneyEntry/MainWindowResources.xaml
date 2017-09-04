@@ -4,163 +4,130 @@
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:vm="clr-namespace:MoneyEntry.ViewModel"
   xmlns:vw="clr-namespace:MoneyEntry.View" xmlns:view="clr-namespace:MoneyEntry.View">
-<DataTemplate DataType="{x:Type vm:MoneyEntryViewModel}">
+  <DataTemplate DataType="{x:Type vm:MoneyEntryViewModel}">
     <vw:NewMoneyEntryView />
-</DataTemplate>
-<DataTemplate DataType="{x:Type vm:ReconcilationViewModel}">
+  </DataTemplate>
+  <DataTemplate DataType="{x:Type vm:ReconcilationViewModel}">
     <vw:ReconciliationView />
-</DataTemplate>
-<DataTemplate DataType="{x:Type vm:QueryViewModel}">
+  </DataTemplate>
+  <DataTemplate DataType="{x:Type vm:QueryViewModel}">
     <vw:QueryView />
-</DataTemplate>
-<DataTemplate DataType="{x:Type vm:CategoryViewModel}">
+  </DataTemplate>
+  <DataTemplate DataType="{x:Type vm:CategoryViewModel}">
     <vw:CategoryView/>
-</DataTemplate>
+  </DataTemplate>
   <DataTemplate DataType="{x:Type vm:ChartViewModel}">
     <vw:ChartView/>
   </DataTemplate>
 
-<CollectionViewSource x:Key="Types" Source="{Binding Types}"/>
-<CollectionViewSource x:Key="Categories" Source="{Binding Categories}"/>
-  
-<Style TargetType="{x:Type Border}">
+  <CollectionViewSource x:Key="Types" Source="{Binding Types}"/>
+  <CollectionViewSource x:Key="Categories" Source="{Binding Categories}"/>
+
+  <Style TargetType="{x:Type Border}">
     <Setter Property="Background" Value="{StaticResource MoneyBrush}" />
     <Setter Property="BorderBrush" Value="#071C07" />
     <Setter Property="BorderThickness" Value="3" />
     <Setter Property="CornerRadius" Value="20" />
     <Setter Property="SnapsToDevicePixels" Value="True" />
     <Setter Property="Margin" Value="5" />
-</Style>
+  </Style>
 
-<!--  This template explains how to render the list of commands on the left side in the main window (the 'Control Panel' area).  -->
-<DataTemplate x:Key="CommandsTemplate">
-<ItemsControl IsTabStop="False" ItemsSource="{Binding}" >
-    <ItemsControl.ItemTemplate>
-    <DataTemplate>
-        <Button Command="{Binding Path=Command}" Content="{Binding Path=DisplayName}" Style="{DynamicResource GlassButton}" />
-    </DataTemplate>
-    </ItemsControl.ItemTemplate>
-</ItemsControl>
-</DataTemplate>
+  <!--  This template explains how to render the list of commands on the left side in the main window (the 'Control Panel' area).  -->
+  <DataTemplate x:Key="CommandsTemplate">
+    <ItemsControl IsTabStop="False" ItemsSource="{Binding}" >
+      <ItemsControl.ItemTemplate>
+        <DataTemplate>
+          <Button Command="{Binding Path=Command}" Content="{Binding Path=DisplayName}" Style="{DynamicResource GlassButton}" />
+        </DataTemplate>
+      </ItemsControl.ItemTemplate>
+    </ItemsControl>
+  </DataTemplate>
 
-<!--   This template explains how to render a tab item with a close button.  -->
-<DataTemplate x:Key="ClosableTabItemTemplate">
-<DockPanel >
-    <Button 
-    Command="{Binding Path=CloseCommand}"
-    Content="X"
-    Cursor="Hand"
-    DockPanel.Dock="Right"
-    Focusable="False"
-    FontFamily="Courier" 
-    FontSize="14"
-    FontWeight="Bold"  
-    Margin="0,1,0,0"
-    Padding="0"
-    Foreground="{StaticResource Brush_HeaderBackground}"
-    Background="White"
-    VerticalContentAlignment="Bottom"
-    Width="16" Height="16" />
-    <Label Content="{Binding DisplayName}" 
-        VerticalAlignment="Center"
-        Foreground="{StaticResource ButtonBrush}"
-        FontSize="16" />
+  <!--   This template explains how to render a tab item with a close button.  -->
+  <DataTemplate x:Key="ClosableTabItemTemplate">
+    <DockPanel >
+      <Button Command="{Binding Path=CloseCommand}" Content="X" Cursor="Hand" DockPanel.Dock="Right" Focusable="False" FontFamily="Courier" FontSize="14" FontWeight="Bold"  Margin="0,1,0,0"
+    Padding="0" Foreground="{StaticResource Brush_HeaderBackground}" Background="White" VerticalContentAlignment="Bottom" Width="16" Height="16" />
+      <Label Content="{Binding DisplayName}"  VerticalAlignment="Center" Foreground="{StaticResource ButtonBrush}" FontSize="16" />
     </DockPanel>
-</DataTemplate>
+  </DataTemplate>
 
-<!--   This template explains how to render the 'Workspace' content area in the main window.  -->
-<DataTemplate x:Key="WorkspacesTemplate">
-<TabControl 
-    IsSynchronizedWithCurrentItem="True" 
-    ItemsSource="{Binding}" 
-    ItemTemplate="{StaticResource ClosableTabItemTemplate}"
-    Background="Transparent"
-    ClipToBounds="False"
-    BorderThickness="0"
-    Margin="5"
-    />
-</DataTemplate>
+  <!--   This template explains how to render the 'Workspace' content area in the main window.  -->
+  <DataTemplate x:Key="WorkspacesTemplate">
+    <TabControl IsSynchronizedWithCurrentItem="True" ItemsSource="{Binding}" ItemTemplate="{StaticResource ClosableTabItemTemplate}" Background="Transparent" ClipToBounds="False" BorderThickness="0" Margin="5" />
+  </DataTemplate>
 
-<Style x:Key="largeCalender" TargetType="{x:Type Calendar}">
+  <Style x:Key="largeCalender" TargetType="{x:Type Calendar}">
     <Setter Property="Template">
-        <Setter.Value>
-            <ControlTemplate TargetType="{x:Type Calendar}">
-                <!-- Wrapping in ViewBox will enlarge calendar of that size.-->
-                <Viewbox Height="400"
-                        Width="400">
-                    <CalendarItem x:Name="PART_CalendarItem"
-                                Background="{TemplateBinding Background}"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}"/>
-                </Viewbox>
-            </ControlTemplate>
-        </Setter.Value>
+      <Setter.Value>
+        <ControlTemplate TargetType="{x:Type Calendar}">
+          <Viewbox Height="400" Width="400">
+            <CalendarItem x:Name="PART_CalendarItem" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}"/>
+          </Viewbox>
+        </ControlTemplate>
+      </Setter.Value>
     </Setter>
-</Style>
+  </Style>
 
-<Style TargetType="{x:Type DatePicker}">
+  <Style TargetType="{x:Type DatePicker}">
     <Setter Property="CalendarStyle" Value="{StaticResource largeCalender}"></Setter>
-</Style>
+  </Style>
 
 
-<Style TargetType="{x:Type Label}">
+  <Style TargetType="{x:Type Label}">
     <Setter Property="FontSize" Value="16"/>
     <Setter Property="HorizontalAlignment" Value="Center"/>
     <Setter Property="Foreground" Value="{StaticResource FontBrush}"/>
-</Style>
+  </Style>
 
-<Style TargetType="TextBox">
+  <Style TargetType="TextBox">
     <Setter Property="FontSize" Value="16"/>
     <Setter Property="Margin" Value="10" />
     <Setter Property="Foreground" Value="{StaticResource FontBrush}"/>
-</Style>
-    
-<Style TargetType="StackPanel">
+  </Style>
+
+  <Style TargetType="StackPanel">
     <Setter Property="Margin" Value="5"/>
     <Setter Property="Width" Value="Auto"/>
-</Style>
-    
-<Style x:Key="GlassButton" TargetType="{x:Type Button}">
+  </Style>
+
+  <Style x:Key="GlassButton" TargetType="{x:Type Button}">
     <Setter Property="FontSize" Value="16" />
     <Setter Property="Height" Value="80" />
     <Setter Property="Margin" Value="0,5,0,5" />
     <Setter Property="Foreground" Value="{StaticResource FontBrush}" />
     <Setter Property="Template">
-        <Setter.Value>
-            <ControlTemplate TargetType="{x:Type Button}">
-                <Border x:Name="border" 
-                        CornerRadius="25" 
-                        BorderThickness="4" 
-                        Background="{StaticResource ButtonBrush}"  
-                        BorderBrush="Black"
-                        RenderTransformOrigin="0.5,0.5">
-                    <ContentPresenter x:Name="ButtonContentPresenter"
-                        VerticalAlignment="Center"  
-                        HorizontalAlignment="Center"/>
-                </Border>
-                <ControlTemplate.Triggers>
-                    <Trigger Property="IsMouseOver" Value="True">
-                        <Setter TargetName="border" Property="BorderBrush" Value="{StaticResource FocusedBrush}" />
-                        <Setter Property="Foreground" Value="{StaticResource FocusedBrush}" />
-                    </Trigger>
-                </ControlTemplate.Triggers>
-            </ControlTemplate>
-        </Setter.Value>
+      <Setter.Value>
+        <ControlTemplate TargetType="{x:Type Button}">
+          <Border x:Name="border" CornerRadius="25" BorderThickness="4"  Background="{StaticResource ButtonBrush}" BorderBrush="Black" RenderTransformOrigin="0.5,0.5">
+            <ContentPresenter x:Name="ButtonContentPresenter" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+          </Border>
+          <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+              <Setter TargetName="border" Property="BorderBrush" Value="{StaticResource FocusedBrush}" />
+              <Setter Property="Foreground" Value="{StaticResource FocusedBrush}" />
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="False" >
+              <Setter Property="Opacity" Value="0.2" />
+            </Trigger>
+          </ControlTemplate.Triggers>
+        </ControlTemplate>
+      </Setter.Value>
     </Setter>
-</Style>
-   
-<ItemsPanelTemplate x:Key="ComboBoxItemsPanelTemplate">
+  </Style>
+
+  <ItemsPanelTemplate x:Key="ComboBoxItemsPanelTemplate">
     <StackPanel IsItemsHost="True" Background="{StaticResource MoneyBrush}"/>
-</ItemsPanelTemplate>
-    
-<Style  TargetType="{x:Type ComboBox}">
+  </ItemsPanelTemplate>
+
+  <Style  TargetType="{x:Type ComboBox}">
     <Setter Property="ItemsPanel" Value="{StaticResource ComboBoxItemsPanelTemplate}"/>
     <Setter Property="FontSize" Value="14"/>
     <Setter Property="Foreground" Value="{StaticResource FontBrush}"/>
-</Style>
+  </Style>
 
-<!-- DatGrid style -->
-<Style TargetType="{x:Type DataGrid}">
+  <!-- DatGrid style -->
+  <Style TargetType="{x:Type DataGrid}">
     <Setter Property="Margin" Value="5" />
     <Setter Property="Background" Value="{StaticResource MoneyBrush}" />
     <Setter Property="BorderBrush" Value="#FF53AA75" />
@@ -169,6 +136,6 @@
     <Setter Property="HorizontalGridLinesBrush" Value="Transparent" />
     <Setter Property="VerticalGridLinesBrush" Value="#AED7BE" />
     <Setter Property="RowHeaderWidth" Value="0" />
-</Style>
+  </Style>
 
 </ResourceDictionary>

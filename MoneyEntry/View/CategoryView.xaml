@@ -24,7 +24,9 @@
         <Border Grid.Row="1" Grid.Column="0">
           <TextBox  Margin="14" Text="{Binding Desc, ValidatesOnDataErrors=True, NotifyOnValidationError=True, ValidatesOnExceptions=True}"/>
         </Border>
-        <Button Grid.RowSpan="2" Grid.Column="1" Style="{StaticResource GlassButton}" Content="Add Category" Command="{Binding AddCommand}"/>
+        <Button Grid.RowSpan="2" Grid.Column="1" Style="{StaticResource GlassButton}" 
+                Content="Add Category" Command="{Binding AddCommand}"
+                />
         <Label Grid.Row="2" Grid.ColumnSpan="2" Content="{Binding ErrorList}" Visibility="{Binding ErrorVisible}" Foreground="Red" />
       </Grid>
     </Border>

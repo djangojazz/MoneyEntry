@@ -62,7 +62,7 @@ namespace MoneyEntry.ViewModel
       set
       {
         _hasError = value;
-        ErrorVisible = !_hasError ? System.Windows.Visibility.Collapsed : System.Windows.Visibility.Visible;
+        ErrorVisible = !_hasError ? System.Windows.Visibility.Hidden : System.Windows.Visibility.Visible;
         OnPropertyChanged(nameof(HasError));
       }
     }
