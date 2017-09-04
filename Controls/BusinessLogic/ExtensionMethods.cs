@@ -136,5 +136,12 @@ namespace Controls
       m.Seek(0, System.IO.SeekOrigin.Begin);
       return (T)Formater.Deserialize(m);
     }
+
+    public static string GetStringListings(this IDictionary dictionary)
+    {
+      string s = string.Empty;
+      foreach (DictionaryEntry o in dictionary) { s += $"{o.Key.ToString()} {o.Value.ToString()} {Environment.NewLine}"; }
+      return s.Trim();
+    }
   }
 }

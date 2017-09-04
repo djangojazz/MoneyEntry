@@ -17,11 +17,12 @@ namespace MoneyEntry.ViewModel
     public CategoryViewModel(Person person)
     {
       _Person = person;
+      //CanAdd = false;
     }
 
     #region Properties
     public override string DisplayName { get => "Add Category (" + _Person.FullName + ")"; }
-    public ICommand AddCommand { get => (_Addcommand == null) ? _Addcommand = new RelayCommand(param => Add()) : _Addcommand; }
+    public ICommand AddCommand { get => (_Addcommand == null) ? _Addcommand = new RelayCommand(param => Add(), can => !HasError) : _Addcommand; }
 
     public string CurrentCategory
     {
@@ -51,19 +52,44 @@ namespace MoneyEntry.ViewModel
       OnRequestClose();
     }
 
+    //private bool _canAdd;
+
+    //public bool CanAdd
+    //{
+    //  get => _canAdd;
+    //  set
+    //  {
+    //    _canAdd = value;
+        
+    //    OnPropertyChanged(nameof(CanAdd));
+    //  }
+    //}
+
+
+
     #region IDataErrorInfo Members
 
-    //TODO Hookup IDataError for description
-    string IDataErrorInfo.Error { get => (_Person as IDataErrorInfo).Error; }
-
-    string IDataErrorInfo.this[string propertyName]
+    protected override void Validation()
     {
-      get
-      {
-        string error = null;
-        return error;
-      }
+      SetError("CATEGORY NAME:", (String.IsNullOrEmpty(Desc)) ? "Need a category" : String.Empty);
     }
+
+    //string IDataErrorInfo.Error { get => (_Person as IDataErrorInfo).Error; }
+
+    //string IDataErrorInfo.this[string propertyName]
+    //{
+    //  get
+    //  {
+    //    if(String.IsNullOrEmpty(Desc))
+    //    {
+    //      CanAdd = false;
+    //      return "Need a description";
+    //    }
+
+    //    CanAdd = true;
+    //    return string.Empty;
+    //  }
+    //}
 
     #endregion // IDataErrorInfo Members
   }

@@ -5,38 +5,39 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
              Background="Black">
-    <UserControl.Resources>
-        <ResourceDictionary Source="..\MainWindowResources.xaml" />
-    </UserControl.Resources>
-        <DockPanel>
-        <Border DockPanel.Dock="Top">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*" />
-                    </Grid.RowDefinitions>
-                    <StackPanel Grid.Row="0" Grid.Column="0">
-                        <Label Content="Description: " />
-                        <Border>
-                            <TextBox Margin="14" Text="{Binding Desc}"/>
-                        </Border>
-                    </StackPanel>
-                <StackPanel Grid.Row="0" Grid.Column="1">
-                        <Button Style="{StaticResource GlassButton}" Content="Add Category" Command="{Binding AddCommand}"/>
-                </StackPanel>
-            </Grid>
-            </Border>
-                <DataGrid  DockPanel.Dock="Top" x:Name="datagrid" ItemsSource="{Binding Categories}" AutoGenerateColumns="False" HorizontalAlignment="Left" VerticalAlignment="Top" 
+  <UserControl.Resources>
+    <ResourceDictionary Source="..\MainWindowResources.xaml" />
+  </UserControl.Resources>
+  <DockPanel>
+    <Border DockPanel.Dock="Top">
+      <Grid>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="*"/>
+          <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0" Grid.Column="0">
+          <Label Content="Description: " />
+          <Border>
+            <TextBox Margin="14" Text="{Binding Desc, ValidatesOnDataErrors=True, NotifyOnValidationError=True, ValidatesOnExceptions=True}"/>
+          </Border>
+        </StackPanel>
+        <StackPanel Grid.Row="0" Grid.Column="1">
+          <Button Style="{StaticResource GlassButton}" Content="Add Category" Command="{Binding AddCommand}"/>
+          <Label Content="{Binding ErrorText}" Visibility="{Binding ErrorVisible}" />
+        </StackPanel>
+      </Grid>
+    </Border>
+    <DataGrid  DockPanel.Dock="Top" x:Name="datagrid" ItemsSource="{Binding Categories}" AutoGenerateColumns="False" HorizontalAlignment="Left" VerticalAlignment="Top" 
                               IsSynchronizedWithCurrentItem="True" MaxHeight="700" >
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="CategoryID" Binding="{Binding CategoryId}" CanUserReorder="True"/>
+      <DataGrid.Columns>
+        <DataGridTextColumn Header="CategoryID" Binding="{Binding CategoryId}" CanUserReorder="True"/>
         <DataGridTextColumn Header="CategoryName" Binding="{Binding CategoryName}" CanUserReorder="True"/>
-                    </DataGrid.Columns>
-                </DataGrid>
-        </DockPanel>
+      </DataGrid.Columns>
+    </DataGrid>
+  </DockPanel>
 </UserControl>
