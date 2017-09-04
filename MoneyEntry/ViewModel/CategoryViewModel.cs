@@ -18,6 +18,7 @@ namespace MoneyEntry.ViewModel
     {
       _Person = person;
       //CanAdd = false;
+      Validation();
     }
 
     #region Properties
@@ -40,6 +41,7 @@ namespace MoneyEntry.ViewModel
       set
       {
         _Desc = value;
+        Validation();
         OnPropertyChanged(nameof(Desc));
       }
     } 
@@ -51,46 +53,10 @@ namespace MoneyEntry.ViewModel
       MessageBox.Show($"Added {_Desc}{Environment.NewLine}Closing window");
       OnRequestClose();
     }
-
-    //private bool _canAdd;
-
-    //public bool CanAdd
-    //{
-    //  get => _canAdd;
-    //  set
-    //  {
-    //    _canAdd = value;
-        
-    //    OnPropertyChanged(nameof(CanAdd));
-    //  }
-    //}
-
-
-
-    #region IDataErrorInfo Members
-
+    
     protected override void Validation()
     {
       SetError("CATEGORY NAME:", (String.IsNullOrEmpty(Desc)) ? "Need a category" : String.Empty);
     }
-
-    //string IDataErrorInfo.Error { get => (_Person as IDataErrorInfo).Error; }
-
-    //string IDataErrorInfo.this[string propertyName]
-    //{
-    //  get
-    //  {
-    //    if(String.IsNullOrEmpty(Desc))
-    //    {
-    //      CanAdd = false;
-    //      return "Need a description";
-    //    }
-
-    //    CanAdd = true;
-    //    return string.Empty;
-    //  }
-    //}
-
-    #endregion // IDataErrorInfo Members
   }
 }
