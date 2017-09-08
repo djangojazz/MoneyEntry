@@ -29,27 +29,31 @@
 
           <Label Grid.Row="0" Grid.Column="0" Content="Entry Date:" HorizontalContentAlignment="Stretch" />
           <Border Grid.Row="1" Grid.Column="0" >
-            <DatePicker Margin="10" Foreground="{StaticResource FontBrush}" FontSize="20" SelectedDate="{Binding DateEntry}" HorizontalContentAlignment="Stretch"/>
+            <DatePicker TabIndex="1" Margin="10" Foreground="{StaticResource FontBrush}" FontSize="20" SelectedDate="{Binding DateEntry}" HorizontalContentAlignment="Stretch"/>
           </Border>
+          
           <Label Grid.Row="2" Grid.Column="0"  Content="Type of Transaction: " HorizontalContentAlignment="Stretch"/>
           <Border Grid.Row="3" Grid.Column="0">
-            <ComboBox  Margin="10" ItemsSource="{Binding Types}" DisplayMemberPath="TypeName" SelectedValue="{Binding CurrentType}" HorizontalContentAlignment="Stretch" />
+            <ComboBox  TabIndex="2" Margin="10" ItemsSource="{Binding Types}" DisplayMemberPath="TypeName" SelectedValue="{Binding CurrentType}" HorizontalContentAlignment="Stretch" />
           </Border>
 
           <Label Grid.Row="0" Grid.Column="1" Content="Amount: "  HorizontalAlignment="Center"/>
           <Border Grid.Row="1" Grid.Column="1" >
-            <TextBox Text="{Binding MoneyAmount, ValidatesOnDataErrors=True, NotifyOnValidationError=True, ValidatesOnExceptions=True}"  Margin="16" />
+            <TextBox TabIndex="3"  Text="{Binding MoneyAmount, ValidatesOnDataErrors=True, NotifyOnValidationError=True, ValidatesOnExceptions=True}"  Margin="16" />
           </Border>
+          
           <Label Grid.Row="2" Grid.Column="1" Content="Category of Transaction: " Foreground="{StaticResource FontBrush}" HorizontalAlignment="Center"/>
           <Border Grid.Row="3" Grid.Column="1" >
-            <ComboBox Margin="10" ItemsSource="{Binding Categories}" DisplayMemberPath="CategoryName" SelectedValue="{Binding CurrentCategory}" HorizontalContentAlignment="Stretch" />
+            <ComboBox TabIndex="5"  Margin="10" ItemsSource="{Binding Categories}" DisplayMemberPath="CategoryName" SelectedValue="{Binding CurrentCategory}" HorizontalContentAlignment="Stretch" />
           </Border>
 
           <Label Grid.Row="0" Grid.Column="2" Content="Description: " HorizontalAlignment="Center"/>
           <Border Grid.Row="1" Grid.Column="2" >
-            <TextBox Text="{Binding Path=Desc, ValidatesOnDataErrors=True, NotifyOnValidationError=True, ValidatesOnExceptions=True}" Margin="16"/>
+            <TextBox TabIndex="4" Text="{Binding Path=Desc, ValidatesOnDataErrors=True, NotifyOnValidationError=True, ValidatesOnExceptions=True}" Margin="16"/>
           </Border>
-          <Button Grid.RowSpan="2" Grid.Row="2" Grid.Column="2" Content="Submit" Style="{StaticResource GlassButton}" Command="{Binding Path=SaveCommand}" Margin="16" />
+
+          <Button TabIndex="6" Grid.RowSpan="2" Grid.Row="2" Grid.Column="2" Content="Submit" Style="{StaticResource GlassButton}" Command="{Binding Path=SaveCommand}" 
+                  Margin="10" />
 
           <Label  Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" Content="{Binding ErrorList}" Visibility="{Binding ErrorVisible}" Foreground="Red" Height="60" />
         </Grid>
@@ -64,22 +68,21 @@
           </Grid.ColumnDefinitions>
           <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*" />
           </Grid.RowDefinitions>
-          <StackPanel Grid.Row="0" Grid.Column="0">
-            <Label Content="StartDate: " HorizontalAlignment="Center"/>
-            <Border>
-              <DatePicker Margin="10" Foreground="{StaticResource FontBrush}" FontSize="20" SelectedDate="{Binding RefreshStart}" />
-            </Border>
-          </StackPanel>
 
-          <StackPanel Grid.Row="0" Grid.Column="1" >
-            <Label Content="EndDate: " HorizontalAlignment="Center"/>
-            <Border>
-              <DatePicker Margin="10" Foreground="{StaticResource FontBrush}" FontSize="20" SelectedDate="{Binding RefreshEnd}"  />
-            </Border>
-          </StackPanel>
-          <Button Grid.Row="0" Grid.Column="2" Content="Refresh"  Style="{StaticResource GlassButton}" Command="{Binding Path=RefreshCommand}" Margin="30"  />
+          <Label Content="StartDate: " HorizontalAlignment="Center"/>
+          <Border Grid.Row="1" >
+            <DatePicker IsTabStop="False"  Margin="10" Foreground="{StaticResource FontBrush}" FontSize="20" SelectedDate="{Binding RefreshStart}" />
+          </Border>
+
+          <Label Grid.Column="1" Content="EndDate: " HorizontalAlignment="Center"/>
+          <Border Grid.Row="1" Grid.Column="1" >
+            <DatePicker IsTabStop="False" Margin="10" Foreground="{StaticResource FontBrush}" FontSize="20" SelectedDate="{Binding RefreshEnd}"  />
+          </Border>
+          
+          <Button IsTabStop="False" Grid.Column="2" Grid.RowSpan="2" Content="Refresh"  Style="{StaticResource GlassButton}" Command="{Binding Path=RefreshCommand}" Margin="10"  />
         </Grid>
       </Border>
       <DataGrid DockPanel.Dock="Top" x:Name="datagrid" 

@@ -152,8 +152,8 @@ namespace MoneyEntry.ViewModel
 
     protected override void Validation()
     {
+      SetError("Amount:", (MoneyAmount <= 0) ? "Need an amount." : String.Empty);
       SetError("Description:", (String.IsNullOrEmpty(Desc)) ? "Need a description for the transaction" : String.Empty);
-      SetError("Amount:", (MoneyAmount == 0) ? "Need an amount." : String.Empty);
     }
   }
 }
