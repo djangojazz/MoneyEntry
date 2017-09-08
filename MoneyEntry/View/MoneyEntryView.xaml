@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:vm="clr-namespace:MoneyEntry.ViewModel"
              xmlns:w="clr-namespace:System.Windows.Controls;assembly=PresentationFramework"
+             xmlns:behaviors="clr-namespace:WPFTextBoxAutoComplete;assembly=WPFTextBoxAutoComplete"
              mc:Ignorable="d" 
              Background="Black">
   <UserControl.Resources>
@@ -49,7 +50,10 @@
 
           <Label Grid.Row="0" Grid.Column="2" Content="Description: " HorizontalAlignment="Center"/>
           <Border Grid.Row="1" Grid.Column="2" >
-            <TextBox TabIndex="4" Text="{Binding Path=Desc, ValidatesOnDataErrors=True, NotifyOnValidationError=True, ValidatesOnExceptions=True}" Margin="16"/>
+            <TextBox TabIndex="4" Text="{Binding Path=Desc, ValidatesOnDataErrors=True, NotifyOnValidationError=True, ValidatesOnExceptions=True}" Margin="16"
+                     behaviors:AutoCompleteBehavior.AutoCompleteItemsSource="{Binding TextCollection}" 
+		behaviors:AutoCompleteBehavior.AutoCompleteStringComparison="InvariantCultureIgnoreCase"
+                     />
           </Border>
 
           <Button TabIndex="6" Grid.RowSpan="2" Grid.Row="2" Grid.Column="2" Content="Submit" Style="{StaticResource GlassButton}" Command="{Binding Path=SaveCommand}" 

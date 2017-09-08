@@ -25,6 +25,7 @@ namespace MoneyEntry.ViewModel
     bool _isSelected;
 
     public MoneyEntryViewModel(Person person)
+      : base(DateTime.Now.Date.AddYears(-1), DateTime.Now.Date, person.PersonId)
     {
       _person = person ?? throw new ArgumentNullException("person");
       CurrentType = Repository.Types.Single(x => x.TypeId == 2); //Debit

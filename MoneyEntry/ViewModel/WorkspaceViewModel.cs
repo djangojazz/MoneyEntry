@@ -29,6 +29,17 @@ namespace MoneyEntry.ViewModel
       MoneyEnts.CollectionChanged += ModifyCollectionsBindings;
     }
 
+    protected WorkspaceViewModel(DateTime start, DateTime end, int personId)
+    {
+      Repository = ExpensesRepo.Instance;
+      Types = new ReadOnlyCollection<TypeTran>(Repository.Types);
+      Categories = new ObservableCollection<Category>(Repository.Categories);
+      MoneyEnts = new ItemObservableCollection<MoneyEntryModelViewModel>();
+      TextCollection = new ReadOnlyCollection<string>(Repository.TextEntryAcrossRange(start, end, personId));
+      MoneyEnts.ClearAndAddRange(Repository.MoneyEntryContainer);
+      MoneyEnts.CollectionChanged += ModifyCollectionsBindings;
+    }
+
     #region Properties
     private string _errorList;
 
@@ -70,7 +81,8 @@ namespace MoneyEntry.ViewModel
     public string Error => throw new NotImplementedException();
     public ReadOnlyCollection<TypeTran> Types { get; }
     public ObservableCollection<Category> Categories { get; set; }
-    public ItemObservableCollection<MoneyEntryModelViewModel> MoneyEnts { get; } 
+    public ItemObservableCollection<MoneyEntryModelViewModel> MoneyEnts { get; }
+    public ReadOnlyCollection<string> TextCollection { get; }
     #endregion
 
     public ICommand CloseCommand { get => (_closeCommand == null) ? _closeCommand = new RelayCommand(param => OnRequestClose()) : _closeCommand; }

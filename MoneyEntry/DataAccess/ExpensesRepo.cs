@@ -58,8 +58,7 @@ namespace MoneyEntry.DataAccess
     private List<Category> GetCurrentCategories() => GetEntities<tdCategory>().Select(x => new Category(x.CategoryID, x.Description)).ToList();
 
     public List<Person> GetPeople() => GetEntities<tePerson>().Select(x => new Person(x)).ToList();
-
-
+    
     public List<MoneyEntryModelViewModel> QueryMoneyEntries(DateTime start, DateTime end, int personId, int categoryId, int typeId, string description = null, decimal? moneyAmount = null)
     {
       var list = GetEntities<vTrans>(x => x.CreatedDate >= start && x.CreatedDate <= end && x.PersonID == personId && x.TypeID == typeId && x.CategoryID == categoryId);
@@ -79,6 +78,8 @@ namespace MoneyEntry.DataAccess
 
     public DateTime? LastDateEnteredByPerson(int personId, bool? reconciled = null) => (DateTime)GetEntities<vTrans>(x => x.PersonID == personId && x.reconciled == (reconciled ?? false))
       .OrderByDescending(x => x.CreatedDate).Select(x => x.CreatedDate).First();
+
+    public List<string> TextEntryAcrossRange(DateTime start, DateTime end, int personId) => GetTransactionViews(start, end, personId).Select(x => x.TransactionDesc).Distinct().ToList();
     #endregion
 
     #region AlterMethods
