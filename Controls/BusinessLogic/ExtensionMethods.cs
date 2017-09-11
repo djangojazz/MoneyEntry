@@ -30,7 +30,10 @@ namespace Controls
     public static void ClearAndAddRange<T>(this ObservableCollection<T> input, IEnumerable<T> array)
     {
       input.Clear();
-      input.AddRange(array);
+      foreach (var o in array)
+      {
+        input.Add(o);
+      }
     }
 
     public static void ClearAndAddRange<T>(this ObservableCollectionContentNotifying<T> input, IEnumerable<T> array)

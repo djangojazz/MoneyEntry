@@ -34,18 +34,18 @@ namespace Controls.Types
       OnItemPropertyChanged((T)sender, e);
     }
 
-    public sealed class ItemPropertyChangedEventArgs<T> : EventArgs
+    public sealed class ItemPropertyChangedEventArgs<Titem> : EventArgs
     {
-      private readonly T _item;
+      private readonly Titem _item;
       private readonly string _propertyName;
 
-      public ItemPropertyChangedEventArgs(T item, string propertyName)
+      public ItemPropertyChangedEventArgs(Titem item, string propertyName)
       {
         _item = item;
         _propertyName = propertyName;
       }
 
-      public T Item
+      public Titem Item
       {
         get { return _item; }
       }

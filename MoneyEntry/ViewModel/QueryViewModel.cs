@@ -16,7 +16,6 @@ namespace MoneyEntry.ViewModel
     
     ObservableCollection<MoneyEntryModelViewModel> _moneyentries;
     RelayCommand _Find;
-    bool _isSelected;
     string _Desc;
     decimal _MoneyAmount;
     TypeTran _CurrentType;
@@ -33,18 +32,18 @@ namespace MoneyEntry.ViewModel
       var lastDate = Repository.LastDateEnteredByPerson(_Person.PersonId);
       RefreshStart = (lastReconciledDate != null) ? lastReconciledDate.Value : lastDate ?? DateTime.Now.Date.AddDays(-7);
       RefreshEnd = DateTime.Now;
-      MoneyEnts = new ObservableCollection<MoneyEntryModelViewModel>(Repository.QueryMoneyEntries(RefreshStart, RefreshEnd, _Person.PersonId, CurrentCategory.CategoryId, CurrentType.TypeId));
+      MoneyEntries = new ObservableCollection<MoneyEntryModelViewModel>(Repository.QueryMoneyEntries(RefreshStart, RefreshEnd, _Person.PersonId, CurrentCategory.CategoryId, CurrentType.TypeId));
     }
 
     #region Properties
 
-    public ObservableCollection<MoneyEntryModelViewModel> MoneyEnts
+    public ObservableCollection<MoneyEntryModelViewModel> MoneyEntries
     {
       get => _moneyentries;
       set
       {
         _moneyentries = value;
-        OnPropertyChanged(nameof(MoneyEnts));
+        OnPropertyChanged(nameof(MoneyEntries));
       }
     }
 
@@ -114,6 +113,6 @@ namespace MoneyEntry.ViewModel
 
     #endregion
     
-    private void Find() => MoneyEnts.ClearAndAddRange(Repository.QueryMoneyEntries(RefreshStart, RefreshEnd, _Person.PersonId, CurrentCategory.CategoryId, CurrentType.TypeId, Desc, MoneyAmount));
+    private void Find() => MoneyEntries.ClearAndAddRange(Repository.QueryMoneyEntries(RefreshStart, RefreshEnd, _Person.PersonId, CurrentCategory.CategoryId, CurrentType.TypeId, Desc, MoneyAmount));
   }
 }

@@ -140,9 +140,9 @@ namespace MoneyEntry.ViewModel
     private void SaveAndResetAmount()
     {
       Repository.InsertOrUpdateTransaction(new TransactionView(_person, CurrentType, CurrentCategory, MoneyAmount, Desc, DateEntry));
-      MoneyAmount = 0;
-      Desc = String.Empty;
       Refresh(RefreshStart, RefreshEnd, _person.PersonId);
+      Desc = String.Empty;
+      MoneyAmount = 0;
     }
 
     protected override void OnPropertyChanged(string propertyName)

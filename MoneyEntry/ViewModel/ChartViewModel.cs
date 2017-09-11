@@ -44,7 +44,6 @@ namespace MoneyEntry.ViewModel
     public GroupingFrequency[] Groupings { get => Enum.GetValues(typeof(GroupingFrequency)).Cast<GroupingFrequency>().ToArray(); }
     public ChartType[] ChartTypes { get => Enum.GetValues(typeof(ChartType)).Cast<ChartType>().ToArray(); }
     public InstanceInSetToStringConverter InstanceConverter { get; }
-    public ObservableCollectionContentNotifying<Category> Categories { get; }
 
     #region SelectedChart		
     private ChartType _selectedChart;

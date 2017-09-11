@@ -117,7 +117,7 @@ namespace MoneyEntry.ViewModel
     {
       return new List<CommandViewModel>
       {
-          new CommandViewModel("Add Category", new RelayCommand(param => Categories())),
+          new CommandViewModel("Add Category", new RelayCommand(param => CategorieEntries())),
           new CommandViewModel("MoneyEntry",   new RelayCommand(param => MoneyEntry())),
           new CommandViewModel("Reconciliation", new RelayCommand(param => Reconciliation())),
           new CommandViewModel("Search",  new RelayCommand(param => Query())),
@@ -152,7 +152,7 @@ namespace MoneyEntry.ViewModel
       SetActiveWorkspace(reconcile);
     }
 
-    private void Categories()
+    private void CategorieEntries()
     {
       CategoryViewModel category = new CategoryViewModel(_currentUser);
       Workspaces.Add(category);
