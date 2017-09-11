@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Windows.Input;
 using MoneyEntry.Model;
 using MessageBox = System.Windows.Forms.MessageBox;

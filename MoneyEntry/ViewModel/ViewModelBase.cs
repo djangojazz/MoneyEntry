@@ -1,6 +1,4 @@
-﻿using MoneyEntry.Model;
-using System;
-using System.Collections.ObjectModel;
+﻿using System;
 using System.ComponentModel;
 using System.Diagnostics;
 

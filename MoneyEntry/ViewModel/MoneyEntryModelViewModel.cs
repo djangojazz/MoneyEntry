@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Linq;
-using System.Windows;
-using MoneyEntry.DataAccess;
 using MoneyEntry.Model;
 
 namespace MoneyEntry.ViewModel

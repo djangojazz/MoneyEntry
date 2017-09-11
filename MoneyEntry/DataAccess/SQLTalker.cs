@@ -1,16 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Windows;
 using Microsoft.Win32;
 
 namespace MoneyEntry.DataAccess
 {
-    class SQLTalker
+  class SQLTalker
     {
         private string Server { get; set; }
         private string Database { get; set; }

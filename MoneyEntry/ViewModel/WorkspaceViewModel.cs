@@ -1,15 +1,12 @@
 ﻿using MoneyEntry.DataAccess;
 using MoneyEntry.Model;
 using System;
-using System.Linq;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using Controls;
 using System.ComponentModel;
 using System.Collections.Generic;
 using Controls.Types;
-using System.Reflection;
-using Microsoft.Practices.EnterpriseLibrary.Validation;
 
 namespace MoneyEntry.ViewModel
 {

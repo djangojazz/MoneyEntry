@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Input;
 using MoneyEntry.Model;
 using MoneyEntry.Properties;
-using MoneyEntry.DataAccess;
-using Controls;
 
 namespace MoneyEntry.ViewModel
 {
