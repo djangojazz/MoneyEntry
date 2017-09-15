@@ -7,24 +7,24 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace MoneyEntry
+namespace MoneyEntry.DataAccess
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class vTrans
+    public partial class teTransaction
     {
-        public int PersonID { get; set; }
-        public string Name { get; set; }
+        public int TransactionID { get; set; }
         public decimal Amount { get; set; }
         public string TransactionDesc { get; set; }
         public byte TypeID { get; set; }
-        public string Type { get; set; }
         public byte CategoryID { get; set; }
-        public string Category { get; set; }
-        public Nullable<System.DateTime> CreatedDate { get; set; }
-        public int TransactionID { get; set; }
-        public Nullable<decimal> RunningTotal { get; set; }
+        public Nullable<System.DateTime> CreatedDt { get; set; }
+        public Nullable<System.DateTime> ModifiedDt { get; set; }
         public Nullable<bool> reconciled { get; set; }
+        public Nullable<decimal> RunningTotal { get; set; }
+        public Nullable<int> PersonID { get; set; }
+    
+        public virtual tePerson tePerson { get; set; }
     }
 }

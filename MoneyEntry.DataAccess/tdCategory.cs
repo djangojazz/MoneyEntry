@@ -7,16 +7,14 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace MoneyEntry
+namespace MoneyEntry.DataAccess
 {
     using System;
+    using System.Collections.Generic;
     
-    public partial class spCategoryUseOverDuration_Result
+    public partial class tdCategory
     {
         public byte CategoryID { get; set; }
-        public byte TypeID { get; set; }
-        public string TypeDesc { get; set; }
-        public string CategoryDesc { get; set; }
-        public Nullable<decimal> Amount { get; set; }
+        public string Description { get; set; }
     }
 }

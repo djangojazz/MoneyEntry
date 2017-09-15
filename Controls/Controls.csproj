@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="BusinessLogic\DelegateCommand.cs" />
     <Compile Include="BusinessLogic\ExtensionMethods.cs" />
+    <Compile Include="BusinessLogic\FileIO.cs" />
     <Compile Include="Charting\Charts\BarChart.xaml.cs">
       <DependentUpon>BarChart.xaml</DependentUpon>
     </Compile>

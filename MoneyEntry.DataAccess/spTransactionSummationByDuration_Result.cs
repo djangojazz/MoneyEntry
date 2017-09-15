@@ -7,14 +7,17 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace MoneyEntry
+namespace MoneyEntry.DataAccess
 {
     using System;
-    using System.Collections.Generic;
     
-    public partial class tdCategory
+    public partial class spTransactionSummationByDuration_Result
     {
-        public byte CategoryID { get; set; }
-        public string Description { get; set; }
+        public Nullable<byte> CategoryId { get; set; }
+        public string CategoryName { get; set; }
+        public string GroupName { get; set; }
+        public Nullable<System.DateTime> Grouping { get; set; }
+        public Nullable<int> Position { get; set; }
+        public Nullable<decimal> Amount { get; set; }
     }
 }

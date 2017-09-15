@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Controls", "..\Controls\Con
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "..\Test\Test.csproj", "{C813B45E-8B66-4898-8B2B-6FC32CFA6D94}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoneyEntry.DataAccess", "..\MoneyEntry.DataAccess\MoneyEntry.DataAccess.csproj", "{869C2D0E-F067-446E-AB4E-EF7570DEAF71}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,12 +29,16 @@ Global
 		{C813B45E-8B66-4898-8B2B-6FC32CFA6D94}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C813B45E-8B66-4898-8B2B-6FC32CFA6D94}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C813B45E-8B66-4898-8B2B-6FC32CFA6D94}.Release|Any CPU.Build.0 = Release|Any CPU
+		{869C2D0E-F067-446E-AB4E-EF7570DEAF71}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{869C2D0E-F067-446E-AB4E-EF7570DEAF71}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{869C2D0E-F067-446E-AB4E-EF7570DEAF71}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{869C2D0E-F067-446E-AB4E-EF7570DEAF71}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.Common.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.Validation.6.0.1304.0\lib\NET45
 		SolutionGuid = {8933CDB6-6675-4A55-B637-1E67C9703660}
+		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.Common.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.Validation.6.0.1304.0\lib\NET45
 	EndGlobalSection
 EndGlobal

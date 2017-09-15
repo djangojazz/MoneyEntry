@@ -8,6 +8,7 @@ using Controls;
 using Controls.Charting;
 using Controls.Converters.Instances;
 using Controls.Enums;
+using MoneyEntry.DataAccess;
 
 namespace MoneyEntry.ViewModel
 {

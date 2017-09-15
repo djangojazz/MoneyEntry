@@ -147,7 +147,7 @@ warning 6002: The table/view 'Expenses.dbo.vTrans' does not have a primary key d
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
-      <Schema Namespace="ExpensesModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+      <Schema Namespace="MoneyEntry.DataAccess" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityType Name="tdCategory">
           <Key>
             <PropertyRef Name="CategoryID" />
@@ -238,17 +238,17 @@ warning 6002: The table/view 'Expenses.dbo.vTrans' does not have a primary key d
             <Parameter Name="Person" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="spUpdateTotals" />
-          <FunctionImport Name="spCategoryUseOverDuration" ReturnType="Collection(ExpensesModel.spCategoryUseOverDuration_Result)">
+          <FunctionImport Name="spCategoryUseOverDuration" ReturnType="Collection(MoneyEntry.DataAccess.spCategoryUseOverDuration_Result)">
             <Parameter Name="Start" Mode="In" Type="DateTime" />
             <Parameter Name="End" Mode="In" Type="DateTime" />
             <Parameter Name="TypeId" Mode="In" Type="Int32" />
             <Parameter Name="PersonId" Mode="In" Type="Int32" />
             <Parameter Name="Minimum" Mode="In" Type="Decimal" />
           </FunctionImport>
-          <FunctionImport Name="spTransactionSummationByDuration" ReturnType="Collection(ExpensesModel.spTransactionSummationByDuration_Result)">
+          <FunctionImport Name="spTransactionSummationByDuration" ReturnType="Collection(MoneyEntry.DataAccess.spTransactionSummationByDuration_Result)">
           <Parameter Name="Xml" Mode="In" Type="String" />
           </FunctionImport>
-          <EntitySet Name="vTrans" EntityType="ExpensesModel.vTrans" />
+          <EntitySet Name="vTrans" EntityType="MoneyEntry.DataAccess.vTrans" />
         </EntityContainer>
         <ComplexType Name="spCategoryUseOverDuration_Result">
           <Property Type="Byte" Name="CategoryID" Nullable="false" />
@@ -294,7 +294,7 @@ warning 6002: The table/view 'Expenses.dbo.vTrans' does not have a primary key d
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="ExpensesModelStoreContainer" CdmEntityContainer="ExpensesEntities">
           <EntitySetMapping Name="tdCategory">
-            <EntityTypeMapping TypeName="ExpensesModel.tdCategory">
+            <EntityTypeMapping TypeName="MoneyEntry.DataAccess.tdCategory">
               <MappingFragment StoreEntitySet="tdCategory">
                 <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
@@ -302,7 +302,7 @@ warning 6002: The table/view 'Expenses.dbo.vTrans' does not have a primary key d
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="tdType">
-            <EntityTypeMapping TypeName="ExpensesModel.tdType">
+            <EntityTypeMapping TypeName="MoneyEntry.DataAccess.tdType">
               <MappingFragment StoreEntitySet="tdType">
                 <ScalarProperty Name="TypeID" ColumnName="TypeID" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
@@ -310,7 +310,7 @@ warning 6002: The table/view 'Expenses.dbo.vTrans' does not have a primary key d
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="tePerson">
-            <EntityTypeMapping TypeName="ExpensesModel.tePerson">
+            <EntityTypeMapping TypeName="MoneyEntry.DataAccess.tePerson">
               <MappingFragment StoreEntitySet="tePerson">
                 <ScalarProperty Name="PersonID" ColumnName="PersonID" />
                 <ScalarProperty Name="FirstName" ColumnName="FirstName" />
@@ -319,7 +319,7 @@ warning 6002: The table/view 'Expenses.dbo.vTrans' does not have a primary key d
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="teTransaction">
-            <EntityTypeMapping TypeName="ExpensesModel.teTransaction">
+            <EntityTypeMapping TypeName="MoneyEntry.DataAccess.teTransaction">
               <MappingFragment StoreEntitySet="teTransaction">
                 <ScalarProperty Name="TransactionID" ColumnName="TransactionID" />
                 <ScalarProperty Name="Amount" ColumnName="Amount" />
@@ -341,7 +341,7 @@ warning 6002: The table/view 'Expenses.dbo.vTrans' does not have a primary key d
           <FunctionImportMapping FunctionImportName="spUpdateTotals" FunctionName="ExpensesModel.Store.spUpdateTotals" />
           <FunctionImportMapping FunctionImportName="spCategoryUseOverDuration" FunctionName="ExpensesModel.Store.spCategoryUseOverDuration">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="ExpensesModel.spCategoryUseOverDuration_Result">
+              <ComplexTypeMapping TypeName="MoneyEntry.DataAccess.spCategoryUseOverDuration_Result">
                 <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
                 <ScalarProperty Name="TypeID" ColumnName="TypeID" />
                 <ScalarProperty Name="TypeDesc" ColumnName="TypeDesc" />
@@ -352,7 +352,7 @@ warning 6002: The table/view 'Expenses.dbo.vTrans' does not have a primary key d
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="spTransactionSummationByDuration" FunctionName="ExpensesModel.Store.spTransactionSummationByDuration">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="ExpensesModel.spTransactionSummationByDuration_Result">
+              <ComplexTypeMapping TypeName="MoneyEntry.DataAccess.spTransactionSummationByDuration_Result">
                 <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
                 <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
                 <ScalarProperty Name="GroupName" ColumnName="GroupName" />
@@ -363,7 +363,7 @@ warning 6002: The table/view 'Expenses.dbo.vTrans' does not have a primary key d
             </ResultMapping>
           </FunctionImportMapping>
           <EntitySetMapping Name="vTrans">
-            <EntityTypeMapping TypeName="ExpensesModel.vTrans">
+            <EntityTypeMapping TypeName="MoneyEntry.DataAccess.vTrans">
               <MappingFragment StoreEntitySet="vTrans">
                 <ScalarProperty Name="reconciled" ColumnName="reconciled" />
                 <ScalarProperty Name="RunningTotal" ColumnName="RunningTotal" />

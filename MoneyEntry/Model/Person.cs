@@ -1,4 +1,7 @@
-﻿namespace MoneyEntry.Model
+﻿using MoneyEntry.DataAccess;
+
+
+namespace MoneyEntry.Model
 {
   public class Person
   {

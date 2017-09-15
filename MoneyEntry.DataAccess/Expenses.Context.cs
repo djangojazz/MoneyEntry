@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace MoneyEntry
+namespace MoneyEntry.DataAccess
 {
     using System;
     using System.Data.Entity;

@@ -99,45 +99,12 @@
     </Compile>
     <Compile Include="DataAccess\ExpensesRepo.cs" />
     <Compile Include="DataAccess\SQLTalker.cs" />
-    <Compile Include="Expenses.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Expenses.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Expenses.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Expenses.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Expenses.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Expenses.edmx</DependentUpon>
-    </Compile>
     <Compile Include="Model\Category.cs" />
     <Compile Include="Model\ColorDictionary.cs" />
     <Compile Include="Model\Person.cs" />
     <Compile Include="Model\TransactionSummationByDurationInput.cs" />
     <Compile Include="Model\TransactionView.cs" />
     <Compile Include="Model\TypeTran.cs" />
-    <Compile Include="spCategoryUseOverDuration_Result.cs">
-      <DependentUpon>Expenses.tt</DependentUpon>
-    </Compile>
-    <Compile Include="spTransactionSummationByDuration_Result.cs">
-      <DependentUpon>Expenses.tt</DependentUpon>
-    </Compile>
-    <Compile Include="tdCategory.cs">
-      <DependentUpon>Expenses.tt</DependentUpon>
-    </Compile>
-    <Compile Include="tdType.cs">
-      <DependentUpon>Expenses.tt</DependentUpon>
-    </Compile>
-    <Compile Include="tePerson.cs">
-      <DependentUpon>Expenses.tt</DependentUpon>
-    </Compile>
-    <Compile Include="teTransaction.cs">
-      <DependentUpon>Expenses.tt</DependentUpon>
-    </Compile>
     <Compile Include="ViewModel\CategoryViewModel.cs" />
     <Compile Include="ViewModel\ChartViewModel.cs" />
     <Compile Include="ViewModel\MoneyEntryModelViewModel.cs" />
@@ -158,9 +125,6 @@
     </Compile>
     <Compile Include="View\ReconciliationView.xaml.cs">
       <DependentUpon>ReconciliationView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="vTrans.cs">
-      <DependentUpon>Expenses.tt</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -194,13 +158,6 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="App.Config" />
-    <EntityDeploy Include="Expenses.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>Expenses.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <None Include="Expenses.edmx.diagram">
-      <DependentUpon>Expenses.edmx</DependentUpon>
-    </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -259,18 +216,10 @@
       <Project>{0bf98ebe-cfba-41da-8c80-62b282072193}</Project>
       <Name>Controls</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Expenses.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>Expenses.edmx</DependentUpon>
-      <LastGenOutput>Expenses.Context.cs</LastGenOutput>
-    </Content>
-    <Content Include="Expenses.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>Expenses.edmx</DependentUpon>
-      <LastGenOutput>Expenses.cs</LastGenOutput>
-    </Content>
+    <ProjectReference Include="..\MoneyEntry.DataAccess\MoneyEntry.DataAccess.csproj">
+      <Project>{869c2d0e-f067-446e-ab4e-ef7570deaf71}</Project>
+      <Name>MoneyEntry.DataAccess</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,4 +1,6 @@
 ﻿using MoneyEntry.ViewModel;
+using MoneyEntry.DataAccess;
+
 
 namespace MoneyEntry.Model
 {
