@@ -28,9 +28,9 @@ namespace MoneyEntry.DataAccess
     }
 
     #region RetreivalMethods
-    private IList<tdType> GetTypes() => GetEntities<tdType>(x => x.TypeID != 3).ToList();
+    public IList<tdType> GetTypes() => GetEntities<tdType>(x => x.TypeID != 3).ToList();
 
-    private List<tdCategory> GetCurrentCategories() => GetEntities<tdCategory>().ToList();
+    public List<tdCategory> GetCurrentCategories() => GetEntities<tdCategory>().ToList();
 
     public List<tePerson> GetPeople() => GetEntities<tePerson>().ToList();
     

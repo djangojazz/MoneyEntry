@@ -15,8 +15,7 @@ namespace Test
 
     public MainWIndowViewModel()
     {
-      People = new ObservableCollection<Person>(Repository.GetPeople());
-
+      People = new ObservableCollection<Person>(Repository.People);
       _currentUser = _people.FirstOrDefault(x => x.FirstName == "Shared");
     }
 

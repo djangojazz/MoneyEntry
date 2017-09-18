@@ -10,10 +10,13 @@ namespace MoneyEntry.DataAccess
 {
   public sealed class ExpensesRepo
   {
+    private DataRetreival _dataRetreival;
+
     private static readonly ExpensesRepo _instance = new ExpensesRepo();
     static ExpensesRepo() { }
     private ExpensesRepo()
     {
+      _dataRetreival = DataRetreival.Instance;
       Types = GetTypes();
     }
     public static ExpensesRepo Instance { get => _instance; }
@@ -52,7 +55,8 @@ namespace MoneyEntry.DataAccess
     }
 
     #region RetreivalMethods
-    private IList<TypeTran> GetTypes() => GetEntities<tdType>(x => x.TypeID != 3).Select(x => new TypeTran(x.TypeID, x.Description)).ToList();
+    private IList<TypeTran> GetTypes() => _dataRetreival.GetTypes().Select(x => new TypeTran(x.TypeID, x.Description)).ToList();
+    //private IList<TypeTran> GetTypes() => GetEntities<tdType>(x => x.TypeID != 3).Select(x => new TypeTran(x.TypeID, x.Description)).ToList();
 
     private List<Category> GetCurrentCategories() => GetEntities<tdCategory>().Select(x => new Category(x.CategoryID, x.Description)).ToList();
 
