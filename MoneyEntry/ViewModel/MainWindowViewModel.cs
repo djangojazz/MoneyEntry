@@ -9,10 +9,10 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
-using MoneyEntry.DataAccess;
 using MoneyEntry.Model;
 using MoneyEntry.Properties;
 using System.Configuration;
+using MoneyEntry.DataAccess;
 
 namespace MoneyEntry.ViewModel
 {

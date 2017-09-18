@@ -41,7 +41,7 @@ namespace MoneyEntry.DataAccess
       return final.OrderBy(d => d.CreatedDate).ToList();
     }
 
-    private List<vTrans> GetTransactionViews(DateTime start, DateTime end, int personId) => 
+    public List<vTrans> GetTransactionViews(DateTime start, DateTime end, int personId) => 
       GetEntities<vTrans>(x => x.CreatedDate >= start && x.CreatedDate <= end && x.PersonID == personId).OrderBy(d => d.CreatedDate).ToList();
 
     public DateTime? LastDateEnteredByPerson(int personId, bool? reconciled = null) => (DateTime)GetEntities<vTrans>(x => x.PersonID == personId && x.reconciled == (reconciled ?? false))

@@ -6,7 +6,7 @@ using System.Text;
 
 namespace MoneyEntry.DataAccess
 {
-  public sealed class SQLTalker : IDisposable
+  public sealed class SQLTalker2 : IDisposable
   {
     private string Server { get; set; }
     private string Database { get; set; }
@@ -19,7 +19,7 @@ namespace MoneyEntry.DataAccess
     public string Cnx { get; set; }
 
     // default values of the library is set to local database that has a test database.
-    public SQLTalker(string server = "(local)", string database = "Expenses")
+    public SQLTalker2(string server = "(local)", string database = "Expenses")
     {
       Server = server;
       Database = database;
@@ -46,7 +46,7 @@ namespace MoneyEntry.DataAccess
     {
       try
       {
-        SQLTalker master = new SQLTalker("(local)", "master");
+        SQLTalker2 master = new SQLTalker2("(local)", "master");
 
         DataTable temp = master.GetData("declare @Temp table\n(spid\tint\n,\tecid\tint\n,\tstatus\tvarchar(128)\n,\tloginame\tvarchar(128)\n,\thostname\tvarchar(128)" +
            "\n,\tblk\tint\n,\tdbname\tvarchar(128)\n,\tcmd\tvarchar(128)\n,\trequest_id\tint)\n\ninsert into @Temp\nexec sp_who\n\n" +
@@ -66,7 +66,7 @@ namespace MoneyEntry.DataAccess
     {
       try
       {
-        using (var master = new SQLTalker("(local)", "master"))
+        using (var master = new SQLTalker2("(local)", "master"))
         {
           return new KeyValuePair<bool, string>(true, master.Procer("restore database " + Database + "\nfrom disk = '" + aLoc + "'\nwith replace", false));
         }

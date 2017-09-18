@@ -60,17 +60,16 @@ namespace MoneyEntry.DataAccess
     private List<Category> GetCurrentCategories() => _dataRetreival.GetCurrentCategories().Select(x => new Category(x.CategoryID, x.Description)).ToList();
 
     public List<Person> GetPeople() => _dataRetreival.GetPeople().Select(x => new Person(x)).ToList();
-      //GetEntities<tePerson>().Select(x => new Person(x)).ToList();
     
     public List<MoneyEntryModelViewModel> QueryMoneyEntries(DateTime start, DateTime end, int personId, int categoryId, int typeId, string description = null, decimal? moneyAmount = null)
     {
-      var list = GetEntities<vTrans>(x => x.CreatedDate >= start && x.CreatedDate <= end && x.PersonID == personId && x.TypeID == typeId && x.CategoryID == categoryId);
-      var final = (description == null) ? list.Where(x => x.Amount.Equals(moneyAmount)) : list.Where(x => x.TransactionDesc.Contains(description));
-      return final.OrderBy(d => d.CreatedDate).Select(dbTran => new MoneyEntryModelViewModel(new TransactionView(dbTran))).ToList();
+      return _dataRetreival.QueryMoneyEntries(start, end, personId, categoryId, typeId, description, moneyAmount)
+        .Select(x => new MoneyEntryModelViewModel(new TransactionView(x)))
+        .ToList();
     }
 
     private List<TransactionView> GetTransactionViews(DateTime start, DateTime end, int personId) =>
-      GetEntities<vTrans>(x => x.CreatedDate >= start && x.CreatedDate <= end && x.PersonID == personId)
+      _dataRetreival.GetTransactionViews(start, end, personId)
       .OrderBy(d => d.CreatedDate)
       .Select(dbTran => new TransactionView(dbTran)
         {
