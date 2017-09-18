@@ -12,12 +12,6 @@ namespace MoneyEntry.Model
       CategoryId = categoryId;
       CategoryName = categoryName;
     }
-
-    public Category(vTrans dbTran)
-    {
-      CategoryId = dbTran.CategoryID;
-      CategoryName = dbTran.Category;
-    }
     
     public byte CategoryId { get; set; }
     public string CategoryName { get; set; }
