@@ -59,7 +59,8 @@ namespace MoneyEntry.DataAccess
 
     private List<Category> GetCurrentCategories() => _dataRetreival.GetCurrentCategories().Select(x => new Category(x.CategoryID, x.Description)).ToList();
 
-    public List<Person> GetPeople() => GetEntities<tePerson>().Select(x => new Person(x)).ToList();
+    public List<Person> GetPeople() => _dataRetreival.GetPeople().Select(x => new Person(x)).ToList();
+      //GetEntities<tePerson>().Select(x => new Person(x)).ToList();
     
     public List<MoneyEntryModelViewModel> QueryMoneyEntries(DateTime start, DateTime end, int personId, int categoryId, int typeId, string description = null, decimal? moneyAmount = null)
     {
