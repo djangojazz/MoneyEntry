@@ -7,7 +7,7 @@ namespace MoneyEntry.ViewModel
   public class MoneyEntryModelViewModel : WorkspaceViewModel
   {
     private int _transactionId;
-    private int _typeId;
+    private byte _typeId;
     private readonly TransactionView _viewTransaction;
 
     public MoneyEntryModelViewModel(TransactionView transaction)
@@ -17,7 +17,7 @@ namespace MoneyEntry.ViewModel
       TypeId = transaction.Type.TypeId;
     }
     
-    public MoneyEntryModelViewModel(int transactionId, string transactionDesc, int typeId, int categoryId, decimal amount, DateTime? createdDate, decimal? runningTotal, bool? reconciled)
+    public MoneyEntryModelViewModel(int transactionId, string transactionDesc, byte typeId, int categoryId, decimal amount, DateTime? createdDate, decimal? runningTotal, bool? reconciled)
     {
       TransactionId = transactionId;
       TransactionDesc = transactionDesc;
@@ -65,7 +65,7 @@ namespace MoneyEntry.ViewModel
     //  }
     //}
     
-    public int TypeId
+    public byte TypeId
     {
       get => _typeId;
       set

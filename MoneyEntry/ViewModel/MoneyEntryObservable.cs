@@ -9,16 +9,17 @@ namespace MoneyEntry.ViewModel
     private int _transactionId;
     private string _transactionDesc;
     private DateTime? _createdDate;
-    private int _typeId;
-    
-    
-    public MoneyEntryObservable(int transactionId, string transactionDesc, DateTime? createdDate, int typeId)
+    private byte _typeId;
+    private string _typeName;
+
+    public MoneyEntryObservable(int transactionId, string transactionDesc, DateTime? createdDate, byte typeId, string typeName)
       //, int categoryId, decimal amount, DateTime? createdDate, decimal? runningTotal, bool? reconciled)
     {
       TransactionId = transactionId;
       TransactionDesc = transactionDesc;
       CreatedDate = createdDate;
       TypeId = typeId;
+      TypeName = typeName;
       //CategoryId = categoryId;
       //Amount = amount;
       //CreatedDate = createdDate;
@@ -56,7 +57,7 @@ namespace MoneyEntry.ViewModel
        }
     }
 
-    public int TypeId
+    public byte TypeId
     {
       get => _typeId;
       set
@@ -66,6 +67,19 @@ namespace MoneyEntry.ViewModel
         OnPropertyChanged("TypeId");
       }
     }
+
     
+
+    public string TypeName
+    {
+      get => _typeName;
+      set
+      {
+        _typeName = value;
+        OnPropertyChanged(nameof(TypeName));
+      }
+    }
+
+
   }
 }

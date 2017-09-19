@@ -3,6 +3,7 @@ using Controls.Types;
 using MoneyEntry;
 using MoneyEntry.Model;
 using MoneyEntry.ViewModel;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -15,23 +16,34 @@ namespace Test
   {
     RelayCommand _get;
     ObservableCollection<Person> _people;
-    private Person _currentUser;
+    Person _currentUser;
+
+    
 
     public MainWIndowViewModel()
     {
       People = new ObservableCollection<Person>(Repository.People);
-      _currentUser = _people.FirstOrDefault(x => x.FirstName == "Test");
+      var personId = _people.FirstOrDefault(x => x.FirstName == "Test").PersonId;
+
       System.DateTime start = new System.DateTime(2017, 9, 1);
       System.DateTime end = new System.DateTime(2017, 9, 15);
-      Refresh(start, end, _currentUser.PersonId);
-      
+      Refresh(start, end, personId);
+
+      Types2 = new List<TypeTran>(new List<TypeTran> { new TypeTran(1, "Debit"), new TypeTran(2, "Credit") });
+      Types3 = new Dictionary<byte, string> { { 1, "Debit" }, { 2, "Credit" } };
+
       MoneyEnts2 = new ItemObservableCollection<MoneyEntryObservable>();
-      MoneyEnts2.ClearAndAddRange(Repository.GetModelObservables(start, end, _currentUser.PersonId));
-      MoneyEnts2.CollectionChanged += ModifyCollectionsBindings;
+      MoneyEnts2.ClearAndAddRange(Repository.GetModelObservables(start, end, personId));
+      //MoneyEnts2.CollectionChanged += ModifyCollectionsBindings;
+
+      MoneyEnts3 = new ObservableCollection<MoneyEntryObservable>(Repository.GetModelObservables(start, end, personId));
     }
     
+    public List<TypeTran> Types2 { get; set; }
+    public Dictionary<byte, string> Types3 { get; set; }
 
     public ItemObservableCollection<MoneyEntryObservable> MoneyEnts2 { get; set; }
+    public ObservableCollection<MoneyEntryObservable> MoneyEnts3 { get; set; }
 
     public ObservableCollection<Person> People
     {
@@ -52,6 +64,16 @@ namespace Test
         OnPropertyChanged(nameof(CurrentUser));
       }
     }
+
+    //private void FakeRepo()
+    //{
+    //  var data = new List<TransactionSimple>
+    //  {
+    //    new TransactionSimple(1, "Got some money", 1, 1000m),
+    //    new TransactionSimple(2, "spent some money", 2, 100m),
+    //    new TransactionSimple(3, "spent some more money", 2, 300m)
+    //  };
+    //}
 
     public ICommand GetCommand { get => (_get == null) ? _get = new RelayCommand(param => MessageBox.Show(CurrentUser.FirstName)) : _get; }
 

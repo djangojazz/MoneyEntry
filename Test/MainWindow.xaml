@@ -9,6 +9,8 @@
   <Window.Resources>
     <ResourceDictionary>
       <CollectionViewSource x:Key="Types" Source="{Binding Types}"/>
+      <CollectionViewSource x:Key="Types2" Source="{Binding Types2}"/>
+      <CollectionViewSource x:Key="Types3" Source="{Binding Types3}"/>
     </ResourceDictionary>
   </Window.Resources>
     <Grid>
@@ -17,8 +19,7 @@
       <RowDefinition Height="*" />
       <RowDefinition Height="*" />
     </Grid.RowDefinitions>
-    <DataGrid x:Name="datagrid" 
-                              ItemsSource="{Binding MoneyEnts2}"                   
+    <DataGrid x:Name="datagrid" ItemsSource="{Binding MoneyEnts2}"                   
                               AutoGenerateColumns="False" 
                               HorizontalAlignment="Left" 
                               VerticalAlignment="Top" 
@@ -29,16 +30,20 @@
         <DataGridTextColumn Header="Id" Binding="{Binding TransactionId}" CanUserReorder="True"/>
         <DataGridTextColumn Header="EntryDate" Binding="{Binding CreatedDate, StringFormat={}{0:M/d/yyyy}}" CanUserReorder="True"/>
         <DataGridTextColumn Header="Description" Binding="{Binding TransactionDesc}" />
-        <DataGridTextColumn Header="TYPER" Binding="{Binding TypeId}" />
-        <DataGridComboBoxColumn Header="TypeTest" ItemsSource="{Binding Source={StaticResource Types}}" 
+        <DataGridTextColumn Header="TypeTest" Binding="{Binding TypeId}" />
+        <DataGridComboBoxColumn Header="TypeTest2" ItemsSource="{Binding Source={StaticResource Types2}}" 
                                 DisplayMemberPath="TypeName" 
                                 SelectedValuePath="TypeId" 
                                 SelectedValueBinding="{Binding TypeId}" />
+        <DataGridComboBoxColumn Header="TypeTest3" ItemsSource="{Binding Source={StaticResource Types3}}" 
+                                DisplayMemberPath="Value" 
+                                SelectedValuePath="Key" 
+                                SelectedValueBinding="{Binding TypeId}" />
       </DataGrid.Columns>
     </DataGrid>
-    <!--<ComboBox FontSize="20" ItemsSource="{Binding People}" DisplayMemberPath="FirstName" SelectedValue="{Binding CurrentUser}" />-->
+    <!--<ComboBox FontSize="20" ItemsSource="{Binding People}" DisplayMemberPath="FirstName" SelectedValue="{Binding CurrentUser}" />
     <TextBlock Grid.Row="1" Text="{Binding CurrentUser.FirstName}" Height="50" />
-    <Button Grid.Row="2" Height="40" Width="100" Content="See User" Command="{Binding GetCommand}" />
+    <Button Grid.Row="2" Height="40" Width="100" Content="See User" Command="{Binding GetCommand}" />-->
       
   </Grid>
 </Window>
