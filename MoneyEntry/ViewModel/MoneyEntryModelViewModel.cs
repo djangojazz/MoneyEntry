@@ -7,7 +7,6 @@ namespace MoneyEntry.ViewModel
   public class MoneyEntryModelViewModel : WorkspaceViewModel
   {
     private int _transactionId;
-    private byte _typeId;
     private readonly TransactionView _viewTransaction;
 
     public MoneyEntryModelViewModel(TransactionView transaction)

@@ -2,10 +2,11 @@
 using MoneyEntry.Model;
 using System.Windows;
 using MoneyEntry.ViewModel;
+using System.ComponentModel;
 
 namespace MoneyEntry.Model
 {
-  public class MoneyEntryObservable : ViewModelBase
+  public class MoneyEntryObservable : INotifyPropertyChanged
   {
     private int _transactionId;
     private string _transactionDesc;
@@ -114,9 +115,22 @@ namespace MoneyEntry.Model
         else
         {
           _reconciled = value;
-          //Repository.InsertOrUpdateTransaction(_viewTransaction);
           OnPropertyChanged(nameof(Reconciled));
         }
+      }
+    }
+
+    public event PropertyChangedEventHandler PropertyChanged;
+
+    protected virtual void OnPropertyChanged(string propertyName)
+    {
+      //VerifyPropertyName(propertyName);
+
+      PropertyChangedEventHandler handler = this.PropertyChanged;
+      if (handler != null)
+      {
+        var e = new PropertyChangedEventArgs(propertyName);
+        handler(this, e);
       }
     }
   }

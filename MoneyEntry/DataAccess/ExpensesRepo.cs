@@ -21,13 +21,21 @@ namespace MoneyEntry.DataAccess
     }
     public static ExpensesRepo Instance { get => _instance; }
 
-    private IList<MoneyEntryModelViewModel> _moneyEntryContainer;
+    //private IList<MoneyEntryModelViewModel> _moneyEntryContainer;
 
-    public IList<MoneyEntryModelViewModel> MoneyEntryContainer
-    {
-      get => (_moneyEntryContainer == null) ? _moneyEntryContainer = new List<MoneyEntryModelViewModel>() : _moneyEntryContainer;
-      set => _moneyEntryContainer = value;
-    }
+    //public IList<MoneyEntryModelViewModel> MoneyEntryContainer
+    //{
+    //  get => (_moneyEntryContainer == null) ? _moneyEntryContainer = new List<MoneyEntryModelViewModel>() : _moneyEntryContainer;
+    //  set => _moneyEntryContainer = value;
+    //}
+
+    //private IList<MoneyEntryObservable> _moneyEntryContainer;
+
+    public IList<MoneyEntryObservable> MoneyEntryContainer { get; } = new List<MoneyEntryObservable>();
+    //{
+    //  get => (_moneyEntryContainer == null) ? _moneyEntryContainer = new List<MoneyEntryObservable>() : _moneyEntryContainer;
+    //  set => _moneyEntryContainer = value;
+    //}
 
     #region Properties
     public IList<TypeTran> Types { get; }
@@ -118,7 +126,8 @@ namespace MoneyEntry.DataAccess
 
     public void Refresh(DateTime start, DateTime end, int personId)
     {
-      MoneyEntryContainer.ClearAndAddRange(GetTransactionViews(start, end, personId).Select(x => new MoneyEntryModelViewModel(x)));
+      MoneyEntryContainer.ClearAndAddRange(GetModelObservables(start, end, personId));
+        //GetTransactionViews(start, end, personId).Select(x => new MoneyEntryModelViewModel(x)));
     }
     #endregion
 

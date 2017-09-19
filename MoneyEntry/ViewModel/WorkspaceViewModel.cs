@@ -21,7 +21,6 @@ namespace MoneyEntry.ViewModel
       Repository = ExpensesRepo.Instance;
       Types = new ReadOnlyCollection<TypeTran>(Repository.Types);
       Categories = new ObservableCollection<Category>(Repository.Categories);
-      MoneyEnts = new ItemObservableCollection<MoneyEntryModelViewModel>();
       MoneyEnts.ClearAndAddRange(Repository.MoneyEntryContainer);
       MoneyEnts.CollectionChanged += ModifyCollectionsBindings;
     }
@@ -31,7 +30,6 @@ namespace MoneyEntry.ViewModel
       Repository = ExpensesRepo.Instance;
       Types = new ReadOnlyCollection<TypeTran>(Repository.Types);
       Categories = new ObservableCollection<Category>(Repository.Categories);
-      MoneyEnts = new ItemObservableCollection<MoneyEntryModelViewModel>();
       TextCollection = new ReadOnlyCollection<string>(Repository.TextEntryAcrossRange(start, end, personId));
       MoneyEnts.ClearAndAddRange(Repository.MoneyEntryContainer);
       MoneyEnts.CollectionChanged += ModifyCollectionsBindings;
@@ -78,7 +76,7 @@ namespace MoneyEntry.ViewModel
     public string Error => throw new NotImplementedException();
     public ReadOnlyCollection<TypeTran> Types { get; }
     public ObservableCollection<Category> Categories { get; set; }
-    public ItemObservableCollection<MoneyEntryModelViewModel> MoneyEnts { get; }
+    public ObservableCollection<MoneyEntryObservable> MoneyEnts { get; } = new ObservableCollection<MoneyEntryObservable>();
     public ReadOnlyCollection<string> TextCollection { get; }
     #endregion
 
@@ -108,7 +106,12 @@ namespace MoneyEntry.ViewModel
       }
     }
 
-    private void CascadeEvent(object sender, PropertyChangedEventArgs e) => OnPropertyChanged(e.PropertyName);
+    private void CascadeEvent(object sender, PropertyChangedEventArgs e)
+    {
+
+      //Repository.InsertOrUpdateTransaction(_viewTransaction);
+      OnPropertyChanged(e.PropertyName);
+    }
     #endregion
 
     #region DataErrorValidation
