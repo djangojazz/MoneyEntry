@@ -8,6 +8,7 @@ namespace MoneyEntry.Model
 {
   public class MoneyEntryObservable : INotifyPropertyChanged
   {
+    private int _personId;
     private int _transactionId;
     private string _transactionDesc;
     private DateTime? _createdDate;
@@ -17,8 +18,21 @@ namespace MoneyEntry.Model
     private decimal? _runningTotal;
     private bool? _reconciled;
 
-    public MoneyEntryObservable(int transactionId, string transactionDesc, DateTime? createdDate, byte typeId, byte categoryId, decimal amount, decimal? runningTotal, bool? reconciled)
+   
+    public MoneyEntryObservable(int personId, string transactionDesc, DateTime createdDate, byte typeId, byte categoryId, decimal amount)
     {
+      PersonId = personId;
+      TransactionDesc = transactionDesc;
+      CreatedDate = createdDate;
+      TypeId = typeId;
+      CategoryId = categoryId;
+      Amount = amount;
+      CreatedDate = createdDate;
+    }
+
+    public MoneyEntryObservable(int personId, int transactionId, string transactionDesc, DateTime? createdDate, byte typeId, byte categoryId, decimal amount, decimal? runningTotal, bool? reconciled)
+    {
+      PersonId = personId;
       TransactionId = transactionId;
       TransactionDesc = transactionDesc;
       CreatedDate = createdDate;
@@ -30,6 +44,17 @@ namespace MoneyEntry.Model
       Reconciled = reconciled;
     }
 
+    
+    public int PersonId
+    {
+      get => _personId;
+      set
+      {
+        _personId = value;
+        OnPropertyChanged(nameof(PersonId));
+      }
+    }
+    
     public int TransactionId
     {
       get => _transactionId;
@@ -45,6 +70,7 @@ namespace MoneyEntry.Model
       get => _transactionDesc;
       set
       {
+        if (value == _transactionDesc) { return; }
         _transactionDesc = value;
         OnPropertyChanged(nameof(TransactionDesc));
       }
@@ -55,6 +81,7 @@ namespace MoneyEntry.Model
       get => _createdDate;
       set
       {
+        if (value == _createdDate) { return; }
         _createdDate = value;
         OnPropertyChanged(nameof(CreatedDate));
       }
@@ -65,7 +92,7 @@ namespace MoneyEntry.Model
       get => _typeId;
       set
       {
-        if (_typeId != 0) { MessageBox.Show($"Change to {value}"); }
+        if (value == _typeId) { return; }
         _typeId = value;
         OnPropertyChanged(nameof(TypeId));
       }
@@ -76,6 +103,7 @@ namespace MoneyEntry.Model
       get => _categoryId;
       set
       {
+        if (value == _categoryId) { return; }
         _categoryId = value;
         OnPropertyChanged(nameof(CategoryId));
       }
@@ -90,7 +118,6 @@ namespace MoneyEntry.Model
         else
         {
           _amount = value;
-          //Repository.InsertOrUpdateTransaction(_viewTransaction);
           OnPropertyChanged(nameof(Amount));
         }
       }
@@ -124,8 +151,6 @@ namespace MoneyEntry.Model
 
     protected virtual void OnPropertyChanged(string propertyName)
     {
-      //VerifyPropertyName(propertyName);
-
       PropertyChangedEventHandler handler = this.PropertyChanged;
       if (handler != null)
       {

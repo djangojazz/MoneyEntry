@@ -59,7 +59,7 @@ namespace MoneyEntry.DataAccess
     public List<MoneyEntryObservable> QueryMoneyEntries(DateTime start, DateTime end, int personId, int categoryId, int typeId, string description = null, decimal? moneyAmount = null)
     {
       return _dataRetreival.QueryMoneyEntries(start, end, personId, categoryId, typeId, description, moneyAmount)
-        .Select(dbTran => new MoneyEntryObservable(dbTran.TransactionID, dbTran.TransactionDesc, dbTran.CreatedDate, dbTran.TypeID, dbTran.CategoryID, dbTran.Amount, dbTran.RunningTotal, dbTran.reconciled))
+        .Select(dbTran => new MoneyEntryObservable(dbTran.PersonID, dbTran.TransactionID, dbTran.TransactionDesc, dbTran.CreatedDate, dbTran.TypeID, dbTran.CategoryID, dbTran.Amount, dbTran.RunningTotal, dbTran.reconciled))
         .ToList();
     }
 
@@ -77,7 +77,7 @@ namespace MoneyEntry.DataAccess
     {
       return _dataRetreival.GetTransactionViews(start, end, personId)
       .OrderBy(d => d.CreatedDate)
-      .Select(dbTran => new MoneyEntryObservable(dbTran.TransactionID, dbTran.TransactionDesc, dbTran.CreatedDate, dbTran.TypeID, dbTran.CategoryID, dbTran.Amount, dbTran.RunningTotal, dbTran.reconciled))
+      .Select(dbTran => new MoneyEntryObservable(dbTran.PersonID, dbTran.TransactionID, dbTran.TransactionDesc, dbTran.CreatedDate, dbTran.TypeID, dbTran.CategoryID, dbTran.Amount, dbTran.RunningTotal, dbTran.reconciled))
       .ToList();
     }
 
@@ -106,13 +106,13 @@ namespace MoneyEntry.DataAccess
       }
     }
 
-    public int InsertOrUpdateTransaction(TransactionView tran)
+    public int InsertOrUpdateTransaction(MoneyEntryObservable tran)
     {
       using (var context = new ExpensesEntities())
       {
         try
         {
-          return context.spInsertOrUpdateTransaction(tran.TransactionID, tran.Amount, tran.TransactionDesc, tran.Type.TypeId, tran.Category.CategoryId, tran.CreatedDate, tran.Person.PersonId, tran.reconciled);
+          return context.spInsertOrUpdateTransaction(tran.TransactionId, tran.Amount, tran.TransactionDesc, tran.TypeId, tran.CategoryId, tran.CreatedDate, tran.PersonId, tran.Reconciled);
         }
         catch (Exception ex)
         {
@@ -124,11 +124,7 @@ namespace MoneyEntry.DataAccess
       }
     }
 
-    public void Refresh(DateTime start, DateTime end, int personId)
-    {
-      MoneyEntryContainer.ClearAndAddRange(GetModelObservables(start, end, personId));
-        //GetTransactionViews(start, end, personId).Select(x => new MoneyEntryModelViewModel(x)));
-    }
+    public void Refresh(DateTime start, DateTime end, int personId) => MoneyEntryContainer.ClearAndAddRange(GetModelObservables(start, end, personId));
     #endregion
 
     #endregion

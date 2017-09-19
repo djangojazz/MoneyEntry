@@ -1,6 +1,7 @@
 ﻿using MoneyEntry.DataAccess;
 using MoneyEntry.Model;
 using System;
+using System.Linq;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using Controls;
@@ -106,14 +107,16 @@ namespace MoneyEntry.ViewModel
         foreach (var arg in e?.NewItems) { ((INotifyPropertyChanged)arg).PropertyChanged += CascadeEvent; base.OnPropertyChanged(arg.ToString()); }
       }
     }
-
+    
     private void CascadeEvent(object sender, PropertyChangedEventArgs e)
     {
       if(sender.GetType() == typeof(MoneyEntryObservable))
       {
-        MessageBox.Show("GotCorrectObject");
+        var entry = (MoneyEntryObservable)sender;
+        Repository.InsertOrUpdateTransaction(entry);
       }
-      //Repository.InsertOrUpdateTransaction(_viewTransaction);
+
+      //This will refresh the data grid views
       OnPropertyChanged(e.PropertyName);
     }
     #endregion

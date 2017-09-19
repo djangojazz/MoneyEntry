@@ -13,8 +13,6 @@ namespace MoneyEntry.ViewModel
     
     protected virtual void OnPropertyChanged(string propertyName)
     {
-      //VerifyPropertyName(propertyName);
-
       PropertyChangedEventHandler handler = this.PropertyChanged;
       if (handler != null)
       {
@@ -22,10 +20,7 @@ namespace MoneyEntry.ViewModel
         handler(this, e);
       }
     }
-
-    //TODO Hookup IDataError for description
     
-
     #region IDisposable Members
 
     public void Dispose() => OnDispose();

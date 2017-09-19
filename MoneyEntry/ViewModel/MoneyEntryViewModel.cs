@@ -136,7 +136,7 @@ namespace MoneyEntry.ViewModel
 
     private void SaveAndResetAmount()
     {
-      Repository.InsertOrUpdateTransaction(new TransactionView(_person, CurrentType, CurrentCategory, MoneyAmount, Desc, DateEntry));
+      Repository.InsertOrUpdateTransaction(new MoneyEntryObservable(_person.PersonId, Desc, DateEntry, CurrentType.TypeId, CurrentCategory.CategoryId, MoneyAmount));
       Refresh(RefreshStart, RefreshEnd, _person.PersonId);
       Desc = String.Empty;
       MoneyAmount = 0;
