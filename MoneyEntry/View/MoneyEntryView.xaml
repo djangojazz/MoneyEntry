@@ -9,7 +9,12 @@
              mc:Ignorable="d" 
              Background="Black">
   <UserControl.Resources>
-    <ResourceDictionary Source="..\MainWindowResources.xaml" />
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="..\MainWindowResources.xaml" />
+      </ResourceDictionary.MergedDictionaries>
+      <CollectionViewSource x:Key="Types" Source="{Binding Types}"/>
+    </ResourceDictionary>
   </UserControl.Resources>
   <Grid>
     <DockPanel>
@@ -101,6 +106,18 @@
           <DataGridTextColumn Header="Id" Binding="{Binding TransactionId}" CanUserReorder="True"/>
           <DataGridTextColumn Header="EntryDate" Binding="{Binding CreatedDate, StringFormat={}{0:M/d/yyyy}}" CanUserReorder="True"/>
           <DataGridTextColumn Header="Description" Binding="{Binding TransactionDesc}" />
+          <DataGridTemplateColumn Header="TypeTest">
+            <DataGridTemplateColumn.CellTemplate>
+              <DataTemplate>
+                <ComboBox ItemsSource="{Binding Path=DataContext.Types, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
+                                  DisplayMemberPath="TypeName"
+                                  SelectedValuePath="TypeId"
+                                  SelectedItem="{Binding Path=TypeId, UpdateSourceTrigger=PropertyChanged}"/>
+              </DataTemplate>
+            </DataGridTemplateColumn.CellTemplate>
+          </DataGridTemplateColumn>
+          <DataGridComboBoxColumn Header="TypeTest2" ItemsSource="{Binding Source={StaticResource Types}}" DisplayMemberPath="TypeName" SelectedValuePath="TypeId" SelectedValueBinding="{Binding Path=TypeId}" />
+
           <DataGridTemplateColumn Header="Type">
             <DataGridTemplateColumn.CellTemplate>
               <DataTemplate>

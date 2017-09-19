@@ -12,9 +12,54 @@
       <RowDefinition Height="*" />
       <RowDefinition Height="*" />
     </Grid.RowDefinitions>
-    <ComboBox FontSize="20" ItemsSource="{Binding People}" DisplayMemberPath="FirstName" SelectedValue="{Binding CurrentUser}">
-    </ComboBox>
+    <DataGrid x:Name="datagrid" 
+                              ItemsSource="{Binding MoneyEnts}"                   
+                              AutoGenerateColumns="False" 
+                              HorizontalAlignment="Left" 
+                              VerticalAlignment="Top" 
+                              IsSynchronizedWithCurrentItem="True"
+                              MaxHeight="400"
+                              >
+      <DataGrid.Columns>
+        <DataGridTextColumn Header="Id" Binding="{Binding TransactionId}" CanUserReorder="True"/>
+        <DataGridTextColumn Header="EntryDate" Binding="{Binding CreatedDate, StringFormat={}{0:M/d/yyyy}}" CanUserReorder="True"/>
+        <DataGridTextColumn Header="Description" Binding="{Binding TransactionDesc}" />
+        <DataGridTemplateColumn Header="TypeTest">
+          <DataGridTemplateColumn.CellTemplate>
+            <DataTemplate>
+              <ComboBox ItemsSource="{Binding Path=DataContext.Types, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
+                                  DisplayMemberPath="TypeName"
+                                  SelectedValuePath="TypeId"
+                                  SelectedItem="{Binding Path=TypeId, UpdateSourceTrigger=PropertyChanged}"/>
+            </DataTemplate>
+          </DataGridTemplateColumn.CellTemplate>
+        </DataGridTemplateColumn>
+        <DataGridComboBoxColumn Header="TypeTest2" ItemsSource="{Binding Source={StaticResource Types}}" DisplayMemberPath="TypeName" SelectedValuePath="TypeId" SelectedValueBinding="{Binding Path=TypeId}" />
+
+        <DataGridTemplateColumn Header="Type">
+          <DataGridTemplateColumn.CellTemplate>
+            <DataTemplate>
+              <ComboBox ItemsSource="{Binding Path=DataContext.Types, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
+                              DisplayMemberPath="TypeName" SelectedItem="{Binding Path=Type, UpdateSourceTrigger=PropertyChanged}"/>
+            </DataTemplate>
+          </DataGridTemplateColumn.CellTemplate>
+        </DataGridTemplateColumn>
+        <DataGridTemplateColumn Header="Category">
+          <DataGridTemplateColumn.CellTemplate>
+            <DataTemplate>
+              <ComboBox ItemsSource="{Binding Path=DataContext.Categories, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
+                              DisplayMemberPath="CategoryName" SelectedItem="{Binding Path=Category, UpdateSourceTrigger=PropertyChanged}"/>
+            </DataTemplate>
+          </DataGridTemplateColumn.CellTemplate>
+        </DataGridTemplateColumn>
+        <DataGridTextColumn Header="Amount" Binding="{Binding Amount, StringFormat={}{0:#.00}}"  />
+        <DataGridTextColumn Header="RunningTotal" Binding="{Binding RunningTotal, StringFormat={}{0:#.00}}" />
+        <DataGridCheckBoxColumn Header="IsReconciled" Binding="{Binding Reconciled}" CanUserReorder="True"/>
+      </DataGrid.Columns>
+    </DataGrid>
+    <!--<ComboBox FontSize="20" ItemsSource="{Binding People}" DisplayMemberPath="FirstName" SelectedValue="{Binding CurrentUser}" />-->
     <TextBlock Grid.Row="1" Text="{Binding CurrentUser.FirstName}" Height="50" />
     <Button Grid.Row="2" Height="40" Width="100" Content="See User" Command="{Binding GetCommand}" />
+      
   </Grid>
 </Window>

@@ -1,5 +1,6 @@
 ﻿using MoneyEntry;
 using MoneyEntry.Model;
+using MoneyEntry.ViewModel;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
@@ -7,7 +8,7 @@ using System.Windows.Input;
 
 namespace Test
 {
-  public sealed class MainWIndowViewModel : ViewModelBase
+  public sealed class MainWIndowViewModel : WorkspaceViewModel
   {
     RelayCommand _get;
     ObservableCollection<Person> _people;

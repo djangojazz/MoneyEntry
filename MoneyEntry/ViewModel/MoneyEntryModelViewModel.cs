@@ -1,5 +1,6 @@
 ﻿using System;
 using MoneyEntry.Model;
+using System.Windows;
 
 namespace MoneyEntry.ViewModel
 {
@@ -13,13 +14,9 @@ namespace MoneyEntry.ViewModel
     {
       _viewTransaction = transaction;
       TransactionId = _viewTransaction.TransactionID;
+      TypeId = transaction.Type.TypeId;
     }
     
-    //public Nullable<System.DateTime> CreatedDate { get; set; }
-    //public int TransactionID { get; set; }
-    //public Nullable<bool> reconciled { get; set; }
-
-
     public MoneyEntryModelViewModel(int transactionId, string transactionDesc, int typeId, int categoryId, decimal amount, DateTime? createdDate, decimal? runningTotal, bool? reconciled)
     {
       TransactionId = transactionId;
@@ -74,10 +71,11 @@ namespace MoneyEntry.ViewModel
       set
       {
         _typeId = value;
+        MessageBox.Show($"Changed to {value}");
         OnPropertyChanged(nameof(TypeId));
       }
     }
-    
+
     public TypeTran Type
     {
       get => _viewTransaction.Type;

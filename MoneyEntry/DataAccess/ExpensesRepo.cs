@@ -68,11 +68,7 @@ namespace MoneyEntry.DataAccess
     private List<MoneyEntryModelViewModel> GetModelEntries(DateTime start, DateTime end, int personId) =>
       _dataRetreival.GetTransactionViews(start, end, personId)
       .OrderBy(d => d.CreatedDate)
-      .Select(dbTran => new MoneyEntryModelViewModel(dbTran.TransactionID, dbTran.TransactionDesc, dbTran.TypeID, dbTran.CategoryID, dbTran.Amount, dbTran.CreatedDate, dbTran.RunningTotal, dbTran.reconciled)
-        {
-          Type = Types.First(x => x.TypeId == dbTran.TypeID),
-          Category = Categories.First(x => x.CategoryId == dbTran.CategoryID),
-        })
+      .Select(dbTran => new MoneyEntryModelViewModel(dbTran.TransactionID, dbTran.TransactionDesc, dbTran.TypeID, dbTran.CategoryID, dbTran.Amount, dbTran.CreatedDate, dbTran.RunningTotal, dbTran.reconciled))
       .ToList();
 
     public DateTime? LastDateEnteredByPerson(int personId, bool? reconciled = null) => _dataRetreival.LastDateEnteredByPerson(personId, reconciled);
