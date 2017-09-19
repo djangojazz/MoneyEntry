@@ -7,6 +7,7 @@ using Controls;
 using System.ComponentModel;
 using System.Collections.Generic;
 using Controls.Types;
+using System.Windows;
 
 namespace MoneyEntry.ViewModel
 {
@@ -108,7 +109,10 @@ namespace MoneyEntry.ViewModel
 
     private void CascadeEvent(object sender, PropertyChangedEventArgs e)
     {
-
+      if(sender.GetType() == typeof(MoneyEntryObservable))
+      {
+        MessageBox.Show("GotCorrectObject");
+      }
       //Repository.InsertOrUpdateTransaction(_viewTransaction);
       OnPropertyChanged(e.PropertyName);
     }

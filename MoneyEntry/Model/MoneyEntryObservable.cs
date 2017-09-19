@@ -12,12 +12,12 @@ namespace MoneyEntry.Model
     private string _transactionDesc;
     private DateTime? _createdDate;
     private byte _typeId;
-    private int _categoryId;
+    private byte _categoryId;
     private decimal _amount;
     private decimal? _runningTotal;
     private bool? _reconciled;
 
-    public MoneyEntryObservable(int transactionId, string transactionDesc, DateTime? createdDate, byte typeId, int categoryId, decimal amount, decimal? runningTotal, bool? reconciled)
+    public MoneyEntryObservable(int transactionId, string transactionDesc, DateTime? createdDate, byte typeId, byte categoryId, decimal amount, decimal? runningTotal, bool? reconciled)
     {
       TransactionId = transactionId;
       TransactionDesc = transactionDesc;
@@ -71,7 +71,7 @@ namespace MoneyEntry.Model
       }
     }
 
-    public int CategoryId
+    public byte CategoryId
     {
       get => _categoryId;
       set

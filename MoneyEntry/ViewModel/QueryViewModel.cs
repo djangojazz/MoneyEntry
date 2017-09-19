@@ -12,7 +12,7 @@ namespace MoneyEntry.ViewModel
   {
     Person _Person;
     
-    ObservableCollection<MoneyEntryModelViewModel> _moneyentries;
+    ObservableCollection<MoneyEntryObservable> _moneyentries;
     RelayCommand _Find;
     string _Desc;
     decimal _MoneyAmount;
@@ -30,20 +30,12 @@ namespace MoneyEntry.ViewModel
       var lastDate = Repository.LastDateEnteredByPerson(_Person.PersonId);
       RefreshStart = (lastReconciledDate != null) ? lastReconciledDate.Value : lastDate ?? DateTime.Now.Date.AddDays(-7);
       RefreshEnd = DateTime.Now;
-      MoneyEntries = new ObservableCollection<MoneyEntryModelViewModel>(Repository.QueryMoneyEntries(RefreshStart, RefreshEnd, _Person.PersonId, CurrentCategory.CategoryId, CurrentType.TypeId));
+      MoneyEntries.ClearAndAddRange(Repository.QueryMoneyEntries(RefreshStart, RefreshEnd, _Person.PersonId, CurrentCategory.CategoryId, CurrentType.TypeId));
     }
 
     #region Properties
 
-    public ObservableCollection<MoneyEntryModelViewModel> MoneyEntries
-    {
-      get => _moneyentries;
-      set
-      {
-        _moneyentries = value;
-        OnPropertyChanged(nameof(MoneyEntries));
-      }
-    }
+    public ObservableCollection<MoneyEntryObservable> MoneyEntries { get; } = new ObservableCollection<MoneyEntryObservable>();
 
     public TypeTran CurrentType
     {

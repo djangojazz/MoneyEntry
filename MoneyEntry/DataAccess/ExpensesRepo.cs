@@ -56,10 +56,10 @@ namespace MoneyEntry.DataAccess
 
     public List<Person> GetPeople() => _dataRetreival.GetPeople().Select(x => new Person(x)).ToList();
     
-    public List<MoneyEntryModelViewModel> QueryMoneyEntries(DateTime start, DateTime end, int personId, int categoryId, int typeId, string description = null, decimal? moneyAmount = null)
+    public List<MoneyEntryObservable> QueryMoneyEntries(DateTime start, DateTime end, int personId, int categoryId, int typeId, string description = null, decimal? moneyAmount = null)
     {
       return _dataRetreival.QueryMoneyEntries(start, end, personId, categoryId, typeId, description, moneyAmount)
-        .Select(x => new MoneyEntryModelViewModel(new TransactionView(x)))
+        .Select(dbTran => new MoneyEntryObservable(dbTran.TransactionID, dbTran.TransactionDesc, dbTran.CreatedDate, dbTran.TypeID, dbTran.CategoryID, dbTran.Amount, dbTran.RunningTotal, dbTran.reconciled))
         .ToList();
     }
 

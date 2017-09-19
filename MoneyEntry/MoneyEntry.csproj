@@ -108,7 +108,6 @@
     <Compile Include="ViewModel\CategoryViewModel.cs" />
     <Compile Include="ViewModel\ChartViewModel.cs" />
     <Compile Include="Model\MoneyEntryObservable.cs" />
-    <Compile Include="ViewModel\MoneyEntryModelViewModel.cs" />
     <Compile Include="ViewModel\MoneyEntryViewModel.cs" />
     <Compile Include="ViewModel\QueryViewModel.cs" />
     <Compile Include="ViewModel\ReconcilationViewModel.cs" />
