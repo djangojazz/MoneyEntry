@@ -64,18 +64,12 @@ namespace MoneyEntry.DataAccess
         Category = Categories.First(x => x.CategoryId == dbTran.CategoryID),
       })
       .ToList();
-
-    private List<MoneyEntryModelViewModel> GetModelEntries(DateTime start, DateTime end, int personId) =>
-      _dataRetreival.GetTransactionViews(start, end, personId)
-      .OrderBy(d => d.CreatedDate)
-      .Select(dbTran => new MoneyEntryModelViewModel(dbTran.TransactionID, dbTran.TransactionDesc, dbTran.TypeID, dbTran.CategoryID, dbTran.Amount, dbTran.CreatedDate, dbTran.RunningTotal, dbTran.reconciled))
-      .ToList();
-
+    
     public List<MoneyEntryObservable> GetModelObservables(DateTime start, DateTime end, int personId)
     {
       return _dataRetreival.GetTransactionViews(start, end, personId)
       .OrderBy(d => d.CreatedDate)
-      .Select(dbTran => new MoneyEntryObservable(dbTran.TransactionID, dbTran.TransactionDesc, dbTran.CreatedDate, dbTran.TypeID, dbTran.Type))
+      .Select(dbTran => new MoneyEntryObservable(dbTran.TransactionID, dbTran.TransactionDesc, dbTran.CreatedDate, dbTran.TypeID, dbTran.CategoryID, dbTran.Amount, dbTran.RunningTotal, dbTran.reconciled))
       .ToList();
     }
 

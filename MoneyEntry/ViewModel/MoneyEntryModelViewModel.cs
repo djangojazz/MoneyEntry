@@ -14,19 +14,6 @@ namespace MoneyEntry.ViewModel
     {
       _viewTransaction = transaction;
       TransactionId = _viewTransaction.TransactionID;
-      TypeId = transaction.Type.TypeId;
-    }
-    
-    public MoneyEntryModelViewModel(int transactionId, string transactionDesc, byte typeId, int categoryId, decimal amount, DateTime? createdDate, decimal? runningTotal, bool? reconciled)
-    {
-      TransactionId = transactionId;
-      TransactionDesc = transactionDesc;
-      TypeId = typeId;
-      CategoryId = categoryId;
-      //Amount = amount;
-      //CreatedDate = createdDate;
-      //RunningTotal = runningTotal;
-      //Reconciled = reconciled;
     }
     
     public int TransactionId
@@ -55,27 +42,6 @@ namespace MoneyEntry.ViewModel
       }
     }
     
-    //public Person Person
-    //{
-    //  get => _viewTransaction.Person;
-    //  set
-    //  {
-    //    _viewTransaction.Person = value;
-    //    OnPropertyChanged("Person");
-    //  }
-    //}
-    
-    public byte TypeId
-    {
-      get => _typeId;
-      set
-      {
-        if (_typeId != 0) { MessageBox.Show($"Change to {value}"); }
-        _typeId = value;
-        OnPropertyChanged("TypeId");
-      }
-    }
-
     public TypeTran Type
     {
       get => _viewTransaction.Type;
@@ -84,18 +50,6 @@ namespace MoneyEntry.ViewModel
         _viewTransaction.Type = value;
         Repository.InsertOrUpdateTransaction(_viewTransaction);
         OnPropertyChanged("Type");
-      }
-    }
-
-    private int _categoryId;
-
-    public int CategoryId
-    {
-      get => _categoryId;
-      set
-      {
-        _categoryId = value;
-        OnPropertyChanged(nameof(CategoryId));
       }
     }
     
