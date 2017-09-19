@@ -70,9 +70,9 @@ namespace MoneyEntry.ViewModel
       get => _typeId;
       set
       {
+        if (_typeId != 0) { MessageBox.Show($"Change to {value}"); }
         _typeId = value;
-        MessageBox.Show($"Changed to {value}");
-        OnPropertyChanged(nameof(TypeId));
+        OnPropertyChanged("TypeId");
       }
     }
 
@@ -160,7 +160,7 @@ namespace MoneyEntry.ViewModel
         {
           _viewTransaction.reconciled = value;
           Repository.InsertOrUpdateTransaction(_viewTransaction);
-          OnPropertyChanged("CreatedDate");
+          OnPropertyChanged("Reconciled");
         }
       }
     }

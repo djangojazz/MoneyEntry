@@ -6,6 +6,11 @@
         xmlns:local="clr-namespace:Test"
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
+  <Window.Resources>
+    <ResourceDictionary>
+      <CollectionViewSource x:Key="Types" Source="{Binding Types}"/>
+    </ResourceDictionary>
+  </Window.Resources>
     <Grid>
     <Grid.RowDefinitions>
       <RowDefinition Height="Auto" />
@@ -13,7 +18,7 @@
       <RowDefinition Height="*" />
     </Grid.RowDefinitions>
     <DataGrid x:Name="datagrid" 
-                              ItemsSource="{Binding MoneyEnts}"                   
+                              ItemsSource="{Binding MoneyEnts2}"                   
                               AutoGenerateColumns="False" 
                               HorizontalAlignment="Left" 
                               VerticalAlignment="Top" 
@@ -24,37 +29,11 @@
         <DataGridTextColumn Header="Id" Binding="{Binding TransactionId}" CanUserReorder="True"/>
         <DataGridTextColumn Header="EntryDate" Binding="{Binding CreatedDate, StringFormat={}{0:M/d/yyyy}}" CanUserReorder="True"/>
         <DataGridTextColumn Header="Description" Binding="{Binding TransactionDesc}" />
-        <DataGridTemplateColumn Header="TypeTest">
-          <DataGridTemplateColumn.CellTemplate>
-            <DataTemplate>
-              <ComboBox ItemsSource="{Binding Path=DataContext.Types, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
-                                  DisplayMemberPath="TypeName"
-                                  SelectedValuePath="TypeId"
-                                  SelectedItem="{Binding Path=TypeId, UpdateSourceTrigger=PropertyChanged}"/>
-            </DataTemplate>
-          </DataGridTemplateColumn.CellTemplate>
-        </DataGridTemplateColumn>
-        <DataGridComboBoxColumn Header="TypeTest2" ItemsSource="{Binding Source={StaticResource Types}}" DisplayMemberPath="TypeName" SelectedValuePath="TypeId" SelectedValueBinding="{Binding Path=TypeId}" />
-
-        <DataGridTemplateColumn Header="Type">
-          <DataGridTemplateColumn.CellTemplate>
-            <DataTemplate>
-              <ComboBox ItemsSource="{Binding Path=DataContext.Types, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
-                              DisplayMemberPath="TypeName" SelectedItem="{Binding Path=Type, UpdateSourceTrigger=PropertyChanged}"/>
-            </DataTemplate>
-          </DataGridTemplateColumn.CellTemplate>
-        </DataGridTemplateColumn>
-        <DataGridTemplateColumn Header="Category">
-          <DataGridTemplateColumn.CellTemplate>
-            <DataTemplate>
-              <ComboBox ItemsSource="{Binding Path=DataContext.Categories, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
-                              DisplayMemberPath="CategoryName" SelectedItem="{Binding Path=Category, UpdateSourceTrigger=PropertyChanged}"/>
-            </DataTemplate>
-          </DataGridTemplateColumn.CellTemplate>
-        </DataGridTemplateColumn>
-        <DataGridTextColumn Header="Amount" Binding="{Binding Amount, StringFormat={}{0:#.00}}"  />
-        <DataGridTextColumn Header="RunningTotal" Binding="{Binding RunningTotal, StringFormat={}{0:#.00}}" />
-        <DataGridCheckBoxColumn Header="IsReconciled" Binding="{Binding Reconciled}" CanUserReorder="True"/>
+        <DataGridTextColumn Header="TYPER" Binding="{Binding TypeId}" />
+        <DataGridComboBoxColumn Header="TypeTest" ItemsSource="{Binding Source={StaticResource Types}}" 
+                                DisplayMemberPath="TypeName" 
+                                SelectedValuePath="TypeId" 
+                                SelectedValueBinding="{Binding TypeId}" />
       </DataGrid.Columns>
     </DataGrid>
     <!--<ComboBox FontSize="20" ItemsSource="{Binding People}" DisplayMemberPath="FirstName" SelectedValue="{Binding CurrentUser}" />-->

@@ -71,6 +71,14 @@ namespace MoneyEntry.DataAccess
       .Select(dbTran => new MoneyEntryModelViewModel(dbTran.TransactionID, dbTran.TransactionDesc, dbTran.TypeID, dbTran.CategoryID, dbTran.Amount, dbTran.CreatedDate, dbTran.RunningTotal, dbTran.reconciled))
       .ToList();
 
+    public List<MoneyEntryObservable> GetModelObservables(DateTime start, DateTime end, int personId)
+    {
+      return _dataRetreival.GetTransactionViews(start, end, personId)
+      .OrderBy(d => d.CreatedDate)
+      .Select(dbTran => new MoneyEntryObservable(dbTran.TransactionID, dbTran.TransactionDesc, dbTran.CreatedDate, dbTran.TypeID))
+      .ToList();
+    }
+
     public DateTime? LastDateEnteredByPerson(int personId, bool? reconciled = null) => _dataRetreival.LastDateEnteredByPerson(personId, reconciled);
 
     public List<string> TextEntryAcrossRange(DateTime start, DateTime end, int personId) => GetTransactionViews(start, end, personId).Select(x => x.TransactionDesc).Distinct().ToList();
