@@ -40,19 +40,6 @@ namespace MoneyEntry.DataAccess
     #endregion
 
     #region Methods
-    private IEnumerable<TEntity> GetEntities<TEntity>(Expression<Func<TEntity, bool>> predicate = null) where TEntity : class
-    {
-      using (var context = new ExpensesEntities())
-      {
-        IQueryable<TEntity> data = context.Set<TEntity>();
-        if (predicate != null)
-        {
-          data = data.Where(predicate);
-        }
-
-        return data.ToList();
-      }
-    }
 
     #region RetreivalMethods
     private IList<TypeTran> GetTypes() => _dataRetreival.GetTypes().Select(x => new TypeTran(x.TypeID, x.Description)).ToList();
@@ -72,14 +59,23 @@ namespace MoneyEntry.DataAccess
       _dataRetreival.GetTransactionViews(start, end, personId)
       .OrderBy(d => d.CreatedDate)
       .Select(dbTran => new TransactionView(dbTran)
+      {
+        Type = Types.First(x => x.TypeId == dbTran.TypeID),
+        Category = Categories.First(x => x.CategoryId == dbTran.CategoryID),
+      })
+      .ToList();
+
+    private List<MoneyEntryModelViewModel> GetModelEntries(DateTime start, DateTime end, int personId) =>
+      _dataRetreival.GetTransactionViews(start, end, personId)
+      .OrderBy(d => d.CreatedDate)
+      .Select(dbTran => new MoneyEntryModelViewModel(dbTran.TransactionID, dbTran.TransactionDesc, dbTran.TypeID, dbTran.CategoryID, dbTran.Amount, dbTran.CreatedDate, dbTran.RunningTotal, dbTran.reconciled)
         {
           Type = Types.First(x => x.TypeId == dbTran.TypeID),
           Category = Categories.First(x => x.CategoryId == dbTran.CategoryID),
         })
       .ToList();
 
-    public DateTime? LastDateEnteredByPerson(int personId, bool? reconciled = null) => (DateTime)GetEntities<vTrans>(x => x.PersonID == personId && x.reconciled == (reconciled ?? false))
-      .OrderByDescending(x => x.CreatedDate).Select(x => x.CreatedDate).First();
+    public DateTime? LastDateEnteredByPerson(int personId, bool? reconciled = null) => _dataRetreival.LastDateEnteredByPerson(personId, reconciled);
 
     public List<string> TextEntryAcrossRange(DateTime start, DateTime end, int personId) => GetTransactionViews(start, end, personId).Select(x => x.TransactionDesc).Distinct().ToList();
     #endregion
@@ -124,7 +120,7 @@ namespace MoneyEntry.DataAccess
 
     public void Refresh(DateTime start, DateTime end, int personId)
     {
-      MoneyEntryContainer.ClearAndAddRange(GetTransactionViews(start, end, personId).ConvertAll(x => new MoneyEntryModelViewModel(x)));
+      MoneyEntryContainer.ClearAndAddRange(GetTransactionViews(start, end, personId).Select(x => new MoneyEntryModelViewModel(x)));
     }
     #endregion
 

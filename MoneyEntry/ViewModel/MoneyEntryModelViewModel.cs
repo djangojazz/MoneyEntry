@@ -5,15 +5,43 @@ namespace MoneyEntry.ViewModel
 {
   public class MoneyEntryModelViewModel : WorkspaceViewModel
   {
+    private int _transactionId;
+    private int _typeId;
     private readonly TransactionView _viewTransaction;
 
     public MoneyEntryModelViewModel(TransactionView transaction)
     {
       _viewTransaction = transaction;
+      TransactionId = _viewTransaction.TransactionID;
     }
+    
+    //public Nullable<System.DateTime> CreatedDate { get; set; }
+    //public int TransactionID { get; set; }
+    //public Nullable<bool> reconciled { get; set; }
 
-    public int TransactionId => _viewTransaction.TransactionID;
 
+    public MoneyEntryModelViewModel(int transactionId, string transactionDesc, int typeId, int categoryId, decimal amount, DateTime? createdDate, decimal? runningTotal, bool? reconciled)
+    {
+      TransactionId = transactionId;
+      TransactionDesc = transactionDesc;
+      TypeId = typeId;
+      CategoryId = categoryId;
+      //Amount = amount;
+      //CreatedDate = createdDate;
+      //RunningTotal = runningTotal;
+      //Reconciled = reconciled;
+    }
+    
+    public int TransactionId
+    {
+      get => _transactionId;
+      set
+      {
+        _transactionId = value;
+        OnPropertyChanged(nameof(TransactionId));
+      }
+    }
+    
     public string TransactionDesc
     {
       get => _viewTransaction.TransactionDesc;
@@ -29,17 +57,27 @@ namespace MoneyEntry.ViewModel
         }
       }
     }
-
-    public Person Person
+    
+    //public Person Person
+    //{
+    //  get => _viewTransaction.Person;
+    //  set
+    //  {
+    //    _viewTransaction.Person = value;
+    //    OnPropertyChanged("Person");
+    //  }
+    //}
+    
+    public int TypeId
     {
-      get => _viewTransaction.Person;
+      get => _typeId;
       set
       {
-        _viewTransaction.Person = value;
-        OnPropertyChanged("Person");
+        _typeId = value;
+        OnPropertyChanged(nameof(TypeId));
       }
     }
-
+    
     public TypeTran Type
     {
       get => _viewTransaction.Type;
@@ -51,6 +89,18 @@ namespace MoneyEntry.ViewModel
       }
     }
 
+    private int _categoryId;
+
+    public int CategoryId
+    {
+      get => _categoryId;
+      set
+      {
+        _categoryId = value;
+        OnPropertyChanged(nameof(CategoryId));
+      }
+    }
+    
     public Category Category
     {
       get => _viewTransaction.Category;
