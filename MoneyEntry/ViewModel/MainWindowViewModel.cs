@@ -13,6 +13,8 @@ using MoneyEntry.Model;
 using MoneyEntry.Properties;
 using System.Configuration;
 using MoneyEntry.DataAccess;
+using Microsoft.Win32;
+using System.Data;
 
 namespace MoneyEntry.ViewModel
 {
@@ -26,18 +28,18 @@ namespace MoneyEntry.ViewModel
     ObservableCollection<Person> _people;
     private Person _currentUser;
     ObservableCollection<WorkspaceViewModel> _workspaces;
+    OpenFileDialog _openFileDialog = new OpenFileDialog();
 
     private string _BackupLocation { get; set; }
     private string _InitialBackupLocation { get; set; }
-    SQLTalker s = new SQLTalker();
-   
+
     public MainWindowViewModel()
     {
       base.DisplayName = Strings.MainWindowViewModel_DisplayName;
       People = new ObservableCollection<Person>(Repository.GetPeople());
 
       _currentUser = _people.FirstOrDefault(x => x.FirstName == "Test");
-      
+
       _BackupLocation = ConfigurationManager.AppSettings["DatabaseBackupsLocation"]; // Start the initial backup
 
       if (!Directory.Exists(_BackupLocation)) { Directory.CreateDirectory(_BackupLocation); }
@@ -47,7 +49,7 @@ namespace MoneyEntry.ViewModel
 
       if (!File.Exists(_InitialBackupLocation)) { BackUpDB(true); }  // initial backup on startup
     }
-    
+
     public ObservableCollection<Person> People
     {
       get => _people;
@@ -57,7 +59,7 @@ namespace MoneyEntry.ViewModel
         OnPropertyChanged(nameof(People));
       }
     }
-    
+
 
     public Person CurrentUser
     {
@@ -69,15 +71,15 @@ namespace MoneyEntry.ViewModel
       }
     }
 
-    public ReadOnlyCollection<CommandViewModel> Commands { get => (_commands == null)  ? _commands = new ReadOnlyCollection<CommandViewModel>(CreateCommands()) : _commands;  }
+    public ReadOnlyCollection<CommandViewModel> Commands { get => (_commands == null) ? _commands = new ReadOnlyCollection<CommandViewModel>(CreateCommands()) : _commands; }
     public ICommand ExitCommand { get => (_Exit == null) ? _Exit = new RelayCommand(param => Exit()) : _Exit; }
     public ICommand OpenLocationCommand { get => (_OpenLoc == null) ? _OpenLoc = new RelayCommand(param => OpenBackupLocation()) : _OpenLoc; }
     public ICommand BackupDBCommand { get => (_BackUp == null) ? _BackUp = new RelayCommand(param => this.BackUpDB(false)) : _BackUp; }
     public ICommand RestoreDBCommand { get => (_Restore == null) ? _Restore = new RelayCommand(param => this.RestoreDB()) : _Restore; }
-    
+
 
     #region Workspaces
-    
+
     public ObservableCollection<WorkspaceViewModel> Workspaces
     {
       get
@@ -93,7 +95,7 @@ namespace MoneyEntry.ViewModel
 
     void OnWorkspacesChanged(object sender, NotifyCollectionChangedEventArgs e)
     {
-      if (e.NewItems != null && e.NewItems.Count != 0) 
+      if (e.NewItems != null && e.NewItems.Count != 0)
         foreach (WorkspaceViewModel workspace in e.NewItems)
           workspace.RequestClose += this.OnWorkspaceRequestClose;
 
@@ -130,7 +132,7 @@ namespace MoneyEntry.ViewModel
       try { return Convert.ToInt32(s); }
       catch (FormatException) { return 0; }
     }
-    
+
     private void MoneyEntry()
     {
       MoneyEntryViewModel money = new MoneyEntryViewModel(_currentUser);
@@ -165,7 +167,7 @@ namespace MoneyEntry.ViewModel
       Workspaces.Add(chart);
       SetActiveWorkspace(chart);
     }
-    
+
     void SetActiveWorkspace(WorkspaceViewModel workspace)
     {
       Debug.Assert(Workspaces.Contains(workspace));
@@ -177,7 +179,14 @@ namespace MoneyEntry.ViewModel
 
     void OpenBackupLocation()
     {
-      s.OpenLocation(_BackupLocation);
+      if (Directory.Exists(_BackupLocation))
+      {
+        Process.Start(_BackupLocation);
+      }
+      else
+      {
+        MessageBox.Show("Directory does not exist");
+      }
     }
 
     void Exit()
@@ -187,12 +196,67 @@ namespace MoneyEntry.ViewModel
 
     void BackUpDB(bool aStartup)
     {
-      s.BackupDB(_BackupLocation, aStartup);
+      try
+      {
+        using (var sqlTalker = new SQLTalker())
+        {
+          var result = sqlTalker.BackupDB(_BackupLocation, aStartup);
+          MessageBox.Show(result.Value, result.Key ? "Success" : "Failure");
+        }
+      }
+      catch (Exception ex)
+      {
+        MessageBox.Show("Process failed...", "Backup");
+      }   
     }
 
     void RestoreDB()
     {
-      s.RestoreDB(_BackupLocation);
+      try
+      {
+        switch (
+        MessageBox.Show(
+            "Kill existing connection to Expenses and restore?\n\nWARNING IF YOU REVERT, THE APPLICATION\nNEEDS TO CLOSE BEFORE YOU MAY RESTART.",
+            "Restore", MessageBoxButton.YesNo, MessageBoxImage.Exclamation))
+        {
+          case MessageBoxResult.Yes:
+            {
+              _openFileDialog.InitialDirectory = "C:\\SQLServer\\Backups\\";
+              _openFileDialog.Filter = "Backup Files (.bak)|*.bak|All Files (*.*)|*.*";
+              
+              bool? fileResult = _openFileDialog.ShowDialog();
+              if (fileResult == true)
+              {
+                var restoreloc = _openFileDialog.FileName;
+
+                switch (MessageBox.Show("You wish to restore backup: " + restoreloc + "? ", "Restore", MessageBoxButton.OKCancel, MessageBoxImage.Question))
+                {
+                  case MessageBoxResult.OK:
+                    using (var sqlTalker = new SQLTalker())
+                    {
+                      sqlTalker.KillConnectionsToDatabase();
+                      var result = sqlTalker.RestoreDB(restoreloc);
+                      MessageBox.Show($"{result.Value}{Environment.NewLine}{Environment.NewLine}Closing Application", result.Key ? "Success" : "Failure");
+                    }
+                    Application.Current.Shutdown();
+                    break;
+                  case MessageBoxResult.Cancel:
+                    MessageBox.Show("Operation cancelled.", "Restore");
+                    break;
+                }
+              }
+              else { MessageBox.Show("Could not locate file to restore", "NOT FOUND"); }
+            }
+            break;
+          case MessageBoxResult.No:
+            MessageBox.Show("Operation cancelled.", "Restore");
+            break;
+        }
+      }
+      catch (Exception ex)
+      {
+        MessageBox.Show("Process failed...", "Restore");
+      }
     }
 
     #endregion

@@ -98,7 +98,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DataAccess\ExpensesRepo.cs" />
-    <Compile Include="DataAccess\SQLTalker.cs" />
     <Compile Include="Model\Category.cs" />
     <Compile Include="Model\ColorDictionary.cs" />
     <Compile Include="Model\Person.cs" />

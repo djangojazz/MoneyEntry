@@ -1,14 +1,12 @@
 ﻿using Controls;
 using MoneyEntry.Model;
-using MoneyEntry.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 
 namespace MoneyEntry.DataAccess
 {
-  public sealed class ExpensesRepo
+  public sealed class ExpensesRepo : IDisposable
   {
     private DataRetreival _dataRetreival;
 
@@ -17,36 +15,18 @@ namespace MoneyEntry.DataAccess
     private ExpensesRepo()
     {
       _dataRetreival = DataRetreival.Instance;
+      People = GetPeople();
       Types = GetTypes();
+      _categories = GetCurrentCategories();
     }
+
     public static ExpensesRepo Instance { get => _instance; }
-
-    //private IList<MoneyEntryModelViewModel> _moneyEntryContainer;
-
-    //public IList<MoneyEntryModelViewModel> MoneyEntryContainer
-    //{
-    //  get => (_moneyEntryContainer == null) ? _moneyEntryContainer = new List<MoneyEntryModelViewModel>() : _moneyEntryContainer;
-    //  set => _moneyEntryContainer = value;
-    //}
-
-    //private IList<MoneyEntryObservable> _moneyEntryContainer;
-
     public IList<MoneyEntryObservable> MoneyEntryContainer { get; } = new List<MoneyEntryObservable>();
-    //{
-    //  get => (_moneyEntryContainer == null) ? _moneyEntryContainer = new List<MoneyEntryObservable>() : _moneyEntryContainer;
-    //  set => _moneyEntryContainer = value;
-    //}
-
-    #region Properties
     public IList<TypeTran> Types { get; }
-
     private List<Category> _categories;
-    public List<Category> Categories { get => (_categories == null) ? _categories = GetCurrentCategories() : _categories; }
-
-    private List<Person> _people;
-    public List<Person> People { get => (_people == null) ? _people = GetPeople() : _people; }
-    #endregion
-
+    public List<Category> Categories { get => _categories; }
+    public IList<Person> People { get; }
+    
     #region Methods
 
     #region RetreivalMethods
@@ -115,6 +95,11 @@ namespace MoneyEntry.DataAccess
     }
 
     public void Refresh(DateTime start, DateTime end, int personId) => MoneyEntryContainer.ClearAndAddRange(GetModelObservables(start, end, personId));
+
+    public void Dispose()
+    {
+      _dataRetreival = null;
+    }
     #endregion
 
     #endregion
