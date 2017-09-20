@@ -62,16 +62,6 @@ namespace MoneyEntry.DataAccess
         .Select(dbTran => new MoneyEntryObservable(dbTran.PersonID, dbTran.TransactionID, dbTran.TransactionDesc, dbTran.CreatedDate, dbTran.TypeID, dbTran.CategoryID, dbTran.Amount, dbTran.RunningTotal, dbTran.reconciled))
         .ToList();
     }
-
-    private List<TransactionView> GetTransactionViews(DateTime start, DateTime end, int personId) =>
-      _dataRetreival.GetTransactionViews(start, end, personId)
-      .OrderBy(d => d.CreatedDate)
-      .Select(dbTran => new TransactionView(dbTran)
-      {
-        Type = Types.First(x => x.TypeId == dbTran.TypeID),
-        Category = Categories.First(x => x.CategoryId == dbTran.CategoryID),
-      })
-      .ToList();
     
     public List<MoneyEntryObservable> GetModelObservables(DateTime start, DateTime end, int personId)
     {
@@ -83,7 +73,7 @@ namespace MoneyEntry.DataAccess
 
     public DateTime? LastDateEnteredByPerson(int personId, bool? reconciled = null) => _dataRetreival.LastDateEnteredByPerson(personId, reconciled);
 
-    public List<string> TextEntryAcrossRange(DateTime start, DateTime end, int personId) => GetTransactionViews(start, end, personId).Select(x => x.TransactionDesc).Distinct().ToList();
+    public List<string> TextEntryAcrossRange(DateTime start, DateTime end, int personId) => GetModelObservables(start, end, personId).Select(x => x.TransactionDesc).Distinct().ToList();
     #endregion
 
     #region AlterMethods

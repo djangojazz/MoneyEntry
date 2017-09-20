@@ -103,7 +103,6 @@
     <Compile Include="Model\ColorDictionary.cs" />
     <Compile Include="Model\Person.cs" />
     <Compile Include="Model\TransactionSummationByDurationInput.cs" />
-    <Compile Include="Model\TransactionView.cs" />
     <Compile Include="Model\TypeTran.cs" />
     <Compile Include="ViewModel\CategoryViewModel.cs" />
     <Compile Include="ViewModel\ChartViewModel.cs" />
