@@ -38,7 +38,7 @@ namespace MoneyEntry.ViewModel
       base.DisplayName = Strings.MainWindowViewModel_DisplayName;
       People = new ObservableCollection<Person>(Repository.GetPeople());
 
-      _currentUser = _people.FirstOrDefault(x => x.FirstName == "Test");
+      _currentUser = _people.FirstOrDefault(x => x.FirstName == "Shared");
 
       _BackupLocation = ConfigurationManager.AppSettings["DatabaseBackupsLocation"]; // Start the initial backup
 
