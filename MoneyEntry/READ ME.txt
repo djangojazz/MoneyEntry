@@ -1,0 +1,4 @@
+If this is a first time use you must have the database 'Expenses' installed to a local default installation of SQL Server.  To do this if you don't have it there is an attached backup for the objects in the database and some test entries.
+The general statement in SQL Management Studio to perform a restore from a disk location is similar to this:
+
+restore database (DatabaseName EG: Expenses) from disk (Disk location EG: 'C:\Test\databasename.bak') with replace
