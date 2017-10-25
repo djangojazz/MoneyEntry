@@ -192,6 +192,7 @@ namespace MoneyEntry.ViewModel
     void Exit()
     {
       Application.Current.Shutdown();
+
     }
 
     void BackUpDB(bool aStartup)
