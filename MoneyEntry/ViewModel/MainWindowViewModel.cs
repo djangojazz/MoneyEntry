@@ -201,7 +201,7 @@ namespace MoneyEntry.ViewModel
         using (var sqlTalker = new SQLTalker())
         {
           var result = sqlTalker.BackupDB(_BackupLocation, aStartup);
-          MessageBox.Show(result.Value, result.Key ? "Success" : "Failure");
+                    if (!aStartup) { MessageBox.Show(result.Value, result.Key ? "Success" : "Failure"); }
         }
       }
       catch (Exception ex)
