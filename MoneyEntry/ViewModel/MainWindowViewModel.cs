@@ -50,10 +50,7 @@ namespace MoneyEntry.ViewModel
 
             if (!File.Exists(_InitialBackupLocation)) { BackUpDB(true); }  // initial backup on startup
         }
-
-        public bool IsCloud { get => false; }
-
-
+        
         public ObservableCollection<Person> People
         {
             get => _people;
@@ -63,8 +60,7 @@ namespace MoneyEntry.ViewModel
                 OnPropertyChanged(nameof(People));
             }
         }
-
-
+        
         public Person CurrentUser
         {
             get => _currentUser;
