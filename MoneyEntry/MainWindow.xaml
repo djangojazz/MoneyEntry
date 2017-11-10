@@ -9,18 +9,18 @@
   WindowStartupLocation="CenterScreen" 
   WindowState="Maximized"
   Background="Black" Icon="BillSmall.ico">
-  <Window.Resources>
-    <ResourceDictionary Source="MainWindowResources.xaml" />
-  </Window.Resources>
+    <Window.Resources>
+        <ResourceDictionary Source="MainWindowResources.xaml" />
+    </Window.Resources>
     <Grid Margin="4">
         <!--<Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>-->
         <Grid.ColumnDefinitions>
-        <ColumnDefinition Width="Auto" />
-        <ColumnDefinition Width="*" />
-      </Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
         <!--<Menu Grid.Row="0" Grid.ColumnSpan="3" Background="Transparent" Foreground="{StaticResource MoneyBrush}" FontSize="24">
             <Menu.ItemsPanel>
                 <ItemsPanelTemplate>
@@ -35,8 +35,9 @@
             <MenuItem />
             <MenuItem Header="Open Location" Command="{Binding OpenLocationCommand}" />
         </Menu>-->
-      <Border Grid.Column="0">
-          <StackPanel>
+        <Expander ExpandDirection="Right" IsExpanded="True" Grid.Column="0">
+        <Border>
+            <StackPanel>
                 <Border Margin="5" >
                     <ComboBox Margin="10" x:Name="combopersons"
                     FontSize="20"
@@ -49,8 +50,9 @@
                 <HeaderedContentControl Content="{Binding Commands}" ContentTemplate="{StaticResource CommandsTemplate}" />
             </StackPanel>
         </Border>
-      <Border Grid.Column="1" Grid.Row="1" >
-        <HeaderedContentControl  Content="{Binding Workspaces}" ContentTemplate="{StaticResource WorkspacesTemplate}" />
-      </Border>  
+        </Expander>
+        <Border Grid.Column="1" Grid.Row="1" >
+            <HeaderedContentControl  Content="{Binding Workspaces}" ContentTemplate="{StaticResource WorkspacesTemplate}" />
+        </Border>
     </Grid>
 </Window>
