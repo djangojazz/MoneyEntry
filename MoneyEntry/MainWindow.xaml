@@ -29,11 +29,11 @@
             </Menu.ItemsPanel>
             <MenuItem Header="Exit" Command="{Binding ExitCommand}"/>
             <MenuItem />
-            <MenuItem Header="Backup Database" Command="{Binding BackupDBCommand}"/>
+            <MenuItem Header="Backup Database" Command="{Binding BackupDBCommand}" IsEnabled="{Binding IsCloud, Mode=OneWay}" />
             <MenuItem />
-            <MenuItem Header="Restore Database" Command="{Binding RestoreDBCommand}" />
+            <MenuItem Header="Restore Database" Command="{Binding RestoreDBCommand}" IsEnabled="{Binding IsCloud, Mode=OneWay}"/>
             <MenuItem />
-            <MenuItem Header="Open Location" Command="{Binding OpenLocationCommand}"/>
+            <MenuItem Header="Open Location" Command="{Binding OpenLocationCommand}" />
         </Menu>
       <Border Grid.Column="0" Grid.Row="1">
           <StackPanel>
