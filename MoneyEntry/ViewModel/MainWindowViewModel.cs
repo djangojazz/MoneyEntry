@@ -32,7 +32,6 @@ namespace MoneyEntry.ViewModel
 
         private string _BackupLocation;
         private string _InitialBackupLocation;
-        private bool _isCloud;
 
         public MainWindowViewModel()
         {
@@ -71,11 +70,11 @@ namespace MoneyEntry.ViewModel
             }
         }
 
-        public ReadOnlyCollection<CommandViewModel> Commands { get => (_commands == null) ? _commands = new ReadOnlyCollection<CommandViewModel>(CreateCommands()) : _commands; }
-        public ICommand ExitCommand { get => (_Exit == null) ? _Exit = new RelayCommand(param => Exit()) : _Exit; }
-        public ICommand OpenLocationCommand { get => (_OpenLoc == null) ? _OpenLoc = new RelayCommand(param => OpenBackupLocation()) : _OpenLoc; }
-        public ICommand BackupDBCommand { get => (_BackUp == null) ? _BackUp = new RelayCommand(param => this.BackUpDB(false)) : _BackUp; }
-        public ICommand RestoreDBCommand { get => (_Restore == null) ? _Restore = new RelayCommand(param => this.RestoreDB()) : _Restore; }
+        public ReadOnlyCollection<CommandViewModel> Commands { get => _commands ?? (_commands = new ReadOnlyCollection<CommandViewModel>(CreateCommands())); }
+        public ICommand ExitCommand { get => _Exit ?? (_Exit = new RelayCommand(param => Exit())); }
+        public ICommand OpenLocationCommand { get => _OpenLoc ?? (_OpenLoc = new RelayCommand(param => OpenBackupLocation())); }
+        public ICommand BackupDBCommand { get => _BackUp ?? (_BackUp = new RelayCommand(param => this.BackUpDB(false))); }
+        public ICommand RestoreDBCommand { get => _Restore ?? (_Restore = new RelayCommand(param => this.RestoreDB())); }
 
 
         #region Workspaces
@@ -205,7 +204,7 @@ namespace MoneyEntry.ViewModel
                     if (!aStartup) { MessageBox.Show(result.Value, result.Key ? "Success" : "Failure"); }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 MessageBox.Show("Process failed...", "Backup");
             }
@@ -254,7 +253,7 @@ namespace MoneyEntry.ViewModel
                         break;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 MessageBox.Show("Process failed...", "Restore");
             }

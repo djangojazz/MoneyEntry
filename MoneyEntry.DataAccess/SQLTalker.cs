@@ -33,7 +33,7 @@ namespace MoneyEntry.DataAccess
             ? Procer("backup Database " + _database + "\nto disk = '" + aLoc + "\\" + _initialbackup + "'\nwith format", false)
             : Procer("backup Database " + _database + "\nto disk = '" + aLoc + "\\" + _backup + "'\nwith format", false));
       }
-      catch (Exception ex) { return new KeyValuePair<bool, string>(false, "Could not backup"); }
+      catch (Exception) { return new KeyValuePair<bool, string>(false, "Could not backup"); }
     }
 
     public KeyValuePair<bool, string> KillConnectionsToDatabase()
@@ -54,7 +54,7 @@ namespace MoneyEntry.DataAccess
 
         return new KeyValuePair<bool, string>(true, "Killed existing connection to Expenses");
       }
-      catch (Exception ex) { return new KeyValuePair<bool, string>(false, "Cancelled or problem"); }
+      catch (Exception) { return new KeyValuePair<bool, string>(false, "Cancelled or problem"); }
     }
 
     public KeyValuePair<bool, string> RestoreDB(string aLoc)
@@ -66,7 +66,7 @@ namespace MoneyEntry.DataAccess
           return new KeyValuePair<bool, string>(true, master.Procer("restore database " + _database + "\nfrom disk = '" + aLoc + "'\nwith replace", false));
         }
       }
-      catch (Exception ex) { return new KeyValuePair<bool, string>(false, "Could not restore database"); }
+      catch (Exception) { return new KeyValuePair<bool, string>(false, "Could not restore database"); }
     }
 
     #region Related to populating data sets

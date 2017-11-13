@@ -11,8 +11,6 @@ namespace MoneyEntry.ViewModel
   class QueryViewModel : WorkspaceViewModel
   {
     Person _Person;
-    
-    ObservableCollection<MoneyEntryObservable> _moneyentries;
     RelayCommand _Find;
     string _Desc;
     decimal _MoneyAmount;
@@ -99,7 +97,7 @@ namespace MoneyEntry.ViewModel
 
     public override string DisplayName { get => Strings.QueryViewModel_DisplayName + "(" + _Person.FirstName + ")";  }
 
-    public ICommand FindCommand { get => (_Find == null) ? _Find = new RelayCommand(param => Find()) : _Find; }
+    public ICommand FindCommand { get => _Find ?? (_Find = new RelayCommand(param => Find())); }
 
     #endregion
     
