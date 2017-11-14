@@ -17,11 +17,17 @@ namespace MoneyEntry.DataAccess
     
     public partial class ExpensesEntities : DbContext
     {
-        public ExpensesEntities()
-            : base("name=ExpensesEntities")
+        private readonly ExpensesEntities _context;
+
+        public ExpensesEntities() : base("name=ExpensesEntities") { }
+
+        public ExpensesEntities(string connection) : base(connection) { }
+
+        public ExpensesEntities(ExpensesEntities context)
         {
+            _context = context;
         }
-    
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             throw new UnintentionalCodeFirstException();

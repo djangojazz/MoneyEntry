@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.16
+VisualStudioVersion = 15.0.27004.2006
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoneyEntry", "MoneyEntry.csproj", "{FFE5C341-AFF4-4FC1-A649-60BACFDCFBB9}"
 EndProject
@@ -16,6 +16,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		ExpensesBackupWithTestUser 9-27-2017.bak = ExpensesBackupWithTestUser 9-27-2017.bak
 		READ ME.txt = READ ME.txt
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoneyEntryAPI", "..\MoneyEntryAPI\MoneyEntryAPI.csproj", "{F1DF0330-BFF6-4C18-8DB1-564D2ADE80F3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,12 +41,16 @@ Global
 		{869C2D0E-F067-446E-AB4E-EF7570DEAF71}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{869C2D0E-F067-446E-AB4E-EF7570DEAF71}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{869C2D0E-F067-446E-AB4E-EF7570DEAF71}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F1DF0330-BFF6-4C18-8DB1-564D2ADE80F3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F1DF0330-BFF6-4C18-8DB1-564D2ADE80F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F1DF0330-BFF6-4C18-8DB1-564D2ADE80F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F1DF0330-BFF6-4C18-8DB1-564D2ADE80F3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.Common.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.Validation.6.0.1304.0\lib\NET45
 		SolutionGuid = {8933CDB6-6675-4A55-B637-1E67C9703660}
+		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.Common.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.Validation.6.0.1304.0\lib\NET45
 	EndGlobalSection
 EndGlobal
