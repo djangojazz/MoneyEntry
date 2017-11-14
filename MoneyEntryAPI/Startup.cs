@@ -17,6 +17,8 @@ namespace MoneyEntryAPI
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            var testConnection = Configuration.GetConnectionString("ExpensesEntities");
+            var y = testConnection;
         }
 
         public IConfiguration Configuration { get; }
