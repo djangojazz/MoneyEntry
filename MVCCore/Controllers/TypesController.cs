@@ -12,20 +12,19 @@ using MoneyEntry.DataAccess;
 
 namespace ContosoUniversity.Controllers
 {
-    #region snippet_ContextInController
     public class TypesController : Controller
     {
-        private readonly ExpensesEntities _context;
+        //private readonly ExpensesEntities _context;
 
-        public TypesController(ExpensesEntities context)
-        {
-            _context = context;
-        }
-        #endregion
+        //public TypesController(ExpensesEntities context)
+        //{
+        //    _context = context;
+        //}
+
         // GET: Types
         public async Task<IActionResult> Index()
         {
-            return View(await _context.tdType.ToListAsync());
+            return View();// await _context.tdType.ToListAsync());
         }
     }
 }
