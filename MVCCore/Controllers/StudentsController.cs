@@ -12,11 +12,11 @@ using EF6.Models;
 namespace ContosoUniversity.Controllers
 {
     #region snippet_ContextInController
-    public class StudentsController : Controller
+    public class StudentsControllerB : Controller
     {
         private readonly SchoolContext _context;
 
-        public StudentsController(SchoolContext context)
+        public StudentsControllerB(SchoolContext context)
         {
             _context = context;
         }
