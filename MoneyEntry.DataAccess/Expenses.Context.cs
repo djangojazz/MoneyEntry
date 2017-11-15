@@ -21,9 +21,7 @@ namespace MoneyEntry.DataAccess
         public ExpensesEntities() : base("name=ExpensesEntities") { }
 
         public ExpensesEntities(string connection) : base(connection) { }
-
         
-
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             throw new UnintentionalCodeFirstException();
