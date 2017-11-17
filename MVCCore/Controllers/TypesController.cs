@@ -14,17 +14,18 @@ namespace ContosoUniversity.Controllers
 {
     public class TypesController : Controller
     {
-        //private readonly ExpensesEntities _context;
+        private readonly ExpensesEntities _context;
 
-        //public TypesController(ExpensesEntities context)
-        //{
-        //    _context = context;
-        //}
+        public TypesController(ExpensesEntities context)
+        {
+            _context = context;
+        }
 
-        // GET: Types
+        // GET: Types0
         public async Task<IActionResult> Index()
         {
-            return View();// await _context.tdType.ToListAsync());
+            var data = await _context.tdType.ToListAsync();
+            return View(data);
         }
     }
 }

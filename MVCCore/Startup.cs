@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using EF6;
 using EF6.Models;
+using MoneyEntry.DataAccess;
 
 namespace MVCCore
 {
@@ -32,7 +33,7 @@ namespace MVCCore
         {
             // Add framework services.
             services.AddMvc();
-            services.AddScoped(_ => new SchoolContext(Configuration.GetConnectionString("Expenses")));
+            services.AddScoped(_ => new ExpensesEntities(Configuration.GetConnectionString("Expenses")));
         }
         #endregion  
 
