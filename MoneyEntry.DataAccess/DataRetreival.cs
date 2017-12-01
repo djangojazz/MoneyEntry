@@ -60,6 +60,13 @@ namespace MoneyEntry.DataAccess
             return final.OrderBy(d => d.CreatedDate).ToList();
         }
 
+        public async Task<List<vTrans>> QueryMoneyEntriesAsync(DateTime start, DateTime end, int personId, int categoryId, int typeId, string description = null, decimal? moneyAmount = null)
+        {
+            var list = await GetEntitiesAsync<vTrans>(x => x.CreatedDate >= start && x.CreatedDate <= end && x.PersonID == personId && x.TypeID == typeId && x.CategoryID == categoryId);
+            var final = (description == null) ? list.Where(x => x.Amount.Equals(moneyAmount)) : list.Where(x => x.TransactionDesc.Contains(description));
+            return final.OrderBy(d => d.CreatedDate).ToList();
+        }
+
         public List<vTrans> GetTransactionViews(DateTime start, DateTime end, int personId) =>
           GetEntities<vTrans>(x => x.CreatedDate >= start && x.CreatedDate <= end && x.PersonID == personId).OrderBy(d => d.CreatedDate).ToList();
 
