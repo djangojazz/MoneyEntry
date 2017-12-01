@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Http;
 
 namespace ExpensesAPI.Controllers
@@ -18,9 +19,9 @@ namespace ExpensesAPI.Controllers
         }
 
         // GET api/types
-        public IEnumerable<tdType> Get()
+        public async Task<IEnumerable<tdType>> Get()
         {
-            return _dataRetreival.GetTypes();
+            return await _dataRetreival.GetTypesAsync();
         }
 
         // GET api/values/5

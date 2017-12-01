@@ -119,6 +119,10 @@
       <Project>{A8E5AE00-02C7-4B11-8C0E-542798471B4E}</Project>
       <Name>ExpensesAPI</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\MoneyEntry.DataAccess\MoneyEntry.DataAccess.csproj">
+      <Project>{869c2d0e-f067-446e-ab4e-ef7570deaf71}</Project>
+      <Name>MoneyEntry.DataAccess</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

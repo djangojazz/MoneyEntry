@@ -7,6 +7,7 @@ using System.Web.Http;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ExpensesAPI;
 using ExpensesAPI.Controllers;
+using System.Threading.Tasks;
 
 namespace ExpensesAPI.Tests.Controllers
 {
@@ -14,13 +15,13 @@ namespace ExpensesAPI.Tests.Controllers
     public class ValuesControllerTest
     {
         [TestMethod]
-        public void Get()
+        public async void Get()
         {
             // Arrange
             TypesController controller = new TypesController();
 
             // Act
-            IEnumerable<string> result = controller.Get();
+            var result = await controller.Get();
 
             // Assert
             Assert.IsNotNull(result);

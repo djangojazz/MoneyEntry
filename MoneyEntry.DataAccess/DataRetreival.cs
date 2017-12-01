@@ -1,93 +1,112 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace MoneyEntry.DataAccess
 {
-  public sealed class DataRetreival
-  {
-    private static readonly DataRetreival _instance = new DataRetreival();
-    static DataRetreival() { }
-    private DataRetreival() {}
-    public static DataRetreival Instance { get => _instance; }
-    
-    #region Methods
-    private IEnumerable<TEntity> GetEntities<TEntity>(Expression<Func<TEntity, bool>> predicate = null) where TEntity : class
+    public sealed class DataRetreival
     {
-      using (var context = new ExpensesEntities())
-      {
-        IQueryable<TEntity> data = context.Set<TEntity>();
-        if (predicate != null)
+        private static readonly DataRetreival _instance = new DataRetreival();
+        static DataRetreival() { }
+        private DataRetreival() { }
+        public static DataRetreival Instance { get => _instance; }
+
+        #region Methods
+        private List<TEntity> GetEntities<TEntity>(Expression<Func<TEntity, bool>> predicate = null) where TEntity : class
         {
-          data = data.Where(predicate);
+            using (var context = new ExpensesEntities())
+            {
+                IQueryable<TEntity> data = context.Set<TEntity>();
+                if (predicate != null)
+                {
+                    data = data.Where(predicate);
+                }
+
+                return data.ToList();
+            }
         }
 
-        return data.ToList();
-      }
-    }
-
-    #region RetreivalMethods
-    public IList<tdType> GetTypes() => GetEntities<tdType>(x => x.TypeID != 3).ToList();
-
-    public List<tdCategory> GetCurrentCategories() => GetEntities<tdCategory>().ToList();
-
-    public List<tePerson> GetPeople() => GetEntities<tePerson>().ToList();
-    
-    public List<vTrans> QueryMoneyEntries(DateTime start, DateTime end, int personId, int categoryId, int typeId, string description = null, decimal? moneyAmount = null)
-    {
-      var list = GetEntities<vTrans>(x => x.CreatedDate >= start && x.CreatedDate <= end && x.PersonID == personId && x.TypeID == typeId && x.CategoryID == categoryId);
-      var final = (description == null) ? list.Where(x => x.Amount.Equals(moneyAmount)) : list.Where(x => x.TransactionDesc.Contains(description));
-      return final.OrderBy(d => d.CreatedDate).ToList();
-    }
-
-    public List<vTrans> GetTransactionViews(DateTime start, DateTime end, int personId) => 
-      GetEntities<vTrans>(x => x.CreatedDate >= start && x.CreatedDate <= end && x.PersonID == personId).OrderBy(d => d.CreatedDate).ToList();
-
-    public DateTime? LastDateEnteredByPerson(int personId, bool? reconciled = null) => (DateTime)GetEntities<vTrans>(x => x.PersonID == personId && x.reconciled == (reconciled ?? false))
-      .OrderByDescending(x => x.CreatedDate).Select(x => x.CreatedDate).First();
-
-    public List<string> TextEntryAcrossRange(DateTime start, DateTime end, int personId) => GetTransactionViews(start, end, personId).Select(x => x.TransactionDesc).Distinct().ToList();
-    #endregion
-
-    #region AlterMethods
-    public void AddCategory(string description)
-    {
-      try
-      {
-        using (var context = new ExpensesEntities())
+        private async Task<List<TEntity>> GetEntitiesAsync<TEntity>(Expression<Func<TEntity, bool>> predicate = null) where TEntity : class
         {
-          context.tdCategory.Add(new tdCategory { Description = description });
-          context.SaveChanges();
+            using (var context = new ExpensesEntities())
+            {
+                IQueryable<TEntity> data = context.Set<TEntity>();
+                if (predicate != null)
+                {
+                    data = data.Where(predicate);
+                }
+
+                return await data.ToListAsync();
+            }
         }
-      }
-      catch (Exception ex)
-      {
+
+        #region RetreivalMethods
+        public IList<tdType> GetTypes() => GetEntities<tdType>(x => x.TypeID != 3);
+        public async Task<IList<tdType>> GetTypesAsync() => await GetEntitiesAsync<tdType>(x => x.TypeID != 3);
+
+        public List<tdCategory> GetCurrentCategories() => GetEntities<tdCategory>();
+        public async Task<List<tdCategory>> GetCurrentCategoriesAsync() => await GetEntitiesAsync<tdCategory>();
+
+        public List<tePerson> GetPeople() => GetEntities<tePerson>().ToList();
+        public async Task<List<tePerson>> GetPeopleAsync() => await GetEntitiesAsync<tePerson>();
+
+        public List<vTrans> QueryMoneyEntries(DateTime start, DateTime end, int personId, int categoryId, int typeId, string description = null, decimal? moneyAmount = null)
+        {
+            var list = GetEntities<vTrans>(x => x.CreatedDate >= start && x.CreatedDate <= end && x.PersonID == personId && x.TypeID == typeId && x.CategoryID == categoryId);
+            var final = (description == null) ? list.Where(x => x.Amount.Equals(moneyAmount)) : list.Where(x => x.TransactionDesc.Contains(description));
+            return final.OrderBy(d => d.CreatedDate).ToList();
+        }
+
+        public List<vTrans> GetTransactionViews(DateTime start, DateTime end, int personId) =>
+          GetEntities<vTrans>(x => x.CreatedDate >= start && x.CreatedDate <= end && x.PersonID == personId).OrderBy(d => d.CreatedDate).ToList();
+
+        public DateTime? LastDateEnteredByPerson(int personId, bool? reconciled = null) => (DateTime)GetEntities<vTrans>(x => x.PersonID == personId && x.reconciled == (reconciled ?? false))
+          .OrderByDescending(x => x.CreatedDate).Select(x => x.CreatedDate).First();
+
+        public List<string> TextEntryAcrossRange(DateTime start, DateTime end, int personId) => GetTransactionViews(start, end, personId).Select(x => x.TransactionDesc).Distinct().ToList();
+        #endregion
+
+        #region AlterMethods
+        public void AddCategory(string description)
+        {
+            try
+            {
+                using (var context = new ExpensesEntities())
+                {
+                    context.tdCategory.Add(new tdCategory { Description = description });
+                    context.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
 #if DEBUG
-        Console.WriteLine(ex.Message);
+                Console.WriteLine(ex.Message);
 #endif
-      }
-    }
-
-    public int InsertOrUpdateTransaction(int transactionId, decimal amount, string description, int typeId, int categoryId, DateTime createdDate, int personId, bool reconciled)
-    {
-      using (var context = new ExpensesEntities())
-      {
-        try
-        {
-          return context.spInsertOrUpdateTransaction(transactionId, amount, description, typeId, categoryId, createdDate, personId, reconciled);
+            }
         }
-        catch (Exception ex)
+
+        public int InsertOrUpdateTransaction(int transactionId, decimal amount, string description, int typeId, int categoryId, DateTime createdDate, int personId, bool reconciled)
         {
+            using (var context = new ExpensesEntities())
+            {
+                try
+                {
+                    return context.spInsertOrUpdateTransaction(transactionId, amount, description, typeId, categoryId, createdDate, personId, reconciled);
+                }
+                catch (Exception ex)
+                {
 #if DEBUG
-          Console.WriteLine(ex.Message);
+                    Console.WriteLine(ex.Message);
 #endif
-          return -1;
+                    return -1;
+                }
+            }
         }
-      }
-    }
-    #endregion
+        #endregion
 
-    #endregion
-  }
+        #endregion
+    }
 }
