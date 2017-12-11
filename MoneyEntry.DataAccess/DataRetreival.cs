@@ -87,7 +87,7 @@ namespace MoneyEntry.DataAccess
             }
         }
 
-        public async void AddCategoryAsync(string description)
+        public async Task AddCategoryAsync(string description)
         {
             try
             {
