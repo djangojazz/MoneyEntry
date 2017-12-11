@@ -15,33 +15,6 @@ namespace MoneyEntry.DataAccess
         public static DataRetreival Instance { get => _instance; }
 
         #region Methods
-        private List<TEntity> GetEntities<TEntity>(Expression<Func<TEntity, bool>> predicate = null) where TEntity : class
-        {
-            using (var context = new ExpensesEntities())
-            {
-                IQueryable<TEntity> data = context.Set<TEntity>();
-                if (predicate != null)
-                {
-                    data = data.Where(predicate);
-                }
-
-                return data.ToList();
-            }
-        }
-
-        private async Task<List<TEntity>> GetEntitiesAsync<TEntity>(Expression<Func<TEntity, bool>> predicate = null) where TEntity : class
-        {
-            using (var context = new ExpensesEntities())
-            {
-                IQueryable<TEntity> data = context.Set<TEntity>();
-                if (predicate != null)
-                {
-                    data = data.Where(predicate);
-                }
-
-                return await data.ToListAsync();
-            }
-        }
 
         #region RetreivalMethods
         public IList<tdType> GetTypes() => GetEntities<tdType>(x => x.TypeID != 3);
@@ -114,6 +87,24 @@ namespace MoneyEntry.DataAccess
             }
         }
 
+        public async void AddCategoryAsync(string description)
+        {
+            try
+            {
+                using (var context = new ExpensesEntities())
+                {
+                    context.tdCategory.Add(new tdCategory { Description = description });
+                    await context.SaveChangesAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+#if DEBUG
+                Console.WriteLine(ex.Message);
+#endif
+            }
+        }
+
         public int InsertOrUpdateTransaction(int transactionId, decimal amount, string description, int typeId, int categoryId, DateTime createdDate, int personId, bool reconciled)
         {
             using (var context = new ExpensesEntities())
@@ -131,8 +122,54 @@ namespace MoneyEntry.DataAccess
                 }
             }
         }
+        
+        public async Task<int> InsertOrUpdateTransactionAsync(int transactionId, decimal amount, string description, int typeId, int categoryId, DateTime createdDate, int personId, bool reconciled)
+        {
+            using (var context = new ExpensesEntities())
+            {
+                try
+                {
+                    return await Task.Factory.StartNew(() => context.spInsertOrUpdateTransaction(transactionId, amount, description, typeId, categoryId, createdDate, personId, reconciled));
+                }
+                catch (Exception ex)
+                {
+#if DEBUG
+                    Console.WriteLine(ex.Message);
+#endif
+                    return -1;
+                }
+            }
+        }
         #endregion
 
+
+        private List<TEntity> GetEntities<TEntity>(Expression<Func<TEntity, bool>> predicate = null) where TEntity : class
+        {
+            using (var context = new ExpensesEntities())
+            {
+                IQueryable<TEntity> data = context.Set<TEntity>();
+                if (predicate != null)
+                {
+                    data = data.Where(predicate);
+                }
+
+                return data.ToList();
+            }
+        }
+
+        private async Task<List<TEntity>> GetEntitiesAsync<TEntity>(Expression<Func<TEntity, bool>> predicate = null) where TEntity : class
+        {
+            using (var context = new ExpensesEntities())
+            {
+                IQueryable<TEntity> data = context.Set<TEntity>();
+                if (predicate != null)
+                {
+                    data = data.Where(predicate);
+                }
+
+                return await data.ToListAsync();
+            }
+        }
         #endregion
     }
 }
