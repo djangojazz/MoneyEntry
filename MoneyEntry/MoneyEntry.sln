@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27004.2009
+VisualStudioVersion = 15.0.27130.2010
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoneyEntry", "MoneyEntry.csproj", "{FFE5C341-AFF4-4FC1-A649-60BACFDCFBB9}"
 EndProject
@@ -18,8 +18,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MoneyEntryAPI", "..\MoneyEntryAPI\MoneyEntryAPI.csproj", "{F1DF0330-BFF6-4C18-8DB1-564D2ADE80F3}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EF6", "..\EF6\EF6.csproj", "{10B9484D-5293-48BA-868D-6CA5B21BC6B9}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MVCCore", "..\MVCCore\MVCCore.csproj", "{2B1E3771-9A31-4106-9FD4-BFD819C59404}"
 EndProject
@@ -53,10 +51,6 @@ Global
 		{F1DF0330-BFF6-4C18-8DB1-564D2ADE80F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F1DF0330-BFF6-4C18-8DB1-564D2ADE80F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F1DF0330-BFF6-4C18-8DB1-564D2ADE80F3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{10B9484D-5293-48BA-868D-6CA5B21BC6B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{10B9484D-5293-48BA-868D-6CA5B21BC6B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{10B9484D-5293-48BA-868D-6CA5B21BC6B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{10B9484D-5293-48BA-868D-6CA5B21BC6B9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2B1E3771-9A31-4106-9FD4-BFD819C59404}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2B1E3771-9A31-4106-9FD4-BFD819C59404}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2B1E3771-9A31-4106-9FD4-BFD819C59404}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -74,7 +68,7 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.Common.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.Validation.6.0.1304.0\lib\NET45
 		SolutionGuid = {8933CDB6-6675-4A55-B637-1E67C9703660}
+		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.Common.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.Validation.6.0.1304.0\lib\NET45
 	EndGlobalSection
 EndGlobal
