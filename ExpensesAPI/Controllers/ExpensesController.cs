@@ -18,7 +18,13 @@ namespace ExpensesAPI.Controllers
             _dataRetreival = DataRetreival.Instance;
         }
 
-        public async Task<IEnumerable<vTrans>> Get() => await _dataRetreival.GetTransactionViewsAsync();
+        public async Task<IEnumerable<vTrans>> Get()
+        {
+            var data = _dataRetreival.GetTransactionViewsAsync(new DateTime(2017, 12, 18), new DateTime(2017, 12, 20), 3);
+            return await data;
+        }
+            
+        //public async Task<IEnumerable<vTrans>> Get(DateTime start, DateTime end, int personId) => await _dataRetreival.GetTransactionViewsAsync(start, end, personId);
 
 
         // POST api/categories
@@ -31,4 +37,3 @@ namespace ExpensesAPI.Controllers
         }
     }
 }
-l

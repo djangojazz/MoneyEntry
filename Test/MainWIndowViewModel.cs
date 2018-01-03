@@ -25,8 +25,8 @@ namespace Test
       People = new ObservableCollection<Person>(Repository.People);
       var personId = _people.FirstOrDefault(x => x.FirstName == "Test").PersonId;
 
-      System.DateTime start = new System.DateTime(2017, 9, 1);
-      System.DateTime end = new System.DateTime(2017, 9, 15);
+      System.DateTime start = new System.DateTime(2017, 12, 1);
+      System.DateTime end = new System.DateTime(2017, 12, 15);
       Refresh(start, end, personId);
 
       Types2 = new List<TypeTran>(new List<TypeTran> { new TypeTran(1, "Debit"), new TypeTran(2, "Credit") });
