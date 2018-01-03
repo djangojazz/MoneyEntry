@@ -17,7 +17,7 @@ namespace MoneyEntry.DataAccess
       _dataRetreival = DataRetreival.Instance;
       People = GetPeople();
       Types = GetTypes();
-      _categories = GetCurrentCategories();
+      _categories = GetCategories();
     }
 
     public static ExpensesRepo Instance { get => _instance; }
@@ -32,7 +32,7 @@ namespace MoneyEntry.DataAccess
     #region RetreivalMethods
     private IList<TypeTran> GetTypes() => _dataRetreival.GetTypes().Select(x => new TypeTran(x.TypeID, x.Description)).ToList();
 
-    private List<Category> GetCurrentCategories() => _dataRetreival.GetCurrentCategories().Select(x => new Category(x.CategoryID, x.Description)).ToList();
+    private List<Category> GetCategories() => _dataRetreival.GetCategories().Select(x => new Category(x.CategoryID, x.Description)).ToList();
 
     public List<Person> GetPeople() => _dataRetreival.GetPeople().Select(x => new Person(x)).ToList();
     
@@ -65,7 +65,7 @@ namespace MoneyEntry.DataAccess
         {
           context.tdCategory.Add(new tdCategory { Description = description });
           context.SaveChanges();
-          _categories = GetCurrentCategories();
+          _categories = GetCategories();
         }
       }
       catch (Exception ex)

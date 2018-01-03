@@ -19,7 +19,7 @@ namespace ExpensesAPI.Controllers
         }
 
         // GET api/categories
-        public async Task<IEnumerable<tdCategory>> Get() => await _dataRetreival.GetCurrentCategoriesAsync();
+        public async Task<IEnumerable<tdCategory>> Get() => await _dataRetreival.GetCategoriesAsync();
         
 
         // POST api/categories

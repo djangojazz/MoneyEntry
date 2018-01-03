@@ -20,8 +20,8 @@ namespace MoneyEntry.DataAccess
         public IList<tdType> GetTypes() => GetEntities<tdType>(x => x.TypeID != 3);
         public async Task<IList<tdType>> GetTypesAsync() => await GetEntitiesAsync<tdType>(x => x.TypeID != 3);
 
-        public List<tdCategory> GetCurrentCategories() => GetEntities<tdCategory>();
-        public async Task<List<tdCategory>> GetCurrentCategoriesAsync() => await GetEntitiesAsync<tdCategory>();
+        public List<tdCategory> GetCategories() => GetEntities<tdCategory>();
+        public async Task<List<tdCategory>> GetCategoriesAsync() => await GetEntitiesAsync<tdCategory>();
 
         public List<tePerson> GetPeople() => GetEntities<tePerson>().ToList();
         public async Task<List<tePerson>> GetPeopleAsync() => await GetEntitiesAsync<tePerson>();
