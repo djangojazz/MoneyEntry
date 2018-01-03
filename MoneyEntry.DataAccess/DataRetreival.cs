@@ -43,15 +43,13 @@ namespace MoneyEntry.DataAccess
         public List<vTrans> GetTransactionViews(DateTime start, DateTime end, int personId) =>
           GetEntities<vTrans>(x => x.CreatedDate >= start && x.CreatedDate <= end && x.PersonID == personId).OrderBy(d => d.CreatedDate).ToList();
 
-        public async Task<List<vTrans>> GetTransactionViewsAsync(DateTime start, DateTime end, int personId)
-        {
-            var data = await GetEntitiesAsync<vTrans>(x => x.CreatedDate >= start && x.CreatedDate <= end && x.PersonID == personId);
-            return data.OrderBy(d => d.CreatedDate).ToList();
-        }
+        public async Task<List<vTrans>> GetTransactionViewsAsync(DateTime start, DateTime end, int personId) =>
+            (await GetEntitiesAsync<vTrans>(x => x.CreatedDate >= start && x.CreatedDate <= end && x.PersonID == personId)).OrderBy(d => d.CreatedDate).ToList();
 
 
-        public DateTime? LastDateEnteredByPerson(int personId, bool? reconciled = null) => (DateTime)GetEntities<vTrans>(x => x.PersonID == personId && x.reconciled == (reconciled ?? false))
-          .OrderByDescending(x => x.CreatedDate).Select(x => x.CreatedDate).FirstOrDefault();
+        public DateTime? LastDateEnteredByPerson(int personId, bool? reconciled = null) => 
+            (DateTime)GetEntities<vTrans>(x => x.PersonID == personId && x.reconciled == (reconciled ?? false))
+                .OrderByDescending(x => x.CreatedDate).Select(x => x.CreatedDate).FirstOrDefault();
 
         public async Task<DateTime?> LastDateEnteredByPersonAsync(int personId, bool? reconciled = null)
         {
