@@ -23,11 +23,18 @@ namespace ExpensesAPI.Controllers
         
 
         // POST api/categories
-        public async Task Post([FromBody]string value)
+        public async Task<IHttpActionResult> Post([FromBody]string value)
         {
-            if(!String.IsNullOrEmpty(value))
+            if(String.IsNullOrEmpty(value)) { return BadRequest();  }
+            
+            try
             {
                 await _dataRetreival.AddCategoryAsync(value);
+                return Ok();
+            }
+            catch (Exception)
+            {
+                return BadRequest();
             }
         }
     }

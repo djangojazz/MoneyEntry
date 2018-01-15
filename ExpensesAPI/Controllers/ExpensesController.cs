@@ -1,4 +1,5 @@
-﻿using MoneyEntry.DataAccess;
+﻿using ExpensesAPI.Models;
+using MoneyEntry.DataAccess;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,12 +25,20 @@ namespace ExpensesAPI.Controllers
         
         
         // POST api/categories
-        public async Task Post([FromBody]string value)
+        public async Task<IHttpActionResult> Post([FromBody]WebTransaction tran)
         {
-            if (!String.IsNullOrEmpty(value))
+            if(!ModelState.IsValid) { return  BadRequest(); }
+
+            try
             {
-                await _dataRetreival.AddCategoryAsync(value);
+                var tranId = await _dataRetreival.InsertOrUpdateTransactionAsync(tran.TransactionId, tran.Amount, tran.Description, tran.TypeId, tran.CategoryId, tran.CreatedDate, tran.PersonId, tran.Reconciled);
+                return Ok(tranId);
             }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            
         }
     }
 }
