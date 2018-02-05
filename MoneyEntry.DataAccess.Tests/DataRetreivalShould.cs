@@ -53,8 +53,8 @@ namespace MoneyEntry.DataAccess.Tests
         [TestMethod]
         public void GetTransactionViewsShould()
         {
-            DateTime start = new DateTime(2017, 12, 18);
-            DateTime end = new DateTime(2017, 12, 20);
+            DateTime start = new DateTime(2017, 12, 17);
+            DateTime end = new DateTime(2017, 12, 17);
             int personId = 3;
 
             var trans = _dataRetreival.GetTransactionViews(start, end, personId);
@@ -68,8 +68,8 @@ namespace MoneyEntry.DataAccess.Tests
         [TestMethod]
         public async Task GetTransactionViewsAsyncShould()
         {
-            DateTime start = new DateTime(2017, 12, 18);
-            DateTime end = new DateTime(2017, 12, 20);
+            DateTime start = new DateTime(2017, 12, 17);
+            DateTime end = new DateTime(2017, 12, 17);
             int personId = 3;
 
             var trans = await _dataRetreival.GetTransactionViewsAsync(start, end, personId);
@@ -78,6 +78,21 @@ namespace MoneyEntry.DataAccess.Tests
             Assert.IsTrue(trans.Exists(x => x.Category == "Gifts"), "Gifts category should exist");
             Assert.IsTrue(trans.Exists(x => x.Type == "Debit"), "Debit type should exist");
             Assert.IsTrue(trans.Exists(x => x.Type == "Credit"), "Credit Type should exist");
+        }
+
+        [TestMethod]
+        public void CreateTransactionShould()
+        {
+            DateTime now = DateTime.Now;
+            int typeId = 2;
+            int personId = 4;
+            int categoryMisc = 26;
+            decimal amt = 99.9m;
+            string desc = "UnitTest";
+
+            var trans = _dataRetreival.InsertOrUpdateTransaction(0, amt, desc, typeId, categoryMisc, now, personId, false);
+
+            Assert.IsNotNull(trans, "Expected a non null Transaction");
         }
     }
 }

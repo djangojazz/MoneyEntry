@@ -19,12 +19,12 @@ namespace ExpensesAPI.Controllers
             _dataRetreival = DataRetreival.Instance;
         }
 
-        [Route("api/expenses/{start}/{end}/{personId}")]
+        [Route("api/expenses/{start}/{end}/{personId}"), HttpGet]
         public async Task<IEnumerable<vTrans>> Get(DateTime start, DateTime end, int personId) =>
             await _dataRetreival.GetTransactionViewsAsync(start, end, personId);
-        
-        
-        // POST api/categories
+
+
+        [Route("api/expenses"), HttpPost]
         public async Task<IHttpActionResult> Post([FromBody]WebTransaction tran)
         {
             if(!ModelState.IsValid) { return  BadRequest(); }

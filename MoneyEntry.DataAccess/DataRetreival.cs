@@ -127,7 +127,8 @@ namespace MoneyEntry.DataAccess
             {
                 try
                 {
-                    return await Task.Factory.StartNew(() => context.spInsertOrUpdateTransaction(transactionId, amount, description, typeId, categoryId, createdDate, personId, reconciled));
+                    var data = await Task.Factory.StartNew(() => context.spInsertOrUpdateTransaction(transactionId, amount, description, typeId, categoryId, createdDate, personId, reconciled));
+                    return data;
                 }
                 catch (Exception ex)
                 {
