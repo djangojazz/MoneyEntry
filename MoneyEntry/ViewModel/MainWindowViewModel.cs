@@ -47,7 +47,8 @@ namespace MoneyEntry.ViewModel
             DateTime dt = DateTime.Now;
             _InitialBackupLocation = _BackupLocation + "\\ExpensesStart_" + dt.Year + "-" + dt.Month + "-" + dt.Day + ".bak";
 
-            if (!File.Exists(_InitialBackupLocation)) { BackUpDB(true); }  // initial backup on startup
+            //Not needed at this point.
+            //if (!File.Exists(_InitialBackupLocation)) { BackUpDB(true); }  // initial backup on startup
         }
         
         public ObservableCollection<Person> People

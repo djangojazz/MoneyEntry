@@ -4,8 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d"
-             Background="Black"
-             MaxHeight="850">
+             Background="Black">
   <UserControl.Resources>
     <ResourceDictionary Source="..\MainWindowResources.xaml" />
   </UserControl.Resources>
@@ -45,7 +44,7 @@
 
 
     <DataGrid DockPanel.Dock="Top" x:Name="datagrid" ItemsSource="{Binding MoneyEnts}" AutoGenerateColumns="False" HorizontalAlignment="Left" VerticalAlignment="Top" 
-                              IsSynchronizedWithCurrentItem="True" MaxHeight="700">
+                              IsSynchronizedWithCurrentItem="True" MaxHeight="1000">
       <DataGrid.Columns>
         <DataGridTextColumn Header="Id" Binding="{Binding TransactionId}" CanUserReorder="True"/>
         <DataGridTextColumn Header="EntryDate" Binding="{Binding CreatedDate, StringFormat={}{0:MM/dd/yyyy}}" CanUserReorder="True"/>
