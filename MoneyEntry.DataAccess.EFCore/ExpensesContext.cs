@@ -20,8 +20,8 @@ namespace MoneyEntry.DataAccess.EFCore.Expenses
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                //optionsBuilder.UseSqlServer(@"Server=.;Database=Expenses;initial catalog=Expenses;integrated security=True!");
-                optionsBuilder.UseSqlServer(@"Server=tcp:brettdb.database.windows.net,1433;Database=Expenses;User ID=NOPE;Password=NOWAY");
+                optionsBuilder.UseSqlServer(@"Server=.;Database=Expenses;initial catalog=ExpensesTest;integrated security=True");
+                //optionsBuilder.UseSqlServer(@"Server=tcp:brettdb.database.windows.net,1433;Database=Expenses;User ID=NOPE;Password=NOPE");
             }
         }
 
