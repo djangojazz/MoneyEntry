@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using MoneyEntry.DataAccess.EFCore.Expenses.Models;
@@ -7,6 +8,10 @@ namespace MoneyEntry.DataAccess.EFCore.Expenses
 {
     public partial class ExpensesContext : DbContext
     {
+        private readonly string _connectionString;
+
+        public ExpensesContext(string connectionString) => _connectionString = connectionString;
+
         public virtual DbSet<TdCategory> TdCategory { get; set; }
         public virtual DbSet<TdType> TdType { get; set; }
         public virtual DbSet<TePerson> TePerson { get; set; }
@@ -20,9 +25,9 @@ namespace MoneyEntry.DataAccess.EFCore.Expenses
         {
             if (!optionsBuilder.IsConfigured)
             {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer(@"Server=.;Database=ExpensesTestView;integrated security=True");
-                //optionsBuilder.UseSqlServer(@"Server=tcp:brettdb.database.windows.net,1433;Database=Expenses;User ID=nope;Password=nope");
+                optionsBuilder.UseSqlServer(_connectionString);
+                    //(@"Server=.;Database=ExpensesTestView;integrated security=True");
+                //optionsBuilder.UseSqlServer(@"Server=tcp:brettdb.database.windows.net,1433;Database=Expenses;User ID=bmorin@brettdb;Password=nope");
             }
         }
 

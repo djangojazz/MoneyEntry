@@ -1,7 +1,6 @@
-﻿using MoneyEntry.DataAccess.EFCore.Expenses;
+﻿using MoneyEntry.DataAccess.EFCore;
+using MoneyEntry.DataAccess.EFCore.Expenses;
 using System;
-using System.Linq;
-using MoneyEntry.DataAccess.EFCore;
 
 namespace TestConsole
 {
