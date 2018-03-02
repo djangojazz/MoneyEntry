@@ -1,14 +1,25 @@
 ﻿using MoneyEntry.DataAccess.EFCore;
 using MoneyEntry.DataAccess.EFCore.Expenses;
 using System;
+using Microsoft.Extensions.Configuration;
+using System.IO;
 
 namespace TestConsole
 {
     class Program
     {
+        private static IConfiguration _configuration { get; set; }
+
         static void Main(string[] args)
         {
-            using (var context = new ExpensesContext())
+            var builder = new ConfigurationBuilder()
+                    .SetBasePath(Directory.GetCurrentDirectory())
+                    .AddJsonFile("appsettings.json");
+
+            _configuration = builder.Build();
+
+            
+            using (var context = new ExpensesContext(_configuration.GetConnectionString("Expenses")))
             {
                 try
                 {

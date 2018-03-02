@@ -10,6 +10,7 @@ namespace MoneyEntry.DataAccess.EFCore.Expenses
     {
         private readonly string _connectionString;
 
+        public ExpensesContext() { }
         public ExpensesContext(string connectionString) => _connectionString = connectionString;
 
         public virtual DbSet<TdCategory> TdCategory { get; set; }
@@ -27,7 +28,7 @@ namespace MoneyEntry.DataAccess.EFCore.Expenses
             {
                 optionsBuilder.UseSqlServer(_connectionString);
                     //(@"Server=.;Database=ExpensesTestView;integrated security=True");
-                //optionsBuilder.UseSqlServer(@"Server=tcp:brettdb.database.windows.net,1433;Database=Expenses;User ID=bmorin@brettdb;Password=nope");
+                //optionsBuilder.UseSqlServer(@"Server=tcp:brettdb.database.windows.net,1433;Database=Expenses;User ID=bmorin@brettdb;Password=NO");
             }
         }
 
