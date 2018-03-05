@@ -11,7 +11,7 @@ using System;
 namespace MoneyEntry.DataAccess.EFCore.Migrations
 {
     [DbContext(typeof(ExpensesContext))]
-    [Migration("20180228150017_Initial")]
+    [Migration("20180305151833_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -20,6 +20,16 @@ namespace MoneyEntry.DataAccess.EFCore.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "2.0.1-rtm-125")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("MoneyEntry.DataAccess.EFCore.Expenses.Models.spInsertOrUpdateTransaction", b =>
+                {
+                    b.Property<int>("TransactionId")
+                        .ValueGeneratedOnAdd();
+
+                    b.HasKey("TransactionId");
+
+                    b.ToTable("spInsertOrUpdateTransaction");
+                });
 
             modelBuilder.Entity("MoneyEntry.DataAccess.EFCore.Expenses.Models.TdCategory", b =>
                 {
@@ -116,6 +126,38 @@ namespace MoneyEntry.DataAccess.EFCore.Migrations
                         .HasName("IX_teTransaction_PersonId");
 
                     b.ToTable("teTransaction");
+                });
+
+            modelBuilder.Entity("MoneyEntry.DataAccess.EFCore.Expenses.Models.vTrans", b =>
+                {
+                    b.Property<int>("TransactionID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<double>("Amount");
+
+                    b.Property<string>("Category");
+
+                    b.Property<byte>("CategoryID");
+
+                    b.Property<DateTime>("CreatedDate");
+
+                    b.Property<string>("Name");
+
+                    b.Property<int>("PersonID");
+
+                    b.Property<double>("RunningTotal");
+
+                    b.Property<string>("TransactionDesc");
+
+                    b.Property<string>("Type");
+
+                    b.Property<byte>("TypeID");
+
+                    b.Property<bool>("reconciled");
+
+                    b.HasKey("TransactionID");
+
+                    b.ToTable("vTrans");
                 });
 
             modelBuilder.Entity("MoneyEntry.DataAccess.EFCore.Expenses.Models.TeTransaction", b =>

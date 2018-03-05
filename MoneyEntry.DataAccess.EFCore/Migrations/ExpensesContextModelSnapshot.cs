@@ -19,7 +19,7 @@ namespace MoneyEntry.DataAccess.EFCore.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "2.0.1-rtm-125")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
+            
             modelBuilder.Entity("MoneyEntry.DataAccess.EFCore.Expenses.Models.TdCategory", b =>
                 {
                     b.Property<byte>("CategoryId")
@@ -116,6 +116,7 @@ namespace MoneyEntry.DataAccess.EFCore.Migrations
 
                     b.ToTable("teTransaction");
                 });
+            
 
             modelBuilder.Entity("MoneyEntry.DataAccess.EFCore.Expenses.Models.TeTransaction", b =>
                 {

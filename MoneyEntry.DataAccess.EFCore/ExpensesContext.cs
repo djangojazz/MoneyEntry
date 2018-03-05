@@ -18,6 +18,7 @@ namespace MoneyEntry.DataAccess.EFCore.Expenses
         public virtual DbSet<TePerson> TePerson { get; set; }
         public virtual DbSet<TeTransaction> TeTransaction { get; set; }
         public virtual DbSet<vTrans> vTrans { get; set; }
+        public virtual DbSet<spInsertOrUpdateTransaction> spInsertOrUpdateTransaction { get; set; }
 
         // Unable to generate entity type for table 'dbo.export'. Please see the warning messages.
         // Unable to generate entity type for table 'dbo.teRunningTotals'. Please see the warning messages.
@@ -26,7 +27,7 @@ namespace MoneyEntry.DataAccess.EFCore.Expenses
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer(_connectionString);
+                optionsBuilder.UseSqlServer(_connectionString ?? "Server=.;Database=ExpensesEF;Trusted_Connection=True");
                     //(@"Server=.;Database=ExpensesTestView;integrated security=True");
                 //optionsBuilder.UseSqlServer(@"Server=tcp:brettdb.database.windows.net,1433;Database=Expenses;User ID=bmorin@brettdb;Password=NO");
             }
