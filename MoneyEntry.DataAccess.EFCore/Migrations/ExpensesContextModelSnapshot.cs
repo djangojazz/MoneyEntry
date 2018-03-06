@@ -117,7 +117,6 @@ namespace MoneyEntry.DataAccess.EFCore.Migrations
                     b.ToTable("teTransaction");
                 });
             
-
             modelBuilder.Entity("MoneyEntry.DataAccess.EFCore.Expenses.Models.TeTransaction", b =>
                 {
                     b.HasOne("MoneyEntry.DataAccess.EFCore.Expenses.Models.TdCategory", "Category")
