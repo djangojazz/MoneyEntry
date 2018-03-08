@@ -17,20 +17,6 @@ namespace MoneyEntry.DataAccess.EFCore.Migrations
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder
-                .HasAnnotation("ProductVersion", "2.0.1-rtm-125")
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-            modelBuilder.Entity("MoneyEntry.DataAccess.EFCore.Expenses.Models.spInsertOrUpdateTransaction", b =>
-                {
-                    b.Property<int>("TransactionId")
-                        .ValueGeneratedOnAdd();
-
-                    b.HasKey("TransactionId");
-
-                    b.ToTable("spInsertOrUpdateTransaction");
-                });
-
             modelBuilder.Entity("MoneyEntry.DataAccess.EFCore.Expenses.Models.TdCategory", b =>
                 {
                     b.Property<byte>("CategoryId")
@@ -127,39 +113,7 @@ namespace MoneyEntry.DataAccess.EFCore.Migrations
 
                     b.ToTable("teTransaction");
                 });
-
-            modelBuilder.Entity("MoneyEntry.DataAccess.EFCore.Expenses.Models.vTrans", b =>
-                {
-                    b.Property<int>("TransactionID")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<double>("Amount");
-
-                    b.Property<string>("Category");
-
-                    b.Property<byte>("CategoryID");
-
-                    b.Property<DateTime>("CreatedDate");
-
-                    b.Property<string>("Name");
-
-                    b.Property<int>("PersonID");
-
-                    b.Property<double>("RunningTotal");
-
-                    b.Property<string>("TransactionDesc");
-
-                    b.Property<string>("Type");
-
-                    b.Property<byte>("TypeID");
-
-                    b.Property<bool>("reconciled");
-
-                    b.HasKey("TransactionID");
-
-                    b.ToTable("vTrans");
-                });
-
+            
             modelBuilder.Entity("MoneyEntry.DataAccess.EFCore.Expenses.Models.TeTransaction", b =>
                 {
                     b.HasOne("MoneyEntry.DataAccess.EFCore.Expenses.Models.TdCategory", "Category")

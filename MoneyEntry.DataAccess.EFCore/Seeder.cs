@@ -12,6 +12,12 @@ namespace MoneyEntry.DataAccess.EFCore
         {
             context.Database.EnsureCreated();
 
+            if(!context.TePerson.Any())
+            {
+                context.TePerson.Add(new TePerson { FirstName = "Test", LastName = "Test" });
+                context.SaveChanges();
+            }
+
             //Only invoke seeding of data if tables do not contain data already.
             if (!context.TdType.Any())
             {
