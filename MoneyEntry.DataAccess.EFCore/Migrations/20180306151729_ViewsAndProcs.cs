@@ -32,6 +32,34 @@ namespace MoneyEntry.DataAccess.EFCore.Migrations
             );
 
             migrationBuilder.Sql(
+            "CREATE PROC spCategoryUseOverDuration " +
+            "	( " +
+            "	  @Start DATE  " +
+            "	, @End DATE  " +
+            "	, @TypeId INT = 2 " +
+            "	, @PersonId INT  " +
+            "	, @Minimum MONEY " +
+            "	) " +
+            "AS  " +
+            "BEGIN " +
+            "	SELECT " +
+            "	  t.CategoryID " +
+            "	, t.TypeID " +
+            "	, ty.Description AS TypeDesc " +
+            "	, c.Description AS CategoryDesc " +
+            "	, SUM(t.Amount) AS Amount " +
+            "	FROM teTransaction t " +
+            "		INNER JOIN tdCategory c ON c.CategoryID = t.CategoryID " +
+            "			AND t.CreatedDt BETWEEN @Start AND @End " +
+            "			AND t.PersonID = @PersonId " +
+            "			AND t.TypeID = ISNULL(@TypeId, t.TypeID) " +
+            "		INNER JOIN tdType ty ON ty.TypeID = t.TypeID " +
+            "	GROUP BY t.TypeID, ty.Description, t.CategoryID, c.Description " +
+            "	HAVING SUM(t.Amount) > @Minimum " +
+            "	ORDER BY SUM(t.Amount) DESC " +
+            "END ");
+
+            migrationBuilder.Sql(
             "Create PROC spInsertOrUpdateTransaction " +
             "	( " +
             "		@TransactionID	  INT  " +
@@ -72,42 +100,21 @@ namespace MoneyEntry.DataAccess.EFCore.Migrations
             "		 " +
             "		Select @Previous = MAX(CreatedDt) FROM teTransaction  WHERE PersonId = @PersonId and CreatedDt < @CreatedDt " +
             "		 " +
-            "		if Exists(Select 1 from teTransaction WHERE PersonID = @PersonID AND CreatedDt = @CreatedDt) " +
-            "			BEGIN " +
-            "				INSERT INTO @Temp " +
-            "				SELECT top 1 " +
-            "					TransactionID " +
-            "				, Amount " +
-            "				, TransactionDesc " +
-            "				, TypeID " +
-            "				, CategoryID " +
-            "				, CreatedDt " +
-            "				, PersonID " +
-            "				, RunningTotal " +
-            "				, Reconciled " +
-            "				from dbo.teTransaction " +
-            "				WHERE PersonID = @PersonID " +
-            "					AND CreatedDt >= @CreatedDt " +
-            "				ORDER BY CreatedDt, TransactionID desc " +
-            "			END " +
-            "		ELSE " +
-            "			BEGIN " +
-            "				INSERT INTO @Temp " +
-            "				SELECT top 1 " +
-            "				  Isnull(TransactionID, @TransactionID) " +
-            "				, Amount " +
-            "				, TransactionDesc " +
-            "				, TypeID " +
-            "				, CategoryID " +
-            "				, CreatedDt " +
-            "				, PersonID " +
-            "				, RunningTotal " +
-            "				, Reconciled " +
-            "				from teTransaction " +
-            "				WHERE PersonID = @PersonID " +
-            "					AND CreatedDt >= @Previous " +
-            "				ORDER BY CreatedDt, TransactionID desc " +
-            "			END " +
+            "		INSERT INTO @Temp " +
+            "		SELECT top 1 " +
+            "			TransactionID " +
+            "		, Amount " +
+            "		, TransactionDesc " +
+            "		, TypeID " +
+            "		, CategoryID " +
+            "		, CreatedDt " +
+            "		, PersonID " +
+            "		, RunningTotal " +
+            "		, Reconciled " +
+            "		from dbo.teTransaction " +
+            "		WHERE PersonID = @PersonID " +
+            "			AND CreatedDt >= ISNULL(@Previous, @CreatedDt) " +
+            "		ORDER BY CreatedDt desc, TransactionID desc " +
             "	 " +
             "		Merge @Temp as T " +
             "		Using (Select @TransactionID AS TransactionId, @Amount AS Amount, @TransactionDesc AS TransactionDesc, @TypeId AS TypeId, @CategoryId AS CategoryId, @CreatedDt AS CreatedDt,  " +
@@ -133,7 +140,7 @@ namespace MoneyEntry.DataAccess.EFCore.Migrations
             "		( " +
             "		SELECT  " +
             "			* " +
-            "		--if this is a new transaction, 0, trick system to think it should come last in windowed function " +
+            "		/* if this is a new transaction, 0, trick system to think it should come last in windowed function */ " +
             "		, ROW_NUMBER() OVER(ORDER BY CreatedDt, CASE WHEN TransactionId = 0 THEN @MaxInt ELSE TransactionID END) AS rwn  " +
             "		FROM @Temp " +
             "		) " +
@@ -185,12 +192,166 @@ namespace MoneyEntry.DataAccess.EFCore.Migrations
             "        BEGIN CATCH " +
             "        END Catch " +
             "end ");
+
+            migrationBuilder.Sql(
+                "CREATE PROC spTransactionSummationByDuration @Xml XML " +
+                "AS  " +
+                " " +
+                "BEGIN " +
+                " " +
+                "DECLARE  " +
+                "  @PersonId INT " +
+                ", @Start DATE " +
+                ", @End DATE  " +
+                ", @Grouping VARCHAR(64) " +
+                ", @Summarize BIT " +
+                ",	@Floor money " +
+                ", @Sql NVARCHAR(Max) =  " +
+                "'SELECT CategoryId, CategoryDesc, ''{Grouping}'', {Grouping}, ROW_NUMBER() OVER(Partition by CategoryId Order by {Grouping}), SUM(Amount) as Amount  " +
+                "From #Data  " +
+                "GROUP BY CategoryId, CategoryDesc, {Grouping} " +
+                "' " +
+                " " +
+                "SET FMTONLY OFF; " +
+                " " +
+                "DROP TABLE IF EXISTS #Data; " +
+                " " +
+                "CREATE TABLE #Data " +
+                "	( " +
+                "	  TransactionId	INT " +
+                "	, Amount		MONEY " +
+                "	, CategoryId	TINYINT " +
+                "	, CategoryDesc	VARCHAR(128) " +
+                "	, Day			DATE " +
+                "	, Week			DATE " +
+                "	, Month			DATE " +
+                "	, Quarter		DATE " +
+                "	, Year			DATE " +
+                "	) " +
+                " " +
+                "Declare @Results Table " +
+                "	( " +
+                "	  CategoryId	TINYINT " +
+                "	, CategoryName	VARCHAR(128) " +
+                "	, GroupName		VARCHAR(64) " +
+                "	, Grouping		DATE " +
+                "	, Position		INT " +
+                "	, Amount		MONEY " +
+                "	) " +
+                " " +
+                "SELECT " +
+                "  @PersonId = y.value('@PersonId', 'int') " +
+                ", @Start = y.value('@Start', 'DateTime')	 " +
+                ", @End = y.value('@End', 'DateTime')	 " +
+                ", @Grouping = y.value('@Grouping', 'varchar(64)') " +
+                ", @Summarize = y.value('@Summarize', 'bit') " +
+                ", @Floor = y.value('@Floor', 'money') " +
+                "FROM @Xml.nodes('/Input') AS x(y) " +
+                " " +
+                "; WITH c AS  " +
+                "	( " +
+                "	SELECT " +
+                "	  y.value('.', 'int') AS CategoryID " +
+                "	FROM @Xml.nodes('/Input/Categories/int') AS x(y) " +
+                "	) " +
+                "INSERT INTO #Data " +
+                "SELECT  " +
+                "  TransactionID " +
+                ", Amount " +
+                ", t.CategoryId " +
+                ",	cat.Description AS CategoryDesc " +
+                ", CreatedDt  " +
+                ", DATEADD(WEEK, DATEDIFF(WEEK, 0, CreatedDt), 0)  " +
+                ", DATEADD(Month, DATEDIFF(MOnth, 0, CreatedDt), 0)  " +
+                ", DATEADD(QUARTER, DATEDIFF(QUARTER, 0, CreatedDt), 0)  " +
+                ", DATEADD(YEAR, DATEDIFF(YEAR, 0, CreatedDt), 0)  " +
+                "From dbo.teTransaction t " +
+                "	INNER JOIN c ON t.CategoryID =  c.CategoryID " +
+                "		AND t.PersonID = @PersonId " +
+                "		AND CreatedDt BETWEEN @Start AND @End " +
+                "		AND t.Amount >= @Floor " +
+                "	INNER JOIN dbo.tdCategory cat ON cat.CategoryID = t.CategoryID " +
+                "ORDER BY t.CreatedDt, t.TransactionID " +
+                " " +
+                "SELECT @Sql = REPLACE(@SQL, '{Grouping}', @Grouping) " +
+                "IF @Summarize = 1 " +
+                "BEGIN " +
+                "    SELECT @SQL = REPLACE(@SQL, 'CategoryId, CategoryDesc, ', '') " +
+                "	SELECT @SQL = REPLACE(@SQL, 'SELECT', 'SELECT 0, ''Summary'', ')  " +
+                "	SELECT @SQL = REPLACE(@SQL, 'Partition by CategoryId ', '') " +
+                "END " +
+                " " +
+                "INSERT INTO @Results " +
+                "EXEC sp_executesql @SQL " +
+                " " +
+                "Select * " +
+                "From @Results " +
+                " " +
+                "DROP TABLE IF EXISTS #Data " +
+                "END "
+                );
+
+            migrationBuilder.Sql(
+                "CREATE PROC spUpdateTotals " +
+                "as  " +
+                "begin  " +
+                "	set nocount on; " +
+                " " +
+                "	if OBJECT_ID('tempdb..#math') is not null drop table #math; " +
+                "	if OBJECT_ID('tempdb..#updates') is not null drop table #updates; " +
+                "		 " +
+                "	select  " +
+                "		a.TransactionID	 " +
+                "	,	a.PersonID " +
+                "	,	a.TypeID " +
+                "	,	a.Amount " +
+                "	,	a.CreatedDt " +
+                "	,	a.RunningTotal " +
+                "	,	cast(LEFT(CONVERT(varchar, CreatedDt, 112),14) as varchar(16)) + '.' +  " +
+                "		cast(  ROW_NUMBER() over(Partition by CreatedDt order by TransactionID)  as varchar(16) ) as fl " +
+                "	,	ROW_NUMBER() over(Partition by PersonId order by CreatedDt, TransactionID) as rwn " +
+                "	into #math " +
+                "	from dbo.teTransaction a (nolock) " +
+                "	Order by CreatedDt, TransactionID " +
+                " " +
+                "	; with x as  " +
+                "		( " +
+                "		select  " +
+                "			TransactionID " +
+                "		,	Amount " +
+                "		,	Sum(Case when TypeId = 2 then cast('-' + cast(Amount as varchar(16)) as varchar(16)) Else Amount End) Over(Partition by PersonId Order By rwn) as RunningTotal " +
+                "		from #math " +
+                "		) " +
+                "	select  " +
+                "		x.TransactionID " +
+                "	,	x.PersonID " +
+                "	,	x.TypeID " +
+                "	,	x.Amount " +
+                "	,	x.CreatedDt " +
+                "	,	y.RunningTotal " +
+                "	into #updates " +
+                "	from #math x " +
+                "		left join x y on x.TransactionID = y.TransactionID " +
+                "	Order by x.CreatedDt, x.TransactionId " +
+                " " +
+                "	update dbo.teTransaction " +
+                "	set " +
+                "		RunningTotal = u.RunningTotal " +
+                "	from #updates u " +
+                "	where TeTransaction.TransactionID = u.TransactionID " +
+                "		 " +
+                "	Select @@ROWCOUNT as RowsUpdated " +
+                "end "
+                );
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             //Procs
+            migrationBuilder.Sql("drop proc spUpdateTotals");
+            migrationBuilder.Sql("drop proc spTransactionSummationByDuration");
             migrationBuilder.Sql("drop proc spInsertOrUpdateTransaction");
+            migrationBuilder.Sql("drop proc spCategoryUseOverDuration");
 
             //Views
             migrationBuilder.Sql("drop view vTrans");

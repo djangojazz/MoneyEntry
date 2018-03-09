@@ -13,12 +13,20 @@ namespace MoneyEntry.DataAccess.EFCore.Expenses
         public ExpensesContext() { }
         public ExpensesContext(string connectionString) => _connectionString = connectionString;
 
+        //Tables
         public virtual DbSet<TdCategory> TdCategory { get; set; }
         public virtual DbSet<TdType> TdType { get; set; }
         public virtual DbSet<TePerson> TePerson { get; set; }
         public virtual DbSet<TeTransaction> TeTransaction { get; set; }
+
+        //Views
         public virtual DbSet<vTrans> vTrans { get; set; }
+
+        //Procs
+        public virtual DbSet<spCategoryUseOverDuration> spCategoryUseOverDuration { get; set; }
         public virtual DbSet<spInsertOrUpdateTransaction> spInsertOrUpdateTransaction { get; set; }
+        public virtual DbSet<spTransactionSummationByDuration> spTransactionSummationByDuration { get; set; }
+        public virtual DbSet<spUpdateTotals> spUpdateTotals { get; set; }
 
         // Unable to generate entity type for table 'dbo.export'. Please see the warning messages.
         // Unable to generate entity type for table 'dbo.teRunningTotals'. Please see the warning messages.
