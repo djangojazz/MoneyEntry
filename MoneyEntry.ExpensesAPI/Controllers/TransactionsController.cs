@@ -4,19 +4,20 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MoneyEntry.DataAccess.EFCore;
 
 namespace MoneyEntry.ExpensesAPI.Controllers
 {
     [Route("api/Transactions")]
     public class TransactionsController : Controller
     {
-        // GET: api/Transactions
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
+        ExpensesRepository _repo = ExpensesRepository.Instance;
 
+        //Optional params as needed
+        [HttpGet("{personId?}/{start?}/{end?}")]
+        public async Task<IActionResult> Get(int personId = 1, DateTime? start = null, DateTime? end = null) =>
+            Ok((await _repo.GetTransactionViewsAsync(start ?? DateTime.Now.Date.AddMonths(-3), end ?? DateTime.Now, personId)).ToList());
+        
         // GET: api/Transactions/5
         [HttpGet("{id}", Name = "Get")]
         public string Get(int id)

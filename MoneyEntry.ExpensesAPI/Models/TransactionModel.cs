@@ -36,5 +36,17 @@ namespace MoneyEntry.ExpensesAPI.Models
             PersonId = personId;
             Reconciled = reconciled;
         }
+
+        public TransactionModel(vTrans vTrans)
+        {
+            TransactionId = vTrans.TransactionID;
+            Amount = vTrans.Amount;
+            Description = vTrans.TransactionDesc;
+            TypeId = vTrans.TypeID;
+            CategoryId = vTrans.CategoryID;
+            CreatedDate = vTrans.CreatedDate;
+            PersonId = vTrans.PersonID;
+            Reconciled = vTrans.Reconciled;
+        }
     }
 }

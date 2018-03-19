@@ -25,6 +25,7 @@ namespace MoneyEntry.ExpensesAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+            services.AddCors();
 
             ExpensesRepository.SetConnectionFirstTime(Configuration.GetConnectionString("Expenses"));
         }
@@ -35,6 +36,13 @@ namespace MoneyEntry.ExpensesAPI
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+
+                //Enables CORS for anything for the time being
+                app.UseCors(builder =>
+                    builder.AllowAnyOrigin()
+                            .AllowAnyHeader()
+                            .AllowAnyMethod()
+                   );
             }
 
             app.UseMvc();

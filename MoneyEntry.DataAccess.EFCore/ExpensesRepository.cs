@@ -64,12 +64,12 @@ namespace MoneyEntry.DataAccess.EFCore
 
 
         public DateTime? LastDateEnteredByPerson(int personId, bool? reconciled = null) =>
-            (DateTime)GetEntities<vTrans>(x => x.PersonID == personId && x.reconciled == (reconciled ?? false))
+            (DateTime)GetEntities<vTrans>(x => x.PersonID == personId && x.Reconciled == (reconciled ?? false))
                 .OrderByDescending(x => x.CreatedDate).Select(x => x.CreatedDate).FirstOrDefault();
 
         public async Task<DateTime?> LastDateEnteredByPersonAsync(int personId, bool? reconciled = null)
         {
-            var data = await GetEntitiesAsync<vTrans>(x => x.PersonID == personId && x.reconciled == (reconciled ?? false));
+            var data = await GetEntitiesAsync<vTrans>(x => x.PersonID == personId && x.Reconciled == (reconciled ?? false));
             return (DateTime)data.OrderByDescending(x => x.CreatedDate).Select(x => x.CreatedDate).FirstOrDefault();
         }
 

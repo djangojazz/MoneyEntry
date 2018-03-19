@@ -19,6 +19,6 @@ namespace MoneyEntry.DataAccess.EFCore.Expenses.Models
         [Key]
         public int TransactionID { get; set; }
         public decimal RunningTotal { get; set; }
-        public bool reconciled { get; set; }
+        public bool Reconciled { get; set; }
     }
 }

@@ -24,7 +24,7 @@ namespace MoneyEntry.DataAccess.EFCore.Migrations
             ",	cast(t.CreatedDt as DATE) as CreatedDate " +
             ",	t.TransactionID " +
             ",	t.RunningTotal " +
-            ",	t.reconciled " +
+            ",	t.Reconciled " +
             "from teTransaction t (nolock)	" +
             "	join tdType ty (nolock)	 on t.TypeID = ty.TypeID " +
             "	join tdCategory c (nolock) on t.CategoryID = c.CategoryID " +
