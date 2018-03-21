@@ -33,6 +33,14 @@ namespace MoneyEntry.DataAccess.EFCore
         #region Methods
 
         #region RetreivalMethods
+        public void SeedDatabase()
+        {
+            using (var context = new ExpensesContext(_connection))
+            {
+                Seeder.Initialize(context);
+            }
+        }
+
         public IList<TdType> GetTypes() => GetEntities<TdType>(x => x.TypeId != 3);
         public async Task<IList<TdType>> GetTypesAsync() => await GetEntitiesAsync<TdType>(x => x.TypeId != 3);
 

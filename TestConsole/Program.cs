@@ -14,8 +14,10 @@ namespace TestConsole
 
         static void Main(string[] args)
         {
+            var baseLocale = Extensions.GetBaseDirectory();
+
             var builder = new ConfigurationBuilder()
-                    .SetBasePath(Directory.GetCurrentDirectory())
+                    .SetBasePath(baseLocale)
                     .AddJsonFile("appsettings.json");
 
             _configuration = builder.Build();
@@ -26,13 +28,17 @@ namespace TestConsole
 
             var yesterday = DateTime.Now.Date.AddDays(-1);
 
-            var result = Task.Factory.StartNew(async () =>
-            {
-                //await repo.InsertOrUpdaTeTransactionAsync(0, 100, "Test debit", 2, 14, yesterday.Date.AddDays(1), 1, false);
-                var rows = await repo.GetTransactionViewsAsync(yesterday, yesterday.Date.AddDays(1), 1);
-                
-            }
-            );
+            var locale = Path.Combine(baseLocale, @"SqlScripts\vTrans.sql");
+            var result = locale.ReadFile();
+            Console.WriteLine(result);
+
+            //var result = Task.Factory.StartNew(async () =>
+            //{
+            //    //await repo.InsertOrUpdaTeTransactionAsync(0, 100, "Test debit", 2, 14, yesterday.Date.AddDays(1), 1, false);
+            //    var rows = await repo.GetTransactionViewsAsync(yesterday, yesterday.Date.AddDays(1), 1);
+
+            //}
+            //);
 
 
             //using (var context = new ExpensesContext())

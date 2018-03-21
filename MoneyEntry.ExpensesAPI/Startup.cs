@@ -28,6 +28,7 @@ namespace MoneyEntry.ExpensesAPI
             services.AddCors();
 
             ExpensesRepository.SetConnectionFirstTime(Configuration.GetConnectionString("Expenses"));
+            ExpensesRepository.Instance.SeedDatabase();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
