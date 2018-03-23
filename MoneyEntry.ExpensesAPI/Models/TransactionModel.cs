@@ -7,46 +7,22 @@ using System.Threading.Tasks;
 
 namespace MoneyEntry.ExpensesAPI.Models
 {
-    public sealed class TransactionModel
+    public class TransactionModel
     {
         public int TransactionId { get; set; }
         [Required]
         public decimal Amount { get; set; }
         [Required, MaxLength(128)]
         public string Description { get; set; }
-        [Required]
+        [Required, Range(1,2)]
         public int TypeId { get; set; }
-        [Required]
+        [Required, Range(1,99)]
         public int CategoryId { get; set; }
-        [Required]
+        [Required, DataType(DataType.DateTime)]
         public DateTime CreatedDate { get; set; }
-        [Required]
+        [Required, Range(1,10)]
         public int PersonId { get; set; }
-        
-        public bool Reconciled { get; set; }
-        
-        public TransactionModel(decimal amount, string description, int typeId, int categoryId, DateTime createdDate, int personId, int transactionId = 0, bool reconciled = false)
-        {
-            TransactionId = transactionId;
-            Amount = amount;
-            Description = description;
-            TypeId = typeId;
-            CategoryId = categoryId;
-            CreatedDate = createdDate;
-            PersonId = personId;
-            Reconciled = reconciled;
-        }
 
-        public TransactionModel(vTrans vTrans)
-        {
-            TransactionId = vTrans.TransactionID;
-            Amount = vTrans.Amount;
-            Description = vTrans.TransactionDesc;
-            TypeId = vTrans.TypeID;
-            CategoryId = vTrans.CategoryID;
-            CreatedDate = vTrans.CreatedDate;
-            PersonId = vTrans.PersonID;
-            Reconciled = vTrans.Reconciled;
-        }
+        public bool Reconciled { get; set; }
     }
 }

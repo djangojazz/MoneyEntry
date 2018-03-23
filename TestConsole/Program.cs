@@ -26,11 +26,11 @@ namespace TestConsole
             ExpensesRepository.SetConnectionFirstTime(connectionString);
             var repo = ExpensesRepository.Instance;
 
-            var yesterday = DateTime.Now.Date.AddDays(-1);
+            //var yesterday = DateTime.Now.Date.AddDays(-1);
 
-            var locale = Path.Combine(baseLocale, @"SqlScripts\vTrans.sql");
-            var result = locale.ReadFile();
-            Console.WriteLine(result);
+            //var locale = Path.Combine(baseLocale, @"SqlScripts\vTrans.sql");
+            //var result = locale.ReadFile();
+            //Console.WriteLine(result);
 
             //var result = Task.Factory.StartNew(async () =>
             //{

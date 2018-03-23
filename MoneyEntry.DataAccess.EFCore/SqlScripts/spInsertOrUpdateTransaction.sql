@@ -39,8 +39,8 @@ begin
         Select @Previous = MAX(CreatedDt) FROM teTransaction  WHERE PersonId = @PersonId and CreatedDt < @CreatedDt
             		
         INSERT INTO @Temp
-        SELECT top 1
-            TransactionID
+        SELECT
+          TransactionID
         , Amount
         , TransactionDesc
         , TypeID
@@ -71,7 +71,7 @@ begin
             Values (S.TransactionId, S.Amount, S.TransactionDesc, S.TypeId, S.CategoryId, S.CreatedDt, S.PersonId, S.RunningTotal, S.Reconciled) 
         ;
             
-        SELECT TOP 1 @StartAmount = RunningTotal FROM @Temp ORDER BY CreatedDt, TransactionId
+        SELECT TOP 1 @StartAmount = RunningTotal FROM @Temp Where TransactionId <> 0 ORDER BY CreatedDt, TransactionId
             		
             
         ; with ord as 
