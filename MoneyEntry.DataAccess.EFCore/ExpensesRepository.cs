@@ -72,22 +72,15 @@ namespace MoneyEntry.DataAccess.EFCore
 
 
         public DateTime? LastDateEnteredByPerson(int personId, bool? reconciled = null) =>
-            (DateTime)GetEntities<vTrans>(x => x.PersonID == personId && x.Reconciled == (reconciled ?? false))
+            GetEntities<vTrans>(x => x.PersonID == personId && x.Reconciled == (reconciled ?? false))
                 .OrderByDescending(x => x.CreatedDate).Select(x => x.CreatedDate).FirstOrDefault();
 
-        public async Task<DateTime?> LastDateEnteredByPersonAsync(int personId, bool? reconciled = null)
-        {
-            var data = await GetEntitiesAsync<vTrans>(x => x.PersonID == personId && x.Reconciled == (reconciled ?? false));
-            return (DateTime)data.OrderByDescending(x => x.CreatedDate).Select(x => x.CreatedDate).FirstOrDefault();
-        }
+        public async Task<DateTime?> LastDateEnteredByPersonAsync(int personId, bool? reconciled = null) =>
+            (await GetEntitiesAsync<vTrans>(x => x.PersonID == personId && x.Reconciled == (reconciled ?? false))).OrderByDescending(x => x.CreatedDate).Select(x => x.CreatedDate).FirstOrDefault();
 
         public List<string> TextEntryAcrossRange(DateTime start, DateTime end, int personId) => GetTransactionViews(start, end, personId).Select(x => x.TransactionDesc).Distinct().ToList();
 
-        public async Task<List<string>> TextEntryAcrossRangeAsync(DateTime start, DateTime end, int personId)
-        {
-            var data = await GetTransactionViewsAsync(start, end, personId);
-            return data.Select(x => x.TransactionDesc).Distinct().ToList();
-        }
+        public async Task<List<string>> TextEntryAcrossRangeAsync(DateTime start, DateTime end, int personId) => (await GetTransactionViewsAsync(start, end, personId)).Select(x => x.TransactionDesc).Distinct().ToList();
         #endregion
 
         #region AlterMethods

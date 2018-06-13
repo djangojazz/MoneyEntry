@@ -10,7 +10,7 @@ using MoneyEntry.ExpensesAPI.Models;
 
 namespace MoneyEntry.ExpensesAPI.Controllers
 {
-    [Route("api/Categories")]
+    [Route("api/[Controller]")]
     public class CategoriesController : Controller
     {
         ExpensesRepository _repo = ExpensesRepository.Instance;

@@ -9,15 +9,25 @@ using MoneyEntry.ExpensesAPI.Models;
 
 namespace MoneyEntry.ExpensesAPI.Controllers
 {
-    [Route("api/Transactions")]
+    [Route("api/[controller]/[action]")]
     public class TransactionsController : Controller
     {
         ExpensesRepository _repo = ExpensesRepository.Instance;
 
+        [HttpGet, Route("{personId:int}")]
+        public async Task<IActionResult> GetLastDate(int personId) => Ok(await _repo.LastDateEnteredByPersonAsync(personId));
+
         //Optional params as needed
-        [HttpGet("{personId?}/{start?}/{end?}")]
-        public async Task<IActionResult> Get(int personId = 1, DateTime? start = null, DateTime? end = null) =>
-            Ok((await _repo.GetTransactionViewsAsync(start ?? DateTime.Now.Date.AddMonths(-3), end ?? DateTime.Now, personId)).ToList());
+        [HttpGet, Route("{personId?}/{start?}/{end?}")]
+        public async Task<IActionResult> GetTransactions(int personId = 1, DateTime? start = null, DateTime? end = null)
+        {
+            var trans = await _repo.GetTransactionViewsAsync(start ?? DateTime.Now.Date.AddMonths(-3), end ?? DateTime.Now, personId);
+
+            if (!trans.Any())
+               return NotFound("There were no results found for this time period");
+
+            return Ok(trans);
+        }
         
         // POST: api/Transactions
         [HttpPost]
