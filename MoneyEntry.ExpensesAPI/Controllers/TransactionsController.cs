@@ -10,12 +10,16 @@ using MoneyEntry.ExpensesAPI.Models;
 namespace MoneyEntry.ExpensesAPI.Controllers
 {
     [Route("api/[controller]/[action]")]
-    public class TransactionsController : Controller
+    public class TransactionsController : BaseController
+        //Controller
     {
         ExpensesRepository _repo = ExpensesRepository.Instance;
 
         [HttpGet, Route("{personId:int}")]
         public async Task<IActionResult> GetLastDate(int personId) => Ok(await _repo.LastDateEnteredByPersonAsync(personId));
+
+        [HttpGet]
+        public async Task<IActionResult> GetDate() => Ok(await Task.Factory.StartNew(() => new DateTime(2018, 2, 1)));
 
         //Optional params as needed
         [HttpGet, Route("{personId?}/{start?}/{end?}")]
@@ -31,16 +35,12 @@ namespace MoneyEntry.ExpensesAPI.Controllers
         
         // POST: api/Transactions
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody]TransactionModel t)
+        public async Task<IActionResult> PostTransaction([FromBody]TransactionModel t)
         {
-            if(ModelState.IsValid)
+            return await DetermineModelThenReturn(async x =>
             {
                 return Ok(await _repo.InsertOrUpdaTeTransactionAsync(t.TransactionId, t.Amount, t.Description, t.TypeId, t.CategoryId, t.CreatedDate, t.PersonId, t.Reconciled));
-            }
-            else
-            {
-                return BadRequest(ModelState);
-            }
+            });
         }   
     }
 }
