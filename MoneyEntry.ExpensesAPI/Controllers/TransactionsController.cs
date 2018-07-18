@@ -35,12 +35,7 @@ namespace MoneyEntry.ExpensesAPI.Controllers
         
         // POST: api/Transactions
         [HttpPost]
-        public async Task<IActionResult> PostTransaction([FromBody]TransactionModel t)
-        {
-            return await DetermineModelThenReturn(async x =>
-            {
-                return Ok(await _repo.InsertOrUpdaTeTransactionAsync(t.TransactionId, t.Amount, t.Description, t.TypeId, t.CategoryId, t.CreatedDate, t.PersonId, t.Reconciled));
-            });
-        }   
+        public async Task<IActionResult> PostTransaction([FromBody]TransactionModel t) =>
+         await DetermineModelThenReturn(async () => Ok(await _repo.InsertOrUpdaTeTransactionAsync(t.TransactionId, t.Amount, t.Description, t.TypeId, t.CategoryId, t.CreatedDate, t.PersonId, t.Reconciled)));   
     }
 }

@@ -8,12 +8,23 @@ namespace MoneyEntry.ExpensesAPI
 {
     public class BaseController: Controller
     {
-        internal async Task<IActionResult> DetermineModelThenReturn(Func<object, Task<IActionResult>> method)
+        internal async Task<IActionResult> DetermineModelThenReturn(Func<Task<IActionResult>> method)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            
-            return await method(null);
+
+            try
+            {
+                return await method();
+            }
+            catch (Exception ex)
+            {
+                string s = "Fatal Exception";
+#if DEBUG
+                s = ex.Message;
+#endif
+                return BadRequest(s);
+            }
         }
     }
 }
