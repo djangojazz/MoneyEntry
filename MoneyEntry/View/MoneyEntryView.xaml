@@ -95,8 +95,7 @@
                               HorizontalAlignment="Left" 
                               VerticalAlignment="Top" 
                               IsSynchronizedWithCurrentItem="True"
-                              MaxHeight="800"
-                              >
+                              MaxHeight="800">
         <DataGrid.Columns>
           <DataGridTextColumn Header="Id" Binding="{Binding TransactionId}" CanUserReorder="True"/>
           <DataGridTextColumn Header="EntryDate" Binding="{Binding CreatedDate, StringFormat={}{0:M/d/yyyy}}" CanUserReorder="True"/>
