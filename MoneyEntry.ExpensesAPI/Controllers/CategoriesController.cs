@@ -24,6 +24,7 @@ namespace MoneyEntry.ExpensesAPI.Controllers
         public async Task<IActionResult> Post([FromBody]string value)
         {
             await _repo.AddCategoryAsync(value);
+            
             var results = (await _repo.GetCategoriesAsync()).ToList();
 
             if (results.Exists(x => x.Description == value))

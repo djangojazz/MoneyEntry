@@ -19,6 +19,21 @@ namespace MoneyEntry.ExpensesAPI
 
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
+            .ConfigureAppConfiguration((context, config) =>
+            {
+                var builtConfig = config.Build();
+
+                var keyVaultConfigBuilder = new ConfigurationBuilder();
+
+                keyVaultConfigBuilder.AddAzureKeyVault(
+                    $"https://{builtConfig["Azure:Vault"]}.vault.azure.net/",
+                    builtConfig["Azure:ClientId"],
+                    builtConfig["Azure:ClientSecret"]);
+
+                var keyVaultConfig = keyVaultConfigBuilder.Build();
+
+                config.AddConfiguration(keyVaultConfig);
+            })
                 .UseStartup<Startup>()
                 .Build();
     }

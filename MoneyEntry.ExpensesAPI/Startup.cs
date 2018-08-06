@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
@@ -26,8 +27,18 @@ namespace MoneyEntry.ExpensesAPI
         {
             services.AddMvc();
             services.AddCors();
+            
+            var connectionBuilder = new SqlConnectionStringBuilder
+            {
+                DataSource = Configuration["SQLServer"],
+                InitialCatalog = "Expenses",
+                UserID = Configuration["SQLUser"],
+                Password = Configuration["SQLPassword"]
+            };
 
-            ExpensesRepository.SetConnectionFirstTime(Configuration.GetConnectionString("Expenses"));
+            ExpensesRepository.SetConnectionFirstTime(
+                //connectionBuilder.ConnectionString);
+                Configuration.GetConnectionString("Expenses"));
             ExpensesRepository.Instance.SeedDatabase();
         }
 
