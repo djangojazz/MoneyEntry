@@ -7,12 +7,12 @@ using MoneyEntry.DataAccess.EFCore;
 
 namespace MoneyEntry.ExpensesAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("expensesApi/[controller]/[action]")]
     public class TypesController : Controller
     {
         ExpensesRepository _repo = ExpensesRepository.Instance;
         
         [HttpGet]
-        public async Task<IActionResult> Get() => Ok(await _repo.GetTypesAsync());
+        public async Task<IActionResult> GetTypes() => Ok(await _repo.GetTypesAsync());
     }
 }

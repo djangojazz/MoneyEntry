@@ -10,18 +10,18 @@ using MoneyEntry.ExpensesAPI.Models;
 
 namespace MoneyEntry.ExpensesAPI.Controllers
 {
-    [Route("api/[Controller]")]
+    [Route("expensesApi/[controller]/[action]")]
     public class CategoriesController : Controller
     {
         ExpensesRepository _repo = ExpensesRepository.Instance;
 
         [HttpGet]
-        public async Task<IActionResult> Get() => Ok((await _repo.GetCategoriesAsync()).ToList());
+        public async Task<IActionResult> GetCategories() => Ok((await _repo.GetCategoriesAsync()).ToList());
         
         
         // POST: api/Categories
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody]string value)
+        public async Task<IActionResult> PostCategory([FromBody]string value)
         {
             await _repo.AddCategoryAsync(value);
             

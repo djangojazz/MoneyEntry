@@ -9,7 +9,7 @@ using MoneyEntry.ExpensesAPI.Models;
 
 namespace MoneyEntry.ExpensesAPI.Controllers
 {
-    [Route("api/[controller]/[action]")]
+    [Route("expensesApi/[controller]/[action]")]
     public class TransactionsController : BaseController
         //Controller
     {
