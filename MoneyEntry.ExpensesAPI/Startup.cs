@@ -28,13 +28,18 @@ namespace MoneyEntry.ExpensesAPI
             services.AddMvc();
             services.AddCors();
             
-            //var connectionBuilder = new SqlConnectionStringBuilder
-            //{
-            //    DataSource = Configuration["SQLServer"],
-            //    InitialCatalog = "Expenses",
-            //    UserID = Configuration["SQLUser"],
-            //    Password = Configuration["SQLPassword"]
-            //};
+            if(Configuration["SQLServer"] != null && Configuration["SQLUser"] != null && Configuration["SQLPassword"] != null)
+            {
+                var connectionBuilder = new SqlConnectionStringBuilder
+                {
+                    DataSource = Configuration["SQLServer"],
+                    InitialCatalog = "Expenses",
+                    UserID = Configuration["SQLUser"],
+                    Password = Configuration["SQLPassword"]
+                };
+            }
+
+
 
             ExpensesRepository.SetConnectionFirstTime(
                 //connectionBuilder.ConnectionString);
