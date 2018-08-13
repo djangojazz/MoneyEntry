@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -9,17 +10,19 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using MoneyEntry.DataAccess.EFCore;
 
 namespace MoneyEntry.ExpensesAPI
 {
     public class Startup
     {
-        public IConfiguration Configuration { get; }
+        private IConfiguration _config;
+        private IApplicationBuilder _app;
 
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            _config = configuration;
         }
         
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -27,41 +30,60 @@ namespace MoneyEntry.ExpensesAPI
         {
             services.AddMvc();
             services.AddCors();
-            
-            if(Configuration["SQLServer"] != null && Configuration["SQLUser"] != null && Configuration["SQLPassword"] != null)
+
+            var sqlServer = _config["SQLServer"];
+            var sqlUser = _config["SQLUser"];
+            var sqlPassword = _config["SQLPassword"];
+
+            if (sqlServer != null && sqlUser != null && sqlPassword != null)
             {
                 var connectionBuilder = new SqlConnectionStringBuilder
                 {
-                    DataSource = Configuration["SQLServer"],
+                    DataSource = sqlServer,
                     InitialCatalog = "Expenses",
-                    UserID = Configuration["SQLUser"],
-                    Password = Configuration["SQLPassword"]
+                    UserID = sqlUser,
+                    Password = sqlPassword
                 };
             }
 
+            var tokenSymetricKey = Convert.FromBase64String(_config["Security:Tokens:Key"]);
+            var text = Encoding.UTF8.GetString(tokenSymetricKey);
 
+            services.AddAuthentication()
+                .AddJwtBearer(cfg =>
+                {
+                    cfg.TokenValidationParameters = new TokenValidationParameters()
+                    {
+                        ValidIssuer = _config["Security:Tokens:Issuer"],
+                        ValidAudience = _config["Security:Tokens:Audience"],
+                        IssuerSigningKey = new SymmetricSecurityKey(Convert.FromBase64String(_config["Security:Tokens:Key"]))
+                    };
+                });
 
+            
+            
             ExpensesRepository.SetConnectionFirstTime(
                 //connectionBuilder.ConnectionString);
-                Configuration.GetConnectionString("Expenses"));
+                _config.GetConnectionString("Expenses"));
             ExpensesRepository.Instance.SeedDatabase();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            app.UseMvc(routes => routes.MapRoute(name: "default", template: "expensesApi/{controller}/{action}"));
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-
-                //Enables CORS for anything for the time being
-                app.UseCors(builder =>
-                    builder.AllowAnyOrigin()
-                            .AllowAnyHeader()
-                            .AllowAnyMethod()
-                   );
+                app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+            }
+            else
+            {
+                app.UseHsts();
             }
 
+            app.UseHttpsRedirection();
             app.UseMvc();
         }
     }
