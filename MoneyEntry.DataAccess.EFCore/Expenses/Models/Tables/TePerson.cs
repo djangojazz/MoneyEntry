@@ -7,11 +7,24 @@ namespace MoneyEntry.DataAccess.EFCore.Expenses.Models
     [Table("tePerson")]
     public partial class TePerson
     {
+        public TePerson() {}
+        public TePerson(string firstName, string lastName, byte[] salt, byte[] password)
+        {
+            FirstName = firstName;
+            LastName = lastName;
+            Salt = salt;
+            Password = password;
+        }
+
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int PersonId { get; set; }
-        [Column(TypeName = "varchar(255)")]
+        [Required, Column(TypeName = "varchar(255)")]
         public string FirstName { get; set; }
-        [Column(TypeName = "varchar(255)")]
+        [Required, Column(TypeName = "varchar(255)")]
         public string LastName { get; set; }
+        [Required, MaxLength(128)]
+        public byte[] Salt { get; set; }
+        [Required, MaxLength(512)]
+        public byte[] Password { get; set; }
     }
 }

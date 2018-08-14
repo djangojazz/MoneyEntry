@@ -6,6 +6,9 @@ namespace MoneyEntry.DataAccess.EFCore.Expenses.Models
     [Table("tdType")]
     public partial class TdType
     {
+        public TdType() { }
+        public TdType(string description) => Description = description;
+        
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public byte TypeId { get; set; }
 

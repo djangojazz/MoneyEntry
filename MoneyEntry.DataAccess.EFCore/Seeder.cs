@@ -14,7 +14,7 @@ namespace MoneyEntry.DataAccess.EFCore
 
             if(!context.TePerson.Any())
             {
-                context.TePerson.Add(new TePerson { FirstName = "Test", LastName = "Test" });
+                context.TePerson.Add(new TePerson("Test", "Test", new byte[] { 128 }, new byte[] { 127, 126, 244 }));
                 context.SaveChanges();
             }
 
@@ -23,9 +23,9 @@ namespace MoneyEntry.DataAccess.EFCore
             {
                 new List<TdType>
                 {
-                    new TdType{ Description = "Credit" },
-                    new TdType{ Description = "Debit" },
-                    new TdType{ Description = "Adjustment" }
+                    new TdType("Credit"),
+                    new TdType("Debit"),
+                    new TdType("Adjustment")
                 }
                 .ForEach(x => context.TdType.Add(x));
                 context.SaveChanges();
@@ -35,36 +35,36 @@ namespace MoneyEntry.DataAccess.EFCore
             {
                 new List<TdCategory>
                 {
-                    new TdCategory { Description = "EatingOut" },
-                    new TdCategory { Description = "Food" },
-                    new TdCategory { Description = "Car" },
-                    new TdCategory { Description = "Electronics" },
-                    new TdCategory { Description = "Transfer" },
-                    new TdCategory { Description = "Education" },
-                    new TdCategory { Description = "Bills" },
-                    new TdCategory { Description = "Rent/Mortgage" },
-                    new TdCategory { Description = "Cellphone" },
-                    new TdCategory { Description = "Paycheck" },
-                    new TdCategory { Description = "Alcohol" },
-                    new TdCategory { Description = "Gas" },
-                    new TdCategory { Description = "Fee" },
-                    new TdCategory { Description = "Health" },
-                    new TdCategory { Description = "Clothing" },
-                    new TdCategory { Description = "Fun" },
-                    new TdCategory { Description = "Miscellaneous" },
-                    new TdCategory { Description = "Gifts" },
-                    new TdCategory { Description = "Wedding" },
-                    new TdCategory { Description = "Debt" },
-                    new TdCategory { Description = "Pets" },
-                    new TdCategory { Description = "Parking" },
-                    new TdCategory { Description = "Paddling" },
-                    new TdCategory { Description = "Household Goods" },
-                    new TdCategory { Description = "Cleaning" },
-                    new TdCategory { Description = "Insurance" },
-                    new TdCategory { Description = "Charity/Donation" },
-                    new TdCategory { Description = "Travel" },
-                    new TdCategory { Description = "Kids" },
-                    new TdCategory { Description = "Investments" }
+                    new TdCategory("EatingOut"),
+                    new TdCategory("Food"),
+                    new TdCategory("Car"),
+                    new TdCategory("Electronics"),
+                    new TdCategory("Transfer"),
+                    new TdCategory("Education"),
+                    new TdCategory("Bills"),
+                    new TdCategory("Rent/Mortgage"),
+                    new TdCategory("Cellphone"),
+                    new TdCategory("Paycheck"),
+                    new TdCategory("Alcohol"),
+                    new TdCategory("Gas"),
+                    new TdCategory("Fee"),
+                    new TdCategory("Health"),
+                    new TdCategory("Clothing"),
+                    new TdCategory("Fun"),
+                    new TdCategory("Miscellaneous"),
+                    new TdCategory("Gifts"),
+                    new TdCategory("Wedding"),
+                    new TdCategory("Debt"),
+                    new TdCategory("Pets"),
+                    new TdCategory("Parking"),
+                    new TdCategory("Paddling"),
+                    new TdCategory("Household Goods"),
+                    new TdCategory("Cleaning"),
+                    new TdCategory("Insurance"),
+                    new TdCategory("Charity/Donation"),
+                    new TdCategory("Travel"),
+                    new TdCategory("Kids"),
+                    new TdCategory("Investments")
                 }
                 .ForEach(x => context.TdCategory.Add(x));
                 context.SaveChanges();

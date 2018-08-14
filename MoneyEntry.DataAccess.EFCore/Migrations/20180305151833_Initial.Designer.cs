@@ -68,6 +68,12 @@ namespace MoneyEntry.DataAccess.EFCore.Migrations
                     b.Property<string>("LastName")
                         .HasColumnType("varchar(255)");
 
+                    b.Property<byte[]>("Salt")
+                        .HasColumnType("varbinary(128)");
+
+                    b.Property<byte[]>("PasswordHashed")
+                        .HasColumnType("varbinary(512)");
+
                     b.HasKey("PersonId");
 
                     b.HasIndex("FirstName", "LastName")

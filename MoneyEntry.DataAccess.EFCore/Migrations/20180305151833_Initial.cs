@@ -41,8 +41,10 @@ namespace MoneyEntry.DataAccess.EFCore.Migrations
                 {
                     PersonId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    FirstName = table.Column<string>(type: "varchar(255)", nullable: true),
-                    LastName = table.Column<string>(type: "varchar(255)", nullable: true)
+                    FirstName = table.Column<string>(type: "varchar(255)", nullable: false),
+                    LastName = table.Column<string>(type: "varchar(255)", nullable: false),
+                    Salt = table.Column<byte[]>(type: "varbinary(128)", nullable: false),
+                    Password = table.Column<byte[]>(type: "varbinary(512)", nullable: false)
                 },
                 constraints: table =>
                 {
