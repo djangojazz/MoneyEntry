@@ -71,8 +71,6 @@ namespace MoneyEntry.ExpensesAPI
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            app.UseMvc(routes => routes.MapRoute(name: "default", template: "expensesApi/{controller}/{action}"));
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -84,7 +82,7 @@ namespace MoneyEntry.ExpensesAPI
             }
 
             app.UseHttpsRedirection();
-            app.UseMvc();
+            app.UseMvc(routes => routes.MapRoute(name: "default", template: "expensesApi/{controller}/{action}"));
         }
     }
 }
