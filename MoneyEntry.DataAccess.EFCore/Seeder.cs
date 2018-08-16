@@ -14,7 +14,7 @@ namespace MoneyEntry.DataAccess.EFCore
 
             if(!context.TePerson.Any())
             {
-                context.TePerson.Add(new TePerson("Test", "Test", new byte[] { 128 }, new byte[] { 127, 126, 244 }));
+                context.TePerson.Add(new TePerson("Test", "Test", "TestUser", Crypto.GetSalt(), Crypto.GetSalt(256)));
                 context.SaveChanges();
             }
 

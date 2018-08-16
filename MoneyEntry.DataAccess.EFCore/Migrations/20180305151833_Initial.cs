@@ -43,6 +43,7 @@ namespace MoneyEntry.DataAccess.EFCore.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     FirstName = table.Column<string>(type: "varchar(255)", nullable: false),
                     LastName = table.Column<string>(type: "varchar(255)", nullable: false),
+                    UserName = table.Column<string>(type: "varchar(128)", nullable: false),
                     Salt = table.Column<byte[]>(type: "varbinary(128)", nullable: false),
                     Password = table.Column<byte[]>(type: "varbinary(512)", nullable: false)
                 },

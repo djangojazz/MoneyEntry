@@ -18,7 +18,6 @@ namespace MoneyEntry.ExpensesAPI
     public class Startup
     {
         private IConfiguration _config;
-        private IApplicationBuilder _app;
 
         public Startup(IConfiguration configuration)
         {

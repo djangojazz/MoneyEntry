@@ -50,6 +50,9 @@ namespace MoneyEntry.DataAccess.EFCore
         public List<TePerson> GetPeople() => GetEntities<TePerson>().ToList();
         public async Task<List<TePerson>> GetPeopleAsync() => await GetEntitiesAsync<TePerson>();
 
+        public TePerson GetPerson(string userName) => GetEntities<TePerson>(x => x.UserName == userName).SingleOrDefault();
+        public async Task<TePerson> GetPersonAsync(string userName) => (await GetEntitiesAsync<TePerson>(x => x.UserName == userName)).SingleOrDefault();
+
         public List<vTrans> QueryMoneyEntries(DateTime start, DateTime end, int personId, int categoryId, int typeId, string description = null, decimal? moneyAmount = null)
         {
             var list = GetEntities<vTrans>(x => x.CreatedDate >= start && x.CreatedDate <= end && x.PersonID == personId && x.TypeID == typeId && x.CategoryID == categoryId);

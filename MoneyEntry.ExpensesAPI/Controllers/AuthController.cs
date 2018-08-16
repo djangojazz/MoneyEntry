@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using MoneyEntry.DataAccess.EFCore;
 using MoneyEntry.ExpensesAPI.Models;
 
 namespace MoneyEntry.ExpensesAPI.Controllers
@@ -20,11 +21,25 @@ namespace MoneyEntry.ExpensesAPI.Controllers
     {
         private readonly IHostingEnvironment _env;
         private readonly IConfiguration _config;
+        ExpensesRepository _repo = ExpensesRepository.Instance;
 
         public AuthController(IHostingEnvironment env, IConfiguration config)
         {
             _env = env;
             _config = config;
+        }
+
+        [HttpGet, Route("{userName}")]
+        public async Task<IActionResult> GetSalt(string userName)
+        {
+            if (userName == null)
+                return BadRequest("Need a User Name");
+
+            var user = await _repo.GetPersonAsync(userName);
+            if (user == null)
+                return NotFound("User does not exist");
+
+            return Ok(user.Salt);
         }
 
         [HttpPost()]
