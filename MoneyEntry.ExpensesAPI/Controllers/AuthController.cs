@@ -45,41 +45,29 @@ namespace MoneyEntry.ExpensesAPI.Controllers
         [HttpPost()]
         public async Task<IActionResult> CreateUserToken([FromBody] UserTokenModel request)
         {
-            if (!ModelState.IsValid || request.Password == null)
+            if (!ModelState.IsValid)
                 return BadRequest();
+
+            if (request.Password == null)
+                return BadRequest("Password is incorrect or missing");
 
             try
             {
-                
-                //TODO: verify client user/pass
-                //var user = await _repo.RetrieveInitialUserByName(request.CompanyName, request.DepartmentName,
-                //    request.ApplicationName, request.UserName);
-                
-                //if (user != null)
-                //{
+                //await _repo.UpdatePasswordAsync(request.UserName, request.Password);
 
+                var user = await _repo.GetPersonAsync(request.UserName);
 
-                    //TODO: Hash
-                    //// verify hashed password
-                    //var hashed = _hasher.Hash(user.Salt, Encoding.UTF8.GetBytes(request.Password));
+                if (Convert.ToBase64String(user.Password) != Convert.ToBase64String(request.Password))
+                    return BadRequest("Password is incorrect");
 
-                    //if (!hashed.SequenceEqual(user.PasswordHashed))
-                    //{
-                    //    _logger.LogError("[token request] invalid user creds [{0}] [{1}]", request.ClientId, request.UserName);
-                    //    return Unauthorized();
-                    //}
+                // generate access and refresh tokens
+                var tokenPair = await CreateAccessToken(request);
 
-                    // generate access and refresh tokens
-                    var tokenPair = await CreateAccessToken(request);
+                var handler = new JwtSecurityTokenHandler();
+                var accessJwt = handler.WriteToken(tokenPair);
 
-                    var handler = new JwtSecurityTokenHandler();
-                    var accessJwt = handler.WriteToken(tokenPair);
-                
-                    return Ok(new
-                    {
-                        AccessToken = accessJwt
-                    });
-                //}
+                return Ok(new { token = accessJwt });
+
             }
             catch (Exception ex)
             {

@@ -87,6 +87,44 @@ namespace MoneyEntry.DataAccess.EFCore
         #endregion
 
         #region AlterMethods
+        public void UpdatePassword(string userName, byte[] password)
+        {
+            try
+            {
+                using (var context = new ExpensesContext(_connection))
+                {
+                    var user = context.TePerson.SingleOrDefault(x => x.UserName == userName);
+                    user.Password = password;
+                    context.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+#if DEBUG
+                Console.WriteLine(ex.Message);
+#endif
+            }
+        }
+
+        public async Task UpdatePasswordAsync(string userName, byte[] password)
+        {
+            try
+            {
+                using (var context = new ExpensesContext(_connection))
+                {
+                    var user = context.TePerson.SingleOrDefault(x => x.UserName == userName);
+                    user.Password = password;
+                    await context.SaveChangesAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+#if DEBUG
+                Console.WriteLine(ex.Message);
+#endif
+            }
+        }
+
         public void AddCategory(string description)
         {
             try
