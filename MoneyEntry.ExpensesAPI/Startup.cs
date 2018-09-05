@@ -30,21 +30,8 @@ namespace MoneyEntry.ExpensesAPI
             services.AddMvc();
             services.AddCors();
 
-            var sqlServer = _config["SQLServer"];
-            var sqlUser = _config["SQLUser"];
-            var sqlPassword = _config["SQLPassword"];
-
-            if (sqlServer != null && sqlUser != null && sqlPassword != null)
-            {
-                var connectionBuilder = new SqlConnectionStringBuilder
-                {
-                    DataSource = sqlServer,
-                    InitialCatalog = "Expenses",
-                    UserID = sqlUser,
-                    Password = sqlPassword
-                };
-            }
-
+            Boolean.TryParse(_config["UseAzure"], out bool useAzure);
+            
             var tokenSymetricKey = Convert.FromBase64String(_config["Security:Tokens:Key"]);
             var text = Encoding.UTF8.GetString(tokenSymetricKey);
 
@@ -59,11 +46,28 @@ namespace MoneyEntry.ExpensesAPI
                     };
                 });
 
-            
-            
-            ExpensesRepository.SetConnectionFirstTime(
-                //connectionBuilder.ConnectionString);
-                _config.GetConnectionString("Expenses"));
+            if (useAzure)
+            {
+                var sqlServer = _config["SQLServer"];
+                var sqlUser = _config["SQLUser"];
+                var sqlPassword = _config["SQLPassword"];
+
+                if (sqlServer != null && sqlUser != null && sqlPassword != null)
+                {
+                    ExpensesRepository.SetConnectionFirstTime(new SqlConnectionStringBuilder
+                    {
+                        DataSource = sqlServer,
+                        InitialCatalog = "Expenses",
+                        UserID = sqlUser,
+                        Password = sqlPassword
+                    }.ConnectionString);
+                }
+            }
+            else
+            {
+                ExpensesRepository.SetConnectionFirstTime(_config.GetConnectionString("Expenses"));
+            }
+
             ExpensesRepository.Instance.SeedDatabase();
         }
 
@@ -81,7 +85,7 @@ namespace MoneyEntry.ExpensesAPI
             }
 
             app.UseHttpsRedirection();
-            app.UseMvc(routes => routes.MapRoute(name: "default", template: "expensesApi/{controller}/{action}"));
+            app.UseMvc();
         }
     }
 }

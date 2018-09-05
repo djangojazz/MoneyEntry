@@ -22,17 +22,21 @@ namespace MoneyEntry.ExpensesAPI
             .ConfigureAppConfiguration((context, config) =>
             {
                 var builtConfig = config.Build();
+                Boolean.TryParse(builtConfig["UseAzure"], out bool useIt);
 
-                var keyVaultConfigBuilder = new ConfigurationBuilder();
-                
-                keyVaultConfigBuilder.AddAzureKeyVault(
-                    $"https://{builtConfig["Azure:Vault"]}.vault.azure.net/",
-                    builtConfig["Azure:ClientId"],
-                    builtConfig["Azure:ClientSecret"]);
+                if (useIt)
+                {
+                    var keyVaultConfigBuilder = new ConfigurationBuilder();
 
-                var keyVaultConfig = keyVaultConfigBuilder.Build();
+                    keyVaultConfigBuilder.AddAzureKeyVault(
+                        $"https://{builtConfig["Azure:Vault"]}.vault.azure.net/",
+                        builtConfig["Azure:ClientId"],
+                        builtConfig["Azure:ClientSecret"]);
 
-                config.AddConfiguration(keyVaultConfig);
+                    var keyVaultConfig = keyVaultConfigBuilder.Build();
+
+                    config.AddConfiguration(keyVaultConfig);
+                }
             })
                 .UseStartup<Startup>()
                 .Build();
