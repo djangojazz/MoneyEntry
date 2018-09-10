@@ -6,7 +6,7 @@ namespace MoneyEntry.ExpensesAPI.Models
     {
         [Required]
         public string UserName { get; set; }
-        //[Required]
+        public byte[] Salt { get; set; }
         public byte[] Password { get; set; }
     }
 }

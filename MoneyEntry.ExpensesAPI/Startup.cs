@@ -29,8 +29,6 @@ namespace MoneyEntry.ExpensesAPI
         {
             services.AddMvc();
             services.AddCors();
-
-            Boolean.TryParse(_config["UseAzure"], out bool useAzure);
             
             var tokenSymetricKey = Convert.FromBase64String(_config["Security:Tokens:Key"]);
             var text = Encoding.UTF8.GetString(tokenSymetricKey);
@@ -46,6 +44,7 @@ namespace MoneyEntry.ExpensesAPI
                     };
                 });
 
+            Boolean.TryParse(_config["UseAzure"], out bool useAzure);
             if (useAzure)
             {
                 var sqlServer = _config["SQLServer"];
@@ -68,6 +67,7 @@ namespace MoneyEntry.ExpensesAPI
                 ExpensesRepository.SetConnectionFirstTime(_config.GetConnectionString("Expenses"));
             }
 
+            //ExpensesRepository.SetConnectionFirstTime(_config.GetConnectionString("Expenses"));
             ExpensesRepository.Instance.SeedDatabase();
         }
 

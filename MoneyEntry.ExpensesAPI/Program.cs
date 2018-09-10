@@ -22,9 +22,9 @@ namespace MoneyEntry.ExpensesAPI
             .ConfigureAppConfiguration((context, config) =>
             {
                 var builtConfig = config.Build();
-                Boolean.TryParse(builtConfig["UseAzure"], out bool useIt);
+                Boolean.TryParse(builtConfig["UseAzure"], out bool useAzure);
 
-                if (useIt)
+                if (useAzure)
                 {
                     var keyVaultConfigBuilder = new ConfigurationBuilder();
 

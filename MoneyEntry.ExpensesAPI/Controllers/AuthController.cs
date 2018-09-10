@@ -32,14 +32,40 @@ namespace MoneyEntry.ExpensesAPI.Controllers
         [HttpGet, Route("{userName}")]
         public async Task<IActionResult> GetSalt(string userName)
         {
+            //TODO: Data is janky here on Azure and needs to be fixed.
             if (userName == null)
                 return BadRequest("Need a User Name");
+
+            await _repo.GenerateSaltAsync(userName);
 
             var user = await _repo.GetPersonAsync(userName);
             if (user == null)
                 return NotFound("User does not exist");
 
             return Ok(user.Salt);
+        }
+
+        [HttpPost()]
+        public async Task<IActionResult> GenerateSalt([FromBody] UserTokenModel request)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest();
+
+            if (request.Salt == null)
+                return BadRequest("Salt is incorrect or missing");
+
+            if ((await _repo.PersonExistsAsync(request.UserName)))
+                return BadRequest("User does not exist");
+            
+            try
+            {
+                await _repo.GenerateSaltAsync(request.UserName, request.Salt);
+                return Ok();
+            }
+            catch (Exception)
+            {
+                return BadRequest("Could not update the salt");
+            }
         }
 
         [HttpPost()]
@@ -53,7 +79,7 @@ namespace MoneyEntry.ExpensesAPI.Controllers
 
             try
             {
-                //await _repo.UpdatePasswordAsync(request.UserName, request.Password);
+                await _repo.UpdatePasswordAsync(request.UserName, request.Password);
 
                 var user = await _repo.GetPersonAsync(request.UserName);
 

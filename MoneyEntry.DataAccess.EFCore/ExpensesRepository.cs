@@ -52,6 +52,7 @@ namespace MoneyEntry.DataAccess.EFCore
 
         public TePerson GetPerson(string userName) => GetEntities<TePerson>(x => x.UserName == userName).SingleOrDefault();
         public async Task<TePerson> GetPersonAsync(string userName) => (await GetEntitiesAsync<TePerson>(x => x.UserName == userName)).SingleOrDefault();
+        public async Task<bool> PersonExistsAsync(string userName) => (await GetEntitiesAsync<TePerson>(x => x.UserName == userName)).Any();
 
         public List<vTrans> QueryMoneyEntries(DateTime start, DateTime end, int personId, int categoryId, int typeId, string description = null, decimal? moneyAmount = null)
         {
@@ -87,7 +88,7 @@ namespace MoneyEntry.DataAccess.EFCore
         #endregion
 
         #region AlterMethods
-        public void UpdatePassword(string userName, byte[] password)
+        public async Task UpdatePasswordAsync(string userName, byte[] password)
         {
             try
             {
@@ -95,7 +96,7 @@ namespace MoneyEntry.DataAccess.EFCore
                 {
                     var user = context.TePerson.SingleOrDefault(x => x.UserName == userName);
                     user.Password = password;
-                    context.SaveChanges();
+                    await context.SaveChangesAsync();
                 }
             }
             catch (Exception ex)
@@ -105,15 +106,16 @@ namespace MoneyEntry.DataAccess.EFCore
 #endif
             }
         }
-
-        public async Task UpdatePasswordAsync(string userName, byte[] password)
+        
+        public async Task GenerateSaltAsync(string userName, byte[] salt = null)
         {
             try
             {
                 using (var context = new ExpensesContext(_connection))
                 {
                     var user = context.TePerson.SingleOrDefault(x => x.UserName == userName);
-                    user.Password = password;
+                    user.Salt = salt ?? Crypto.GetSalt();
+                    user.Password = null;
                     await context.SaveChangesAsync();
                 }
             }
