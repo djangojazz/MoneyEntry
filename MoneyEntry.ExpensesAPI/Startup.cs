@@ -66,8 +66,7 @@ namespace MoneyEntry.ExpensesAPI
             {
                 ExpensesRepository.SetConnectionFirstTime(_config.GetConnectionString("Expenses"));
             }
-
-            //ExpensesRepository.SetConnectionFirstTime(_config.GetConnectionString("Expenses"));
+            
             ExpensesRepository.Instance.SeedDatabase();
         }
 
@@ -85,7 +84,7 @@ namespace MoneyEntry.ExpensesAPI
             }
 
             app.UseHttpsRedirection();
-            app.UseMvc();
+            app.UseMvc(routes => routes.MapRoute(name: "default", template: "expensesApi/{controller}/{action}"));
         }
     }
 }

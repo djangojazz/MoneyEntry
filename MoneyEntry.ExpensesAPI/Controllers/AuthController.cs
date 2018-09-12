@@ -15,9 +15,9 @@ using MoneyEntry.ExpensesAPI.Models;
 
 namespace MoneyEntry.ExpensesAPI.Controllers
 {
-    [Route("expensesApi/[controller]/[action]")]
-    [ApiController]
-    public class AuthController : ControllerBase
+    //[Route("expensesApi/[controller]/[action]")]
+    //[ApiController]
+    public class AuthController : BaseController
     {
         private readonly IHostingEnvironment _env;
         private readonly IConfiguration _config;
@@ -43,7 +43,7 @@ namespace MoneyEntry.ExpensesAPI.Controllers
 
                 return Ok(user.Salt);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return BadRequest("Could not retrieve the salt");
             }
@@ -66,7 +66,7 @@ namespace MoneyEntry.ExpensesAPI.Controllers
                 await _repo.GenerateSaltAsync(request.UserName, request.Salt);
                 return Ok();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return BadRequest("Could not update the salt");
             }
@@ -86,17 +86,15 @@ namespace MoneyEntry.ExpensesAPI.Controllers
                 //await _repo.UpdatePasswordAsync(request.UserName, request.Password);
 
                 var user = await _repo.GetPersonAsync(request.UserName);
+                if (user == null)
+                    return NotFound("User does not exist");
 
                 if (Convert.ToBase64String(user.Password) != Convert.ToBase64String(request.Password))
                     return BadRequest("Password is incorrect");
-
-                // generate access and refresh tokens
-                var tokenPair = await CreateAccessToken(request);
-
-                var handler = new JwtSecurityTokenHandler();
-                var accessJwt = handler.WriteToken(tokenPair);
-
-                return Ok(new { token = accessJwt });
+                
+                var tokenPair = await CreateAccessToken(request, user.PersonId);
+                
+                return Ok(new { token = new JwtSecurityTokenHandler().WriteToken(tokenPair) });
 
             }
             catch (Exception ex)
@@ -117,12 +115,12 @@ namespace MoneyEntry.ExpensesAPI.Controllers
         }
         
 
-        private async Task<JwtSecurityToken> CreateAccessToken(UserTokenModel request)
+        private async Task<JwtSecurityToken> CreateAccessToken(UserTokenModel request, int personId)
         {
             var claims = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.UniqueName, request.UserName),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+                new Claim(JwtRegisteredClaimNames.Jti, personId.ToString())
             };
 
             var key = new SymmetricSecurityKey(Convert.FromBase64String(_config["Security:Tokens:Key"]));
