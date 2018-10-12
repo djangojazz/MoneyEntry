@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using MoneyEntry.DataAccess.EFCore;
 using MoneyEntry.ExpensesAPI.Models;
+using MoneyEntry.ExpensesAPI.Services;
 
 namespace MoneyEntry.ExpensesAPI.Controllers
 {
@@ -19,7 +20,7 @@ namespace MoneyEntry.ExpensesAPI.Controllers
         private readonly IConfiguration _config;
         ExpensesRepository _repo = ExpensesRepository.Instance;
 
-        public AuthController(IHostingEnvironment env, IConfiguration config)
+        public AuthController(IHostingEnvironment env, IConfiguration config, IJWTService jwtService) : base(jwtService)
         {
             _env = env;
             _config = config;
@@ -87,9 +88,8 @@ namespace MoneyEntry.ExpensesAPI.Controllers
 
                 if (Convert.ToBase64String(user.Password) != Convert.ToBase64String(request.Password))
                     return BadRequest("Password is incorrect");
-                
-                var tokenPair = await CreateAccessToken(request, user.PersonId);
-                
+
+                var tokenPair = await JwtService.CreateAccessToken(request, user.PersonId, _config["Security:Tokens:Key"], _config["Security:Tokens:AccessExpireMinutes"], _config["Security:Tokens:Issuer"], _config["Security:Tokens:Audience"]);
                 return Ok(new { token = new JwtSecurityTokenHandler().WriteToken(tokenPair) });
 
             }

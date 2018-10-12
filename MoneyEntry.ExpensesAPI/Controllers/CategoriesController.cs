@@ -4,12 +4,15 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MoneyEntry.DataAccess.EFCore;
+using MoneyEntry.ExpensesAPI.Services;
 
 namespace MoneyEntry.ExpensesAPI.Controllers
 {
     [Route("expensesApi/[controller]/[action]"), Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class CategoriesController : BaseController
     {
+        public CategoriesController(IJWTService jwt): base(jwt) {}
+
         ExpensesRepository _repo = ExpensesRepository.Instance;
 
         [HttpGet]

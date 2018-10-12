@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using MoneyEntry.DataAccess.EFCore;
+using MoneyEntry.ExpensesAPI.Services;
 
 namespace MoneyEntry.ExpensesAPI
 {
@@ -25,6 +26,7 @@ namespace MoneyEntry.ExpensesAPI
         {
             services.AddMvc();
             services.AddCors();
+            services.AddScoped<IJWTService, JWTService>();
             
             var tokenSymetricKey = Convert.FromBase64String(_config["Security:Tokens:Key"]);
             var text = Encoding.UTF8.GetString(tokenSymetricKey);

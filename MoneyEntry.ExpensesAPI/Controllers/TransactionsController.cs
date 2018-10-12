@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MoneyEntry.DataAccess.EFCore;
 using MoneyEntry.ExpensesAPI.Models;
+using MoneyEntry.ExpensesAPI.Services;
 
 namespace MoneyEntry.ExpensesAPI.Controllers
 {
@@ -14,6 +15,8 @@ namespace MoneyEntry.ExpensesAPI.Controllers
         //Controller
     {
         ExpensesRepository _repo = ExpensesRepository.Instance;
+
+        public TransactionsController(IJWTService jwt): base(jwt) {}
 
         [HttpGet, Route("{personId:int}")]
         public async Task<IActionResult> GetLastDate(int personId) => Ok(await _repo.LastDateEnteredByPersonAsync(personId));
