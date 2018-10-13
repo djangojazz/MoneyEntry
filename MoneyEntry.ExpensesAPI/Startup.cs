@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -24,14 +26,38 @@ namespace MoneyEntry.ExpensesAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddOptions();
             services.AddMvc();
             services.AddCors();
             services.AddScoped<IJWTService, JWTService>();
-            
+            services.AddScoped<JwtSecurityTokenHandler>();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
             var tokenSymetricKey = Convert.FromBase64String(_config["Security:Tokens:Key"]);
             var text = Encoding.UTF8.GetString(tokenSymetricKey);
 
-            services.AddAuthentication()
+            services.AddAuthentication(options =>
+                {
+                    options.DefaultScheme = "Cookies";
+                    options.DefaultChallengeScheme = "oidc";
+                })
+                .AddCookie("Cookies")
+                .AddOpenIdConnect("oidc", options =>
+                {
+                    options.SignInScheme = "Cookies";
+
+                    options.Authority = "http://localhost:7561";
+                    options.RequireHttpsMetadata = false;
+
+                    options.ClientId = "testclient";
+                    options.ClientSecret = "secret";
+                    options.ResponseType = "code id_token";
+                    options.SaveTokens = true;
+                    options.GetClaimsFromUserInfoEndpoint = true;
+
+                    options.Scope.Add("testapi");
+                    options.Scope.Add("offline_access");
+                })
                 .AddJwtBearer(cfg =>
                 {
                     cfg.TokenValidationParameters = new TokenValidationParameters()
@@ -81,6 +107,7 @@ namespace MoneyEntry.ExpensesAPI
                 app.UseHsts();
             }
 
+            app.UseAuthentication();
             app.UseHttpsRedirection();
             app.UseMvc();
         }

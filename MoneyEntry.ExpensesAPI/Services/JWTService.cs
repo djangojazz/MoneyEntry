@@ -12,14 +12,14 @@ namespace MoneyEntry.ExpensesAPI.Services
 {
     public class JWTService : IJWTService
     {
-        public async Task<UserTokenModel> GetUserDetailsFromJWTToken(string token, JwtSecurityTokenHandler handler, string key)
+        public async Task<UserTokenModel> GetUserDetailsFromJWTToken(string token, JwtSecurityTokenHandler handler, string keyInput)
         {
             var validationParameters = new TokenValidationParameters
             {
                 RequireExpirationTime = false,
                 ValidateAudience = false,
                 ValidateIssuer = false,
-                IssuerSigningKeys = new[] { new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key)) }
+                IssuerSigningKeys = new[] { new SymmetricSecurityKey(Convert.FromBase64String(keyInput)) }
             };
             handler.ValidateToken(token, validationParameters, out SecurityToken t);
             var claims = ((JwtSecurityToken)t).Claims;
@@ -28,8 +28,8 @@ namespace MoneyEntry.ExpensesAPI.Services
             {
                 return new UserTokenModel
                 {
-                    UserName = claims.SingleOrDefault(x => x.Type == "UniqueName")?.Value ?? string.Empty,
-                    UserId = Int32.Parse(claims.SingleOrDefault(x => x.Type == "Jti")?.Value ?? "0")
+                    UserName = claims.SingleOrDefault(x => x.Type == "unique_name")?.Value ?? string.Empty,
+                    UserId = Int32.Parse(claims.SingleOrDefault(x => x.Type == "jti")?.Value ?? "0")
                 };
             });
         }

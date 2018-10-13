@@ -17,13 +17,12 @@ namespace MoneyEntry.ExpensesAPI.Controllers
     public class AuthController : BaseController
     {
         private readonly IHostingEnvironment _env;
-        private readonly IConfiguration _config;
         ExpensesRepository _repo = ExpensesRepository.Instance;
 
-        public AuthController(IHostingEnvironment env, IConfiguration config, IJWTService jwtService) : base(jwtService)
+
+        public AuthController(IHostingEnvironment env, IConfiguration config, IJWTService jwtService, JwtSecurityTokenHandler handler) : base(jwtService, handler, config)
         {
             _env = env;
-            _config = config;
         }
 
         [HttpGet, Route("{userName}")]
@@ -89,9 +88,8 @@ namespace MoneyEntry.ExpensesAPI.Controllers
                 if (Convert.ToBase64String(user.Password) != Convert.ToBase64String(request.Password))
                     return BadRequest("Password is incorrect");
 
-                var tokenPair = await JwtService.CreateAccessToken(request, user.PersonId, _config["Security:Tokens:Key"], _config["Security:Tokens:AccessExpireMinutes"], _config["Security:Tokens:Issuer"], _config["Security:Tokens:Audience"]);
-                return Ok(new { token = new JwtSecurityTokenHandler().WriteToken(tokenPair) });
-
+                //var tokenPair = await JwtService.CreateAccessToken(request, user.PersonId, Config["Security:Tokens:Key"], Config["Security:Tokens:AccessExpireMinutes"], Config["Security:Tokens:Issuer"], Config["Security:Tokens:Audience"]);
+                return Ok(new { token = new JwtSecurityTokenHandler().WriteToken(await CreateAccessToken(request, user.PersonId)) });
             }
             catch (Exception ex)
             {
@@ -119,17 +117,17 @@ namespace MoneyEntry.ExpensesAPI.Controllers
                 new Claim(JwtRegisteredClaimNames.Jti, personId.ToString())
             };
 
-            var key = new SymmetricSecurityKey(Convert.FromBase64String(_config["Security:Tokens:Key"]));
+            var key = new SymmetricSecurityKey(Convert.FromBase64String(Config["Security:Tokens:Key"]));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-            Int32.TryParse(_config["Security:Tokens:AccessExpireMinutes"], out int minutes);
+            Int32.TryParse(Config["Security:Tokens:AccessExpireMinutes"], out int minutes);
 
             if (minutes == 0)
                 return null;
             
             //Just to 
             return await Task.Factory.StartNew(() => new JwtSecurityToken(
-                issuer: _config["Security:Tokens:Issuer"],
-                audience: _config["Security:Tokens:Audience"],
+                issuer: Config["Security:Tokens:Issuer"],
+                audience: Config["Security:Tokens:Audience"],
                 claims: claims,
                 expires: DateTime.UtcNow.AddMinutes(minutes),
                 signingCredentials: creds));

@@ -1,9 +1,13 @@
 ﻿using System;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using MoneyEntry.DataAccess.EFCore;
 using MoneyEntry.ExpensesAPI.Models;
 using MoneyEntry.ExpensesAPI.Services;
@@ -15,11 +19,20 @@ namespace MoneyEntry.ExpensesAPI.Controllers
         //Controller
     {
         ExpensesRepository _repo = ExpensesRepository.Instance;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public TransactionsController(IJWTService jwt): base(jwt) {}
+        public TransactionsController(IJWTService jwt, JwtSecurityTokenHandler handler, IConfiguration configuration, IHttpContextAccessor httpContextAccessor) : base(jwt, handler, configuration)
+        {
+            _httpContextAccessor = httpContextAccessor;
+        }
 
-        [HttpGet, Route("{personId:int}")]
-        public async Task<IActionResult> GetLastDate(int personId) => Ok(await _repo.LastDateEnteredByPersonAsync(personId));
+        [HttpGet]
+        public async Task<IActionResult> GetLastDate()
+        {
+            //var token2 = await _httpContextAccessor.HttpContext.GetTokenAsync(JwtBearerDefaults.AuthenticationScheme, "access_token");
+            var person = await GetUserModelFromJWT();
+            return Ok(await _repo.LastDateEnteredByPersonAsync(person.UserId));
+        }
 
         [HttpGet]
         public async Task<IActionResult> GetDate() => Ok(await Task.Factory.StartNew(() => new DateTime(2018, 2, 1)));
