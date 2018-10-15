@@ -29,7 +29,6 @@ namespace MoneyEntry.ExpensesAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> GetLastDate()
         {
-            //var token2 = await _httpContextAccessor.HttpContext.GetTokenAsync(JwtBearerDefaults.AuthenticationScheme, "access_token");
             var person = await GetUserModelFromJWT();
             return Ok(await _repo.LastDateEnteredByPersonAsync(person.UserId));
         }

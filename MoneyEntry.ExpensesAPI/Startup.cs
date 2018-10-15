@@ -6,8 +6,10 @@ using System.Text;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.IdentityModel.Tokens;
 using MoneyEntry.DataAccess.EFCore;
 using MoneyEntry.ExpensesAPI.Services;
@@ -31,7 +33,6 @@ namespace MoneyEntry.ExpensesAPI
             services.AddCors();
             services.AddScoped<IJWTService, JWTService>();
             services.AddScoped<JwtSecurityTokenHandler>();
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             var tokenSymetricKey = Convert.FromBase64String(_config["Security:Tokens:Key"]);
             var text = Encoding.UTF8.GetString(tokenSymetricKey);
