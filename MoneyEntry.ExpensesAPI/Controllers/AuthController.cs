@@ -87,8 +87,7 @@ namespace MoneyEntry.ExpensesAPI.Controllers
 
                 if (Convert.ToBase64String(user.Password) != Convert.ToBase64String(request.Password))
                     return BadRequest("Password is incorrect");
-
-                //var tokenPair = await JwtService.CreateAccessToken(request, user.PersonId, Config["Security:Tokens:Key"], Config["Security:Tokens:AccessExpireMinutes"], Config["Security:Tokens:Issuer"], Config["Security:Tokens:Audience"]);
+                
                 return Ok(new { token = new JwtSecurityTokenHandler().WriteToken(await CreateAccessToken(request, user.PersonId)) });
             }
             catch (Exception ex)
