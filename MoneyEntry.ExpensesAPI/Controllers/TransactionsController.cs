@@ -19,12 +19,26 @@ namespace MoneyEntry.ExpensesAPI.Controllers
         //Controller
     {
         ExpensesRepository _repo = ExpensesRepository.Instance;
-        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public TransactionsController(IJWTService jwt, JwtSecurityTokenHandler handler, IConfiguration configuration, IHttpContextAccessor httpContextAccessor) : base(jwt, handler, configuration)
+        public TransactionsController(IJWTService jwt, JwtSecurityTokenHandler handler, IConfiguration configuration) : base(jwt, handler, configuration) { }
+
+        [HttpGet]
+        public async Task<IActionResult> TestUp()
         {
-            _httpContextAccessor = httpContextAccessor;
+            var header = (string)Request.Headers["Authorization"];
+            var token = header.Split(' ').Skip(1).First();
+            var key = Config["Security:Tokens:key"];
+            return Ok(await JwtService.GetUserDetailsFromJWTToken(token, JWTHandler, key));
         }
+
+        //internal async Task<UserTokenModel> GetUserModelFromJWT() => await JwtService.GetUserDetailsFromJWTToken(
+        //        ((string)Request.Headers["Authorization"]).Split(' ').Skip(1).First(),
+        //        JWTHandler,
+        //        Config["Security:Tokens:Key"]);
+
+        [HttpGet]
+        public async Task<IActionResult> EchoJwt() => Ok(await GetUserModelFromJWT());
+
 
         [HttpGet]
         public async Task<IActionResult> GetLastDate()
