@@ -20,7 +20,6 @@ namespace MoneyEntry.ExpensesAPI.Models
         public int CategoryId { get; set; }
         [Required, DataType(DataType.DateTime)]
         public DateTime CreatedDate { get; set; }
-        [Required, Range(1,10)]
         public int PersonId { get; set; }
 
         public bool Reconciled { get; set; }
