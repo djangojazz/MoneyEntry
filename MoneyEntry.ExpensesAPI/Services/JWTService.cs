@@ -14,6 +14,9 @@ namespace MoneyEntry.ExpensesAPI.Services
     {
         public async Task<UserTokenModel> GetUserDetailsFromJWTToken(string token, JwtSecurityTokenHandler handler, string keyInput)
         {
+            if (String.IsNullOrEmpty(token) || string.IsNullOrEmpty(keyInput) || handler == null)
+                return null;
+
             var validationParameters = new TokenValidationParameters
             {
                 RequireExpirationTime = false,
@@ -36,6 +39,9 @@ namespace MoneyEntry.ExpensesAPI.Services
         
         public async Task<JwtSecurityToken> CreateAccessToken(UserTokenModel request, int personId, string keyInput, string expiresMinutes, string issuerIn, string audienceIn)
         {
+            if (String.IsNullOrEmpty(request?.UserName) || String.IsNullOrEmpty(keyInput) || String.IsNullOrEmpty(expiresMinutes) || String.IsNullOrEmpty(issuerIn) || string.IsNullOrEmpty(audienceIn) || personId == 0 || request == null)
+                return null;
+
             var claims = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.UniqueName, request.UserName),

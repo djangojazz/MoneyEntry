@@ -26,7 +26,7 @@ namespace MoneyEntry.ExpensesAPI
         }
 
         internal async Task<UserTokenModel> GetUserModelFromJWT() => await JwtService.GetUserDetailsFromJWTToken(
-                ((string)Request.Headers["Authorization"]).Split(' ').Skip(1).First(),
+                ((string)Request.Headers["Authorization"])?.Split(' ')?.Skip(1).FirstOrDefault(),
                 JWTHandler,
                 Config["Security:Tokens:Key"]);
 
@@ -34,7 +34,7 @@ namespace MoneyEntry.ExpensesAPI
             await JwtService.CreateAccessToken(request, personId, Config["Security:Tokens:Key"], Config["Security:Tokens:AccessExpireMinutes"], Config["Security:Tokens:Issuer"], Config["Security:Tokens:Audience"]);
             
 
-        internal async Task<IActionResult> DetermineModelThenReturn(Func<Task<IActionResult>> method)
+        internal async Task<IActionResult> DetermineModelToProceed(Func<Task<IActionResult>> method)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -51,6 +51,15 @@ namespace MoneyEntry.ExpensesAPI
 #endif
                 return BadRequest(s);
             }
+        }
+
+        internal async Task<IActionResult> CheckPersonToProceed(Func<int, Task<IActionResult>> method)
+        {
+            var personId = (await GetUserModelFromJWT())?.UserId ?? 0;
+            if (personId == 0)
+                return BadRequest("There is no user in the header element");
+
+            return await method(personId);
         }
     }
 }
