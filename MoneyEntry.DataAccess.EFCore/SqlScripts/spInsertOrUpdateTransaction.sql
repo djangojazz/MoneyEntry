@@ -102,7 +102,7 @@ begin
         ,	@StartAmount + ISNULL(Subtract,0) AS RunningTotal
         ,	x.Reconciled
         From ord x
-            LEFT JOIN	math z ON x.rwn = z.rwn
+            JOIN	math z ON x.rwn = z.rwn
         ORDER BY x.rwn
             		
         MERGE dbo.teTransaction AS T
