@@ -39,7 +39,7 @@ namespace MoneyEntry.DataAccess
     public List<MoneyEntryObservable> QueryMoneyEntries(DateTime start, DateTime end, int personId, int categoryId, int typeId, string description = null, decimal? moneyAmount = null)
     {
       return _dataRetreival.QueryMoneyEntries(start, end, personId, categoryId, typeId, description, moneyAmount)
-        .Select(dbTran => new MoneyEntryObservable(dbTran.PersonID, dbTran.TransactionID, dbTran.TransactionDesc, dbTran.CreatedDate, dbTran.TypeID, dbTran.CategoryID, dbTran.Amount, dbTran.RunningTotal, dbTran.reconciled))
+        .Select(dbTran => new MoneyEntryObservable(dbTran.PersonID, dbTran.TransactionID, dbTran.Description, dbTran.CreatedDate, dbTran.TypeID, dbTran.CategoryID, dbTran.Amount, dbTran.RunningTotal, dbTran.reconciled))
         .ToList();
     }
     
@@ -47,7 +47,7 @@ namespace MoneyEntry.DataAccess
     {
       return _dataRetreival.GetTransactionViews(start, end, personId)
       .OrderBy(d => d.CreatedDate)
-      .Select(dbTran => new MoneyEntryObservable(dbTran.PersonID, dbTran.TransactionID, dbTran.TransactionDesc, dbTran.CreatedDate, dbTran.TypeID, dbTran.CategoryID, dbTran.Amount, dbTran.RunningTotal, dbTran.reconciled))
+      .Select(dbTran => new MoneyEntryObservable(dbTran.PersonID, dbTran.TransactionID, dbTran.Description, dbTran.CreatedDate, dbTran.TypeID, dbTran.CategoryID, dbTran.Amount, dbTran.RunningTotal, dbTran.reconciled))
       .ToList();
     }
 

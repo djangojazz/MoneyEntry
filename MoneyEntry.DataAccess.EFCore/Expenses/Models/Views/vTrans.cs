@@ -10,7 +10,7 @@ namespace MoneyEntry.DataAccess.EFCore.Expenses.Models
         public int PersonID { get; set; }
         public string Name { get; set; }
         public decimal Amount { get; set; }
-        public string TransactionDesc { get; set; }
+        public string Description { get; set; }
         public byte TypeID { get; set; }
         public string Type { get; set; }
         public byte CategoryID { get; set; }

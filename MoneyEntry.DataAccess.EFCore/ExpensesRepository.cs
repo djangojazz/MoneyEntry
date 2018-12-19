@@ -57,14 +57,14 @@ namespace MoneyEntry.DataAccess.EFCore
         public List<vTrans> QueryMoneyEntries(DateTime start, DateTime end, int personId, int categoryId, int typeId, string description = null, decimal? moneyAmount = null)
         {
             var list = GetEntities<vTrans>(x => x.CreatedDate >= start && x.CreatedDate <= end && x.PersonID == personId && x.TypeID == typeId && x.CategoryID == categoryId);
-            var final = (description == null) ? list.Where(x => x.Amount.Equals(moneyAmount)) : list.Where(x => x.TransactionDesc.Contains(description));
+            var final = (description == null) ? list.Where(x => x.Amount.Equals(moneyAmount)) : list.Where(x => x.Description.Contains(description));
             return final.OrderBy(d => d.CreatedDate).ToList();
         }
 
         public async Task<List<vTrans>> QueryMoneyEntriesAsync(DateTime start, DateTime end, int personId, int categoryId, int typeId, string description = null, decimal? moneyAmount = null)
         {
             var list = await GetEntitiesAsync<vTrans>(x => x.CreatedDate >= start && x.CreatedDate <= end && x.PersonID == personId && x.TypeID == typeId && x.CategoryID == categoryId);
-            var final = (description == null) ? list.Where(x => x.Amount.Equals(moneyAmount)) : list.Where(x => x.TransactionDesc.Contains(description));
+            var final = (description == null) ? list.Where(x => x.Amount.Equals(moneyAmount)) : list.Where(x => x.Description.Contains(description));
             return final.OrderBy(d => d.CreatedDate).ToList();
         }
 
@@ -82,9 +82,9 @@ namespace MoneyEntry.DataAccess.EFCore
         public async Task<DateTime?> LastDateEnteredByPersonAsync(int personId, bool? reconciled = null) =>
             (await GetEntitiesAsync<vTrans>(x => x.PersonID == personId && x.Reconciled == (reconciled ?? false))).OrderByDescending(x => x.CreatedDate).Select(x => x.CreatedDate).FirstOrDefault();
 
-        public List<string> TextEntryAcrossRange(DateTime start, DateTime end, int personId) => GetTransactionViews(start, end, personId).Select(x => x.TransactionDesc).Distinct().ToList();
+        public List<string> TextEntryAcrossRange(DateTime start, DateTime end, int personId) => GetTransactionViews(start, end, personId).Select(x => x.Description).Distinct().ToList();
 
-        public async Task<List<string>> TextEntryAcrossRangeAsync(DateTime start, DateTime end, int personId) => (await GetTransactionViewsAsync(start, end, personId)).Select(x => x.TransactionDesc).Distinct().ToList();
+        public async Task<List<string>> TextEntryAcrossRangeAsync(DateTime start, DateTime end, int personId) => (await GetTransactionViewsAsync(start, end, personId)).Select(x => x.Description).Distinct().ToList();
         #endregion
 
         #region AlterMethods

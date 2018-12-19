@@ -4,7 +4,7 @@ select
 	p.PersonID
 ,	p.FirstName + ' ' + p.LastName as Name
 ,	t.Amount
-,	t.TransactionDesc
+,	t.TransactionDesc as Description
 ,	ty.TypeID
 ,	ty.Description as [Type]
 ,	c.CategoryID
