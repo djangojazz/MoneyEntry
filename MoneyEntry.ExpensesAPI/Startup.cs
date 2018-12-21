@@ -47,7 +47,7 @@ namespace MoneyEntry.ExpensesAPI
                 {
                     options.SignInScheme = "Cookies";
 
-                    options.Authority = "http://localhost:7561";
+                    options.Authority = "ExpensesAPI";
                     options.RequireHttpsMetadata = false;
 
                     options.ClientId = "testclient";
