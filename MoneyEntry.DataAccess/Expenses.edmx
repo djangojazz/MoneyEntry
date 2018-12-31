@@ -269,7 +269,7 @@ warning 6002: The table/view 'Expenses.dbo.vTrans' does not have a primary key d
           <Key>
             <PropertyRef Name="PersonID" />
             <PropertyRef Name="Amount" />
-            <PropertyRef Name="TransactionDesc" />
+            <PropertyRef Name="Description" />
             <PropertyRef Name="TypeID" />
             <PropertyRef Name="CategoryID" />
             <PropertyRef Name="TransactionID" />
@@ -277,7 +277,7 @@ warning 6002: The table/view 'Expenses.dbo.vTrans' does not have a primary key d
           <Property Name="PersonID" Type="Int32" Nullable="false" />
           <Property Name="Name" Type="String" MaxLength="511" FixedLength="false" Unicode="false" />
           <Property Name="Amount" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
-          <Property Name="TransactionDesc" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
           <Property Name="TypeID" Type="Byte" Nullable="false" />
           <Property Name="Type" Type="String" MaxLength="128" FixedLength="false" Unicode="false" />
           <Property Name="CategoryID" Type="Byte" Nullable="false" />
@@ -373,7 +373,7 @@ warning 6002: The table/view 'Expenses.dbo.vTrans' does not have a primary key d
                 <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
                 <ScalarProperty Name="Type" ColumnName="Type" />
                 <ScalarProperty Name="TypeID" ColumnName="TypeID" />
-                <ScalarProperty Name="TransactionDesc" ColumnName="TransactionDesc" />
+                <ScalarProperty Name="Description" ColumnName="TransactionDesc" />
                 <ScalarProperty Name="Amount" ColumnName="Amount" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="PersonID" ColumnName="PersonID" />

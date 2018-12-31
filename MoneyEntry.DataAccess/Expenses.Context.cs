@@ -13,14 +13,19 @@ namespace MoneyEntry.DataAccess
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     using System.Data.Entity.Core.Objects;
-    using System.Configuration;
     using System.Linq;
     
     public partial class ExpensesEntities : DbContext
     {
-        public ExpensesEntities() : base("name=ExpensesEntities") { }
-
-        public ExpensesEntities(string connection) : base(connection) { }
+        public ExpensesEntities()
+            : base("name=ExpensesEntities")
+        {
+        }
+    
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            throw new UnintentionalCodeFirstException();
+        }
     
         public virtual DbSet<tdCategory> tdCategory { get; set; }
         public virtual DbSet<tdType> tdType { get; set; }

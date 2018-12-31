@@ -45,15 +45,16 @@ namespace MoneyEntry.DataAccess
     
     public List<MoneyEntryObservable> GetModelObservables(DateTime start, DateTime end, int personId)
     {
-      return _dataRetreival.GetTransactionViews(start, end, personId)
-      .OrderBy(d => d.CreatedDate)
-      .Select(dbTran => new MoneyEntryObservable(dbTran.PersonID, dbTran.TransactionID, dbTran.Description, dbTran.CreatedDate, dbTran.TypeID, dbTran.CategoryID, dbTran.Amount, dbTran.RunningTotal, dbTran.reconciled))
+            var data = _dataRetreival.GetTransactionViews(start, end, personId)
+            .OrderBy(d => d.CreatedDate);
+
+            return data.Select(dbTran => new MoneyEntryObservable(dbTran.PersonID, dbTran.TransactionID, dbTran.Description, dbTran.CreatedDate, dbTran.TypeID, dbTran.CategoryID, dbTran.Amount, dbTran.RunningTotal, dbTran.reconciled))
       .ToList();
     }
 
     public DateTime? LastDateEnteredByPerson(int personId, bool? reconciled = null) => _dataRetreival.LastDateEnteredByPerson(personId, reconciled);
 
-    public List<string> TextEntryAcrossRange(DateTime start, DateTime end, int personId) => GetModelObservables(start, end, personId).Select(x => x.TransactionDesc).Distinct().ToList();
+    public List<string> TextEntryAcrossRange(DateTime start, DateTime end, int personId) => GetModelObservables(start, end, personId).Select(x => x.Description).Distinct().ToList();
     #endregion
 
     #region AlterMethods
@@ -82,7 +83,7 @@ namespace MoneyEntry.DataAccess
       {
         try
         {
-          return context.spInsertOrUpdateTransaction(tran.TransactionId, tran.Amount, tran.TransactionDesc, tran.TypeId, tran.CategoryId, tran.CreatedDate, tran.PersonId, tran.Reconciled);
+          return context.spInsertOrUpdateTransaction(tran.TransactionId, tran.Amount, tran.Description, tran.TypeId, tran.CategoryId, tran.CreatedDate, tran.PersonId, tran.Reconciled);
         }
         catch (Exception ex)
         {
