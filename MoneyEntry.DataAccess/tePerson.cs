@@ -20,9 +20,12 @@ namespace MoneyEntry.DataAccess
             this.teTransaction = new HashSet<teTransaction>();
         }
     
-        public int PersonID { get; set; }
+        public int PersonId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public string UserName { get; set; }
+        public byte[] Salt { get; set; }
+        public byte[] Password { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<teTransaction> teTransaction { get; set; }

@@ -5,58 +5,68 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="ExpensesModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="__EFMigrationsHistory">
+          <Key>
+            <PropertyRef Name="MigrationId" />
+          </Key>
+          <Property Name="MigrationId" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="ProductVersion" Type="nvarchar" MaxLength="32" Nullable="false" />
+        </EntityType>
         <EntityType Name="tdCategory">
           <Key>
-            <PropertyRef Name="CategoryID" />
+            <PropertyRef Name="CategoryId" />
           </Key>
-          <Property Name="CategoryID" Type="tinyint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CategoryId" Type="tinyint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Description" Type="varchar" MaxLength="128" />
         </EntityType>
         <EntityType Name="tdType">
           <Key>
-            <PropertyRef Name="TypeID" />
+            <PropertyRef Name="TypeId" />
           </Key>
-          <Property Name="TypeID" Type="tinyint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TypeId" Type="tinyint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Description" Type="varchar" MaxLength="128" />
         </EntityType>
         <EntityType Name="tePerson">
           <Key>
-            <PropertyRef Name="PersonID" />
+            <PropertyRef Name="PersonId" />
           </Key>
-          <Property Name="PersonID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="FirstName" Type="varchar" MaxLength="255" />
-          <Property Name="LastName" Type="varchar" MaxLength="255" />
+          <Property Name="PersonId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FirstName" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="LastName" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="UserName" Type="varchar" MaxLength="128" Nullable="false" />
+          <Property Name="Salt" Type="varbinary" MaxLength="128" Nullable="false" />
+          <Property Name="Password" Type="varbinary" MaxLength="512" Nullable="false" />
         </EntityType>
         <EntityType Name="teTransaction">
           <Key>
-            <PropertyRef Name="TransactionID" />
+            <PropertyRef Name="TransactionId" />
           </Key>
-          <Property Name="TransactionID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TransactionId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Amount" Type="money" Nullable="false" />
-          <Property Name="TransactionDesc" Type="varchar" MaxLength="128" Nullable="false" />
-          <Property Name="TypeID" Type="tinyint" Nullable="false" />
-          <Property Name="CategoryID" Type="tinyint" Nullable="false" />
-          <Property Name="CreatedDt" Type="date" />
-          <Property Name="ModifiedDt" Type="date" />
-          <Property Name="reconciled" Type="bit" />
+          <Property Name="CategoryId" Type="tinyint" />
+          <Property Name="CreatedDt" Type="datetime2" Precision="7" />
+          <Property Name="ModifiedDt" Type="datetime2" Precision="7" />
+          <Property Name="PersonId" Type="int" Nullable="false" />
+          <Property Name="Reconciled" Type="bit" />
           <Property Name="RunningTotal" Type="money" />
-          <Property Name="PersonID" Type="int" />
+          <Property Name="TransactionDesc" Type="varchar" MaxLength="128" />
+          <Property Name="TypeId" Type="tinyint" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'Expenses.dbo.vTrans' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'ExpensesEF.dbo.vTrans' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="vTrans">
           <Key>
             <PropertyRef Name="PersonID" />
+            <PropertyRef Name="Name" />
             <PropertyRef Name="Amount" />
-            <PropertyRef Name="TransactionDesc" />
             <PropertyRef Name="TypeID" />
             <PropertyRef Name="CategoryID" />
             <PropertyRef Name="TransactionID" />
           </Key>
           <Property Name="PersonID" Type="int" Nullable="false" />
-          <Property Name="Name" Type="varchar" MaxLength="511" />
+          <Property Name="Name" Type="varchar" MaxLength="511" Nullable="false" />
           <Property Name="Amount" Type="money" Nullable="false" />
-          <Property Name="TransactionDesc" Type="varchar" MaxLength="128" Nullable="false" />
+          <Property Name="Description" Type="varchar" MaxLength="128" />
           <Property Name="TypeID" Type="tinyint" Nullable="false" />
           <Property Name="Type" Type="varchar" MaxLength="128" />
           <Property Name="CategoryID" Type="tinyint" Nullable="false" />
@@ -64,21 +74,46 @@ warning 6002: The table/view 'Expenses.dbo.vTrans' does not have a primary key d
           <Property Name="CreatedDate" Type="date" />
           <Property Name="TransactionID" Type="int" Nullable="false" />
           <Property Name="RunningTotal" Type="money" />
-          <Property Name="reconciled" Type="bit" />
+          <Property Name="Reconciled" Type="bit" />
         </EntityType>
-        <Association Name="FK_Transaction_Person">
-          <End Role="tePerson" Type="Self.tePerson" Multiplicity="0..1" />
+        <Association Name="FK_teTransaction_tdCategory_CategoryId">
+          <End Role="tdCategory" Type="Self.tdCategory" Multiplicity="0..1" />
           <End Role="teTransaction" Type="Self.teTransaction" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="tePerson">
-              <PropertyRef Name="PersonID" />
+            <Principal Role="tdCategory">
+              <PropertyRef Name="CategoryId" />
             </Principal>
             <Dependent Role="teTransaction">
-              <PropertyRef Name="PersonID" />
+              <PropertyRef Name="CategoryId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Function Name="spCategoryLines" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Association Name="FK_teTransaction_tdType_TypeId">
+          <End Role="tdType" Type="Self.tdType" Multiplicity="0..1" />
+          <End Role="teTransaction" Type="Self.teTransaction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tdType">
+              <PropertyRef Name="TypeId" />
+            </Principal>
+            <Dependent Role="teTransaction">
+              <PropertyRef Name="TypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_teTransaction_tePerson_PersonId">
+          <End Role="tePerson" Type="Self.tePerson" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="teTransaction" Type="Self.teTransaction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tePerson">
+              <PropertyRef Name="PersonId" />
+            </Principal>
+            <Dependent Role="teTransaction">
+              <PropertyRef Name="PersonId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Function Name="spCategoryUseOverDuration" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Start" Type="date" Mode="In" />
           <Parameter Name="End" Type="date" Mode="In" />
@@ -96,29 +131,12 @@ warning 6002: The table/view 'Expenses.dbo.vTrans' does not have a primary key d
           <Parameter Name="PersonID" Type="int" Mode="In" />
           <Parameter Name="Reconciled" Type="bit" Mode="In" />
         </Function>
-        <Function Name="spMoneyEntry" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="Amount" Type="money" Mode="In" />
-          <Parameter Name="Description" Type="varchar" Mode="In" />
-          <Parameter Name="Type" Type="varchar" Mode="In" />
-          <Parameter Name="Category" Type="varchar" Mode="In" />
-          <Parameter Name="Created" Type="datetime" Mode="In" />
-          <Parameter Name="PersonID" Type="int" Mode="In" />
-        </Function>
-        <Function Name="spMoneyUpdate" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="TransactionID" Type="int" Mode="In" />
-          <Parameter Name="Amount" Type="money" Mode="In" />
-          <Parameter Name="TransactionDesc" Type="varchar" Mode="In" />
-          <Parameter Name="Type" Type="varchar" Mode="In" />
-          <Parameter Name="Category" Type="varchar" Mode="In" />
-          <Parameter Name="CreatedDate" Type="date" Mode="In" />
-          <Parameter Name="Reconciled" Type="bit" Mode="In" />
-          <Parameter Name="Person" Type="varchar" Mode="In" />
-        </Function>
         <Function Name="spTransactionSummationByDuration" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Xml" Type="xml" Mode="In" />
         </Function>
         <Function Name="spUpdateTotals" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <EntityContainer Name="ExpensesModelStoreContainer">
+          <EntitySet Name="__EFMigrationsHistory" EntityType="Self.__EFMigrationsHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tdCategory" EntityType="Self.tdCategory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tdType" EntityType="Self.tdType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tePerson" EntityType="Self.tePerson" Schema="dbo" store:Type="Tables" />
@@ -128,7 +146,7 @@ warning 6002: The table/view 'Expenses.dbo.vTrans' does not have a primary key d
     [vTrans].[PersonID] AS [PersonID], 
     [vTrans].[Name] AS [Name], 
     [vTrans].[Amount] AS [Amount], 
-    [vTrans].[TransactionDesc] AS [TransactionDesc], 
+    [vTrans].[Description] AS [Description], 
     [vTrans].[TypeID] AS [TypeID], 
     [vTrans].[Type] AS [Type], 
     [vTrans].[CategoryID] AS [CategoryID], 
@@ -136,10 +154,18 @@ warning 6002: The table/view 'Expenses.dbo.vTrans' does not have a primary key d
     [vTrans].[CreatedDate] AS [CreatedDate], 
     [vTrans].[TransactionID] AS [TransactionID], 
     [vTrans].[RunningTotal] AS [RunningTotal], 
-    [vTrans].[reconciled] AS [reconciled]
+    [vTrans].[Reconciled] AS [Reconciled]
     FROM [dbo].[vTrans] AS [vTrans]</DefiningQuery>
           </EntitySet>
-          <AssociationSet Name="FK_Transaction_Person" Association="Self.FK_Transaction_Person">
+          <AssociationSet Name="FK_teTransaction_tdCategory_CategoryId" Association="Self.FK_teTransaction_tdCategory_CategoryId">
+            <End Role="tdCategory" EntitySet="tdCategory" />
+            <End Role="teTransaction" EntitySet="teTransaction" />
+          </AssociationSet>
+          <AssociationSet Name="FK_teTransaction_tdType_TypeId" Association="Self.FK_teTransaction_tdType_TypeId">
+            <End Role="tdType" EntitySet="tdType" />
+            <End Role="teTransaction" EntitySet="teTransaction" />
+          </AssociationSet>
+          <AssociationSet Name="FK_teTransaction_tePerson_PersonId" Association="Self.FK_teTransaction_tePerson_PersonId">
             <End Role="tePerson" EntitySet="tePerson" />
             <End Role="teTransaction" EntitySet="teTransaction" />
           </AssociationSet>
@@ -148,66 +174,7 @@ warning 6002: The table/view 'Expenses.dbo.vTrans' does not have a primary key d
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="MoneyEntry.DataAccess" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityType Name="tdCategory">
-          <Key>
-            <PropertyRef Name="CategoryID" />
-          </Key>
-          <Property Name="CategoryID" Type="Byte" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Description" Type="String" MaxLength="128" FixedLength="false" Unicode="false" />
-        </EntityType>
-        <EntityType Name="tdType">
-          <Key>
-            <PropertyRef Name="TypeID" />
-          </Key>
-          <Property Name="TypeID" Type="Byte" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Description" Type="String" MaxLength="128" FixedLength="false" Unicode="false" />
-        </EntityType>
-        <EntityType Name="tePerson">
-          <Key>
-            <PropertyRef Name="PersonID" />
-          </Key>
-          <Property Name="PersonID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="FirstName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Name="LastName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="teTransaction" Relationship="Self.FK_Transaction_Person" FromRole="tePerson" ToRole="teTransaction" />
-        </EntityType>
-        <EntityType Name="teTransaction">
-          <Key>
-            <PropertyRef Name="TransactionID" />
-          </Key>
-          <Property Name="TransactionID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
-          <Property Name="TransactionDesc" Type="String" MaxLength="128" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="TypeID" Type="Byte" Nullable="false" />
-          <Property Name="CategoryID" Type="Byte" Nullable="false" />
-          <Property Name="CreatedDt" Type="DateTime" Precision="0" />
-          <Property Name="ModifiedDt" Type="DateTime" Precision="0" />
-          <Property Name="reconciled" Type="Boolean" />
-          <Property Name="RunningTotal" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="PersonID" Type="Int32" />
-          <NavigationProperty Name="tePerson" Relationship="Self.FK_Transaction_Person" FromRole="teTransaction" ToRole="tePerson" />
-        </EntityType>
-        <Association Name="FK_Transaction_Person">
-          <End Role="tePerson" Type="Self.tePerson" Multiplicity="0..1" />
-          <End Role="teTransaction" Type="Self.teTransaction" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="tePerson">
-              <PropertyRef Name="PersonID" />
-            </Principal>
-            <Dependent Role="teTransaction">
-              <PropertyRef Name="PersonID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityContainer Name="ExpensesEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="tdCategory" EntityType="Self.tdCategory" />
-          <EntitySet Name="tdType" EntityType="Self.tdType" />
-          <EntitySet Name="tePerson" EntityType="Self.tePerson" />
-          <EntitySet Name="teTransaction" EntityType="Self.teTransaction" />
-          <AssociationSet Name="FK_Transaction_Person" Association="Self.FK_Transaction_Person">
-            <End Role="tePerson" EntitySet="tePerson" />
-            <End Role="teTransaction" EntitySet="teTransaction" />
-          </AssociationSet>
           <FunctionImport Name="spCategoryLines" />
           <FunctionImport Name="spInsertOrUpdateTransaction">
             <Parameter Name="TransactionID" Mode="In" Type="Int32" />
@@ -248,7 +215,24 @@ warning 6002: The table/view 'Expenses.dbo.vTrans' does not have a primary key d
           <FunctionImport Name="spTransactionSummationByDuration" ReturnType="Collection(MoneyEntry.DataAccess.spTransactionSummationByDuration_Result)">
           <Parameter Name="Xml" Mode="In" Type="String" />
           </FunctionImport>
+          <EntitySet Name="C__EFMigrationsHistory" EntityType="MoneyEntry.DataAccess.C__EFMigrationsHistory" />
+          <EntitySet Name="tdCategory" EntityType="MoneyEntry.DataAccess.tdCategory" />
+          <EntitySet Name="tdType" EntityType="MoneyEntry.DataAccess.tdType" />
+          <EntitySet Name="tePerson" EntityType="MoneyEntry.DataAccess.tePerson" />
+          <EntitySet Name="teTransaction" EntityType="MoneyEntry.DataAccess.teTransaction" />
           <EntitySet Name="vTrans" EntityType="MoneyEntry.DataAccess.vTrans" />
+          <AssociationSet Name="FK_teTransaction_tdCategory_CategoryId" Association="MoneyEntry.DataAccess.FK_teTransaction_tdCategory_CategoryId">
+            <End Role="tdCategory" EntitySet="tdCategory" />
+            <End Role="teTransaction" EntitySet="teTransaction" />
+          </AssociationSet>
+          <AssociationSet Name="FK_teTransaction_tdType_TypeId" Association="MoneyEntry.DataAccess.FK_teTransaction_tdType_TypeId">
+            <End Role="tdType" EntitySet="tdType" />
+            <End Role="teTransaction" EntitySet="teTransaction" />
+          </AssociationSet>
+          <AssociationSet Name="FK_teTransaction_tePerson_PersonId" Association="MoneyEntry.DataAccess.FK_teTransaction_tePerson_PersonId">
+            <End Role="tePerson" EntitySet="tePerson" />
+            <End Role="teTransaction" EntitySet="teTransaction" />
+          </AssociationSet>
         </EntityContainer>
         <ComplexType Name="spCategoryUseOverDuration_Result">
           <Property Type="Byte" Name="CategoryID" Nullable="false" />
@@ -265,19 +249,72 @@ warning 6002: The table/view 'Expenses.dbo.vTrans' does not have a primary key d
           <Property Type="Int32" Name="Position" Nullable="true" />
           <Property Type="Decimal" Name="Amount" Nullable="true" Precision="19" />
         </ComplexType>
+        <EntityType Name="C__EFMigrationsHistory">
+          <Key>
+            <PropertyRef Name="MigrationId" />
+          </Key>
+          <Property Name="MigrationId" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="ProductVersion" Type="String" Nullable="false" MaxLength="32" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="tdCategory">
+          <Key>
+            <PropertyRef Name="CategoryId" />
+          </Key>
+          <Property Name="CategoryId" Type="Byte" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Description" Type="String" MaxLength="128" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="teTransaction" Relationship="MoneyEntry.DataAccess.FK_teTransaction_tdCategory_CategoryId" FromRole="tdCategory" ToRole="teTransaction" />
+        </EntityType>
+        <EntityType Name="tdType">
+          <Key>
+            <PropertyRef Name="TypeId" />
+          </Key>
+          <Property Name="TypeId" Type="Byte" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Description" Type="String" MaxLength="128" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="teTransaction" Relationship="MoneyEntry.DataAccess.FK_teTransaction_tdType_TypeId" FromRole="tdType" ToRole="teTransaction" />
+        </EntityType>
+        <EntityType Name="tePerson">
+          <Key>
+            <PropertyRef Name="PersonId" />
+          </Key>
+          <Property Name="PersonId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FirstName" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="LastName" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="UserName" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="Salt" Type="Binary" Nullable="false" MaxLength="128" FixedLength="false" />
+          <Property Name="Password" Type="Binary" Nullable="false" MaxLength="512" FixedLength="false" />
+          <NavigationProperty Name="teTransaction" Relationship="MoneyEntry.DataAccess.FK_teTransaction_tePerson_PersonId" FromRole="tePerson" ToRole="teTransaction" />
+        </EntityType>
+        <EntityType Name="teTransaction">
+          <Key>
+            <PropertyRef Name="TransactionId" />
+          </Key>
+          <Property Name="TransactionId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Amount" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <Property Name="CategoryId" Type="Byte" />
+          <Property Name="CreatedDt" Type="DateTime" Precision="7" />
+          <Property Name="ModifiedDt" Type="DateTime" Precision="7" />
+          <Property Name="PersonId" Type="Int32" Nullable="false" />
+          <Property Name="Reconciled" Type="Boolean" />
+          <Property Name="RunningTotal" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="TransactionDesc" Type="String" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="TypeId" Type="Byte" />
+          <NavigationProperty Name="tdCategory" Relationship="MoneyEntry.DataAccess.FK_teTransaction_tdCategory_CategoryId" FromRole="teTransaction" ToRole="tdCategory" />
+          <NavigationProperty Name="tdType" Relationship="MoneyEntry.DataAccess.FK_teTransaction_tdType_TypeId" FromRole="teTransaction" ToRole="tdType" />
+          <NavigationProperty Name="tePerson" Relationship="MoneyEntry.DataAccess.FK_teTransaction_tePerson_PersonId" FromRole="teTransaction" ToRole="tePerson" />
+        </EntityType>
         <EntityType Name="vTrans">
           <Key>
             <PropertyRef Name="PersonID" />
+            <PropertyRef Name="Name" />
             <PropertyRef Name="Amount" />
-            <PropertyRef Name="Description" />
             <PropertyRef Name="TypeID" />
             <PropertyRef Name="CategoryID" />
             <PropertyRef Name="TransactionID" />
           </Key>
           <Property Name="PersonID" Type="Int32" Nullable="false" />
-          <Property Name="Name" Type="String" MaxLength="511" FixedLength="false" Unicode="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="511" FixedLength="false" Unicode="false" />
           <Property Name="Amount" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
-          <Property Name="Description" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="Description" Type="String" MaxLength="128" FixedLength="false" Unicode="false" />
           <Property Name="TypeID" Type="Byte" Nullable="false" />
           <Property Name="Type" Type="String" MaxLength="128" FixedLength="false" Unicode="false" />
           <Property Name="CategoryID" Type="Byte" Nullable="false" />
@@ -285,59 +322,53 @@ warning 6002: The table/view 'Expenses.dbo.vTrans' does not have a primary key d
           <Property Name="CreatedDate" Type="DateTime" Precision="0" />
           <Property Name="TransactionID" Type="Int32" Nullable="false" />
           <Property Name="RunningTotal" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="reconciled" Type="Boolean" />
+          <Property Name="Reconciled" Type="Boolean" />
         </EntityType>
+        <Association Name="FK_teTransaction_tdCategory_CategoryId">
+          <End Type="MoneyEntry.DataAccess.tdCategory" Role="tdCategory" Multiplicity="0..1" />
+          <End Type="MoneyEntry.DataAccess.teTransaction" Role="teTransaction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tdCategory">
+              <PropertyRef Name="CategoryId" />
+            </Principal>
+            <Dependent Role="teTransaction">
+              <PropertyRef Name="CategoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_teTransaction_tdType_TypeId">
+          <End Type="MoneyEntry.DataAccess.tdType" Role="tdType" Multiplicity="0..1" />
+          <End Type="MoneyEntry.DataAccess.teTransaction" Role="teTransaction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tdType">
+              <PropertyRef Name="TypeId" />
+            </Principal>
+            <Dependent Role="teTransaction">
+              <PropertyRef Name="TypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_teTransaction_tePerson_PersonId">
+          <End Type="MoneyEntry.DataAccess.tePerson" Role="tePerson" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="MoneyEntry.DataAccess.teTransaction" Role="teTransaction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tePerson">
+              <PropertyRef Name="PersonId" />
+            </Principal>
+            <Dependent Role="teTransaction">
+              <PropertyRef Name="PersonId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="ExpensesModelStoreContainer" CdmEntityContainer="ExpensesEntities">
-          <EntitySetMapping Name="tdCategory">
-            <EntityTypeMapping TypeName="MoneyEntry.DataAccess.tdCategory">
-              <MappingFragment StoreEntitySet="tdCategory">
-                <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="tdType">
-            <EntityTypeMapping TypeName="MoneyEntry.DataAccess.tdType">
-              <MappingFragment StoreEntitySet="tdType">
-                <ScalarProperty Name="TypeID" ColumnName="TypeID" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="tePerson">
-            <EntityTypeMapping TypeName="MoneyEntry.DataAccess.tePerson">
-              <MappingFragment StoreEntitySet="tePerson">
-                <ScalarProperty Name="PersonID" ColumnName="PersonID" />
-                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
-                <ScalarProperty Name="LastName" ColumnName="LastName" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="teTransaction">
-            <EntityTypeMapping TypeName="MoneyEntry.DataAccess.teTransaction">
-              <MappingFragment StoreEntitySet="teTransaction">
-                <ScalarProperty Name="TransactionID" ColumnName="TransactionID" />
-                <ScalarProperty Name="Amount" ColumnName="Amount" />
-                <ScalarProperty Name="TransactionDesc" ColumnName="TransactionDesc" />
-                <ScalarProperty Name="TypeID" ColumnName="TypeID" />
-                <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
-                <ScalarProperty Name="CreatedDt" ColumnName="CreatedDt" />
-                <ScalarProperty Name="ModifiedDt" ColumnName="ModifiedDt" />
-                <ScalarProperty Name="reconciled" ColumnName="reconciled" />
-                <ScalarProperty Name="RunningTotal" ColumnName="RunningTotal" />
-                <ScalarProperty Name="PersonID" ColumnName="PersonID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="spCategoryLines" FunctionName="ExpensesModel.Store.spCategoryLines" />
           <FunctionImportMapping FunctionImportName="spInsertOrUpdateTransaction" FunctionName="ExpensesModel.Store.spInsertOrUpdateTransaction" />
-          <FunctionImportMapping FunctionImportName="spMoneyEntry" FunctionName="ExpensesModel.Store.spMoneyEntry" />
-          <FunctionImportMapping FunctionImportName="spMoneyUpdate" FunctionName="ExpensesModel.Store.spMoneyUpdate" />
           <FunctionImportMapping FunctionImportName="spUpdateTotals" FunctionName="ExpensesModel.Store.spUpdateTotals" />
           <FunctionImportMapping FunctionImportName="spCategoryUseOverDuration" FunctionName="ExpensesModel.Store.spCategoryUseOverDuration">
             <ResultMapping>
@@ -362,10 +393,62 @@ warning 6002: The table/view 'Expenses.dbo.vTrans' does not have a primary key d
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <EntitySetMapping Name="C__EFMigrationsHistory">
+            <EntityTypeMapping TypeName="MoneyEntry.DataAccess.C__EFMigrationsHistory">
+              <MappingFragment StoreEntitySet="__EFMigrationsHistory">
+                <ScalarProperty Name="ProductVersion" ColumnName="ProductVersion" />
+                <ScalarProperty Name="MigrationId" ColumnName="MigrationId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tdCategory">
+            <EntityTypeMapping TypeName="MoneyEntry.DataAccess.tdCategory">
+              <MappingFragment StoreEntitySet="tdCategory">
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tdType">
+            <EntityTypeMapping TypeName="MoneyEntry.DataAccess.tdType">
+              <MappingFragment StoreEntitySet="tdType">
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="TypeId" ColumnName="TypeId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tePerson">
+            <EntityTypeMapping TypeName="MoneyEntry.DataAccess.tePerson">
+              <MappingFragment StoreEntitySet="tePerson">
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Salt" ColumnName="Salt" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="PersonId" ColumnName="PersonId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="teTransaction">
+            <EntityTypeMapping TypeName="MoneyEntry.DataAccess.teTransaction">
+              <MappingFragment StoreEntitySet="teTransaction">
+                <ScalarProperty Name="TypeId" ColumnName="TypeId" />
+                <ScalarProperty Name="TransactionDesc" ColumnName="TransactionDesc" />
+                <ScalarProperty Name="RunningTotal" ColumnName="RunningTotal" />
+                <ScalarProperty Name="Reconciled" ColumnName="Reconciled" />
+                <ScalarProperty Name="PersonId" ColumnName="PersonId" />
+                <ScalarProperty Name="ModifiedDt" ColumnName="ModifiedDt" />
+                <ScalarProperty Name="CreatedDt" ColumnName="CreatedDt" />
+                <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="TransactionId" ColumnName="TransactionId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="vTrans">
             <EntityTypeMapping TypeName="MoneyEntry.DataAccess.vTrans">
               <MappingFragment StoreEntitySet="vTrans">
-                <ScalarProperty Name="reconciled" ColumnName="reconciled" />
+                <ScalarProperty Name="Reconciled" ColumnName="Reconciled" />
                 <ScalarProperty Name="RunningTotal" ColumnName="RunningTotal" />
                 <ScalarProperty Name="TransactionID" ColumnName="TransactionID" />
                 <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
@@ -373,7 +456,7 @@ warning 6002: The table/view 'Expenses.dbo.vTrans' does not have a primary key d
                 <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
                 <ScalarProperty Name="Type" ColumnName="Type" />
                 <ScalarProperty Name="TypeID" ColumnName="TypeID" />
-                <ScalarProperty Name="Description" ColumnName="TransactionDesc" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="Amount" ColumnName="Amount" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="PersonID" ColumnName="PersonID" />

@@ -30,26 +30,25 @@ namespace MoneyEntry.DataAccess
     #region Methods
 
     #region RetreivalMethods
-    private IList<TypeTran> GetTypes() => _dataRetreival.GetTypes().Select(x => new TypeTran(x.TypeID, x.Description)).ToList();
+    private IList<TypeTran> GetTypes() => _dataRetreival.GetTypes().Select(x => new TypeTran(x.TypeId, x.Description)).ToList();
 
-    private List<Category> GetCategories() => _dataRetreival.GetCategories().Select(x => new Category(x.CategoryID, x.Description)).ToList();
+    private List<Category> GetCategories() => _dataRetreival.GetCategories().Select(x => new Category(x.CategoryId, x.Description)).ToList();
 
     public List<Person> GetPeople() => _dataRetreival.GetPeople().Select(x => new Person(x)).ToList();
     
     public List<MoneyEntryObservable> QueryMoneyEntries(DateTime start, DateTime end, int personId, int categoryId, int typeId, string description = null, decimal? moneyAmount = null)
     {
       return _dataRetreival.QueryMoneyEntries(start, end, personId, categoryId, typeId, description, moneyAmount)
-        .Select(dbTran => new MoneyEntryObservable(dbTran.PersonID, dbTran.TransactionID, dbTran.Description, dbTran.CreatedDate, dbTran.TypeID, dbTran.CategoryID, dbTran.Amount, dbTran.RunningTotal, dbTran.reconciled))
+        .Select(dbTran => new MoneyEntryObservable(dbTran.PersonID, dbTran.TransactionID, dbTran.Description, dbTran.CreatedDate, dbTran.TypeID, dbTran.CategoryID, dbTran.Amount, dbTran.RunningTotal, dbTran.Reconciled))
         .ToList();
     }
     
     public List<MoneyEntryObservable> GetModelObservables(DateTime start, DateTime end, int personId)
     {
-            var data = _dataRetreival.GetTransactionViews(start, end, personId)
-            .OrderBy(d => d.CreatedDate);
-
-            return data.Select(dbTran => new MoneyEntryObservable(dbTran.PersonID, dbTran.TransactionID, dbTran.Description, dbTran.CreatedDate, dbTran.TypeID, dbTran.CategoryID, dbTran.Amount, dbTran.RunningTotal, dbTran.reconciled))
-      .ToList();
+        return _dataRetreival.GetTransactionViews(start, end, personId)
+            .OrderBy(d => d.CreatedDate)
+            .Select(dbTran => new MoneyEntryObservable(dbTran.PersonID, dbTran.TransactionID, dbTran.Description, dbTran.CreatedDate, dbTran.TypeID, dbTran.CategoryID, dbTran.Amount, dbTran.RunningTotal, dbTran.Reconciled))
+            .ToList();
     }
 
     public DateTime? LastDateEnteredByPerson(int personId, bool? reconciled = null) => _dataRetreival.LastDateEnteredByPerson(personId, reconciled);

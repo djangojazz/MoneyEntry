@@ -14,17 +14,19 @@ namespace MoneyEntry.DataAccess
     
     public partial class teTransaction
     {
-        public int TransactionID { get; set; }
+        public int TransactionId { get; set; }
         public decimal Amount { get; set; }
-        public string TransactionDesc { get; set; }
-        public byte TypeID { get; set; }
-        public byte CategoryID { get; set; }
+        public Nullable<byte> CategoryId { get; set; }
         public Nullable<System.DateTime> CreatedDt { get; set; }
         public Nullable<System.DateTime> ModifiedDt { get; set; }
-        public Nullable<bool> reconciled { get; set; }
+        public int PersonId { get; set; }
+        public Nullable<bool> Reconciled { get; set; }
         public Nullable<decimal> RunningTotal { get; set; }
-        public Nullable<int> PersonID { get; set; }
+        public string TransactionDesc { get; set; }
+        public Nullable<byte> TypeId { get; set; }
     
+        public virtual tdCategory tdCategory { get; set; }
+        public virtual tdType tdType { get; set; }
         public virtual tePerson tePerson { get; set; }
     }
 }

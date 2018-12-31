@@ -14,7 +14,16 @@ namespace MoneyEntry.DataAccess
     
     public partial class tdCategory
     {
-        public byte CategoryID { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public tdCategory()
+        {
+            this.teTransaction = new HashSet<teTransaction>();
+        }
+    
+        public byte CategoryId { get; set; }
         public string Description { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<teTransaction> teTransaction { get; set; }
     }
 }

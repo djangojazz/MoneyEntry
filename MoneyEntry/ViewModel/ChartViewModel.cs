@@ -215,7 +215,7 @@ namespace MoneyEntry.ViewModel
       {
         var results = context.spCategoryUseOverDuration(_start, _end, 2, _person.PersonId, _floor).ToList().Select(x => (int)x.CategoryID).ToArray();
 
-        Categories.ClearAndAddRange(context.tdCategory.ToList().Select(x => new Category(x.CategoryID, x.Description)).ToList());
+        Categories.ClearAndAddRange(context.tdCategory.ToList().Select(x => new Category(x.CategoryId, x.Description)).ToList());
 
         Categories.Where(x => results.Contains(x.CategoryId))
                   .ToList()

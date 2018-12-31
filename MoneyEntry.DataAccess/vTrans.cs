@@ -25,6 +25,6 @@ namespace MoneyEntry.DataAccess
         public Nullable<System.DateTime> CreatedDate { get; set; }
         public int TransactionID { get; set; }
         public Nullable<decimal> RunningTotal { get; set; }
-        public Nullable<bool> reconciled { get; set; }
+        public Nullable<bool> Reconciled { get; set; }
     }
 }

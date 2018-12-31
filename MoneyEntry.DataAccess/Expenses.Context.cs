@@ -27,6 +27,7 @@ namespace MoneyEntry.DataAccess
             throw new UnintentionalCodeFirstException();
         }
     
+        public virtual DbSet<C__EFMigrationsHistory> C__EFMigrationsHistory { get; set; }
         public virtual DbSet<tdCategory> tdCategory { get; set; }
         public virtual DbSet<tdType> tdType { get; set; }
         public virtual DbSet<tePerson> tePerson { get; set; }

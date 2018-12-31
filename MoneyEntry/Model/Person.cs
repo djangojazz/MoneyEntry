@@ -18,7 +18,7 @@ namespace MoneyEntry.Model
 
     public Person(tePerson person)
     {
-      PersonId = person.PersonID;
+      PersonId = person.PersonId;
       FirstName = person.FirstName;
       LastName = person.LastName;
       FullName = $"{person.FirstName} {person.LastName}";

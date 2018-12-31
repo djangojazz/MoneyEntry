@@ -54,6 +54,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="C__EFMigrationsHistory.cs">
+      <DependentUpon>Expenses.tt</DependentUpon>
+    </Compile>
     <Compile Include="Expenses.Context.cs">
       <DependentUpon>Expenses.Context.tt</DependentUpon>
       <AutoGen>True</AutoGen>

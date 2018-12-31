@@ -10,7 +10,7 @@ namespace MoneyEntry.Model
   {
     private int _personId;
     private int _transactionId;
-    private string _transactionDesc;
+    private string _description;
     private DateTime? _createdDate;
     private byte _typeId;
     private byte _categoryId;
@@ -19,10 +19,10 @@ namespace MoneyEntry.Model
     private bool? _reconciled;
 
    
-    public MoneyEntryObservable(int personId, string transactionDesc, DateTime createdDate, byte typeId, byte categoryId, decimal amount)
+    public MoneyEntryObservable(int personId, string description, DateTime createdDate, byte typeId, byte categoryId, decimal amount)
     {
       PersonId = personId;
-      TransactionDesc = transactionDesc;
+      Description = description;
       CreatedDate = createdDate;
       TypeId = typeId;
       CategoryId = categoryId;
@@ -30,11 +30,11 @@ namespace MoneyEntry.Model
       CreatedDate = createdDate;
     }
 
-    public MoneyEntryObservable(int personId, int transactionId, string transactionDesc, DateTime? createdDate, byte typeId, byte categoryId, decimal amount, decimal? runningTotal, bool? reconciled)
+    public MoneyEntryObservable(int personId, int transactionId, string description, DateTime? createdDate, byte typeId, byte categoryId, decimal amount, decimal? runningTotal, bool? reconciled)
     {
       PersonId = personId;
       TransactionId = transactionId;
-      TransactionDesc = transactionDesc;
+      Description = description;
       CreatedDate = createdDate;
       TypeId = typeId;
       CategoryId = categoryId;
@@ -65,14 +65,14 @@ namespace MoneyEntry.Model
       }
     }
 
-    public string TransactionDesc
+    public string Description
     {
-      get => _transactionDesc;
+      get => _description;
       set
       {
-        if (value == _transactionDesc) { return; }
-        _transactionDesc = value;
-        OnPropertyChanged(nameof(TransactionDesc));
+        if (value == _description) { return; }
+        _description = value;
+        OnPropertyChanged(nameof(Description));
       }
     }
 
