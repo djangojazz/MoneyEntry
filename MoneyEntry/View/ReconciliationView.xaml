@@ -48,7 +48,7 @@
       <DataGrid.Columns>
         <DataGridTextColumn Header="Id" Binding="{Binding TransactionId}" CanUserReorder="True"/>
         <DataGridTextColumn Header="EntryDate" Binding="{Binding CreatedDate, StringFormat={}{0:MM/dd/yyyy}}" CanUserReorder="True"/>
-        <DataGridTextColumn Header="Description" Binding="{Binding TransactionDesc}" Width="250" />
+        <DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="250" />
                 <DataGridTemplateColumn Header="Type">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
