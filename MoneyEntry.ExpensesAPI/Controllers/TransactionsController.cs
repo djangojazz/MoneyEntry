@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,7 +17,7 @@ namespace MoneyEntry.ExpensesAPI.Controllers
 {
     [Route("expensesApi/[controller]/[action]"), Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class TransactionsController : BaseController
-        //Controller
+    //Controller
     {
         ExpensesRepository _repo = ExpensesRepository.Instance;
 
@@ -62,10 +63,17 @@ namespace MoneyEntry.ExpensesAPI.Controllers
 
                 return Ok(trans);
             });
-        
+
         // POST: api/Transactions
         [HttpPost]
         public async Task<IActionResult> PostTransaction([FromBody]TransactionModel t) =>
          await DetermineModelToProceed(async () => await CheckPersonToProceed(async personId => Ok(await _repo.InsertOrUpdaTeTransactionAsync(t.TransactionId, t.Amount, t.Description, t.TypeId, t.CategoryId, t.CreatedDate, personId, t.Reconciled))));
+
+        [HttpPost]
+        public async Task<IActionResult> ReconcileTransactions([FromBody]TransactionReconcileModel[] trans) =>
+            await CheckPersonToProceed(async personId =>
+            {
+                return Ok(trans);
+            });
     }
 }
