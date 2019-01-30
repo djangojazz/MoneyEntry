@@ -1,8 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
-using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace MoneyEntry.DataAccess.EFCore.Migrations
 {
@@ -15,6 +11,7 @@ namespace MoneyEntry.DataAccess.EFCore.Migrations
             migrationBuilder.Sql(@".\SqlScripts\spInsertOrUpdateTransaction.sql".ReadFile());
             migrationBuilder.Sql(@".\SqlScripts\spTransactionSummationByDuration.sql".ReadFile());
             migrationBuilder.Sql(@".\SqlScripts\spUpdateTotals.sql".ReadFile());
+            migrationBuilder.Sql(@".\SqlScripts\spBulkReconcileFromJSON.sql".ReadFile());
             migrationBuilder.Sql(@".\SqlScripts\vTrans.sql".ReadFile());
         }
 
@@ -25,6 +22,7 @@ namespace MoneyEntry.DataAccess.EFCore.Migrations
             migrationBuilder.Sql("drop proc spTransactionSummationByDuration");
             migrationBuilder.Sql("drop proc spInsertOrUpdateTransaction");
             migrationBuilder.Sql("drop proc spCategoryUseOverDuration");
+            migrationBuilder.Sql("drop proc spBulkReconcileFromJSON");
 
             //Views
             migrationBuilder.Sql("drop view vTrans");

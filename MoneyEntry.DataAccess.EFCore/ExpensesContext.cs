@@ -1,7 +1,4 @@
-﻿using System;
-using System.Configuration;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
+﻿using Microsoft.EntityFrameworkCore;
 using MoneyEntry.DataAccess.EFCore.Expenses.Models;
 
 namespace MoneyEntry.DataAccess.EFCore.Expenses
@@ -26,6 +23,7 @@ namespace MoneyEntry.DataAccess.EFCore.Expenses
         public virtual DbSet<spCategoryUseOverDuration> spCategoryUseOverDuration { get; set; }
         public virtual DbSet<spInsertOrUpdateTransaction> spInsertOrUpdateTransaction { get; set; }
         public virtual DbSet<spTransactionSummationByDuration> spTransactionSummationByDuration { get; set; }
+        public virtual DbSet<spBulkReconcileFromJSON> spBulkReconcileFromJSON { get; set; }
         public virtual DbSet<spUpdateTotals> spUpdateTotals { get; set; }
 
         // Unable to generate entity type for table 'dbo.export'. Please see the warning messages.

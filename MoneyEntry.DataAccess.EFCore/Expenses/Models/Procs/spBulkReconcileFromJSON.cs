@@ -2,7 +2,7 @@
 
 namespace MoneyEntry.DataAccess.EFCore.Expenses.Models
 {
-    public sealed class spUpdateTotals
+    public class spBulkReconcileFromJSON
     {
         [Key]
         public int RowsUpdated { get; set; }
