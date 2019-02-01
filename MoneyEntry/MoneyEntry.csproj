@@ -210,10 +210,6 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Controls\Controls.csproj">
-      <Project>{0bf98ebe-cfba-41da-8c80-62b282072193}</Project>
-      <Name>Controls</Name>
-    </ProjectReference>
     <ProjectReference Include="..\MoneyEntry.DataAccess\MoneyEntry.DataAccess.csproj">
       <Project>{869c2d0e-f067-446e-ab4e-ef7570deaf71}</Project>
       <Name>MoneyEntry.DataAccess</Name>

@@ -1,23 +1,12 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27130.2036
+VisualStudioVersion = 15.0.27004.2010
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoneyEntry", "MoneyEntry.csproj", "{FFE5C341-AFF4-4FC1-A649-60BACFDCFBB9}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Controls", "..\Controls\Controls.csproj", "{0BF98EBE-CFBA-41DA-8C80-62B282072193}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "..\Test\Test.csproj", "{C813B45E-8B66-4898-8B2B-6FC32CFA6D94}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoneyEntry.DataAccess", "..\MoneyEntry.DataAccess\MoneyEntry.DataAccess.csproj", "{869C2D0E-F067-446E-AB4E-EF7570DEAF71}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{CDB4837C-FD1E-41B3-BA33-FBCEB15EED9F}"
 	ProjectSection(SolutionItems) = preProject
-		ExpensesBackupWithTestUser 9-27-2017.bak = ExpensesBackupWithTestUser 9-27-2017.bak
 		READ ME.txt = READ ME.txt
 	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoneyEntry.DataAccess.Tests", "..\MoneyEntry.DataAccess.Tests\MoneyEntry.DataAccess.Tests.csproj", "{96F21268-6841-43A9-A504-F3B0240BA0DC}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MoneyEntry.DataAccess.EFCore", "..\MoneyEntry.DataAccess.EFCore\MoneyEntry.DataAccess.EFCore.csproj", "{074F5FF6-EA02-45C8-9AEB-9596AB8611DB}"
 EndProject
@@ -31,26 +20,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{FFE5C341-AFF4-4FC1-A649-60BACFDCFBB9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FFE5C341-AFF4-4FC1-A649-60BACFDCFBB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FFE5C341-AFF4-4FC1-A649-60BACFDCFBB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FFE5C341-AFF4-4FC1-A649-60BACFDCFBB9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0BF98EBE-CFBA-41DA-8C80-62B282072193}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0BF98EBE-CFBA-41DA-8C80-62B282072193}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0BF98EBE-CFBA-41DA-8C80-62B282072193}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0BF98EBE-CFBA-41DA-8C80-62B282072193}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C813B45E-8B66-4898-8B2B-6FC32CFA6D94}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C813B45E-8B66-4898-8B2B-6FC32CFA6D94}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C813B45E-8B66-4898-8B2B-6FC32CFA6D94}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C813B45E-8B66-4898-8B2B-6FC32CFA6D94}.Release|Any CPU.Build.0 = Release|Any CPU
-		{869C2D0E-F067-446E-AB4E-EF7570DEAF71}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{869C2D0E-F067-446E-AB4E-EF7570DEAF71}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{869C2D0E-F067-446E-AB4E-EF7570DEAF71}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{869C2D0E-F067-446E-AB4E-EF7570DEAF71}.Release|Any CPU.Build.0 = Release|Any CPU
-		{96F21268-6841-43A9-A504-F3B0240BA0DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{96F21268-6841-43A9-A504-F3B0240BA0DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{96F21268-6841-43A9-A504-F3B0240BA0DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{96F21268-6841-43A9-A504-F3B0240BA0DC}.Release|Any CPU.Build.0 = Release|Any CPU
 		{074F5FF6-EA02-45C8-9AEB-9596AB8611DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{074F5FF6-EA02-45C8-9AEB-9596AB8611DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{074F5FF6-EA02-45C8-9AEB-9596AB8611DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -68,7 +37,7 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.Common.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.Validation.6.0.1304.0\lib\NET45
 		SolutionGuid = {8933CDB6-6675-4A55-B637-1E67C9703660}
+		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.Common.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.Validation.6.0.1304.0\lib\NET45
 	EndGlobalSection
 EndGlobal
