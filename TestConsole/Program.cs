@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace TestConsole
 {
@@ -23,24 +24,7 @@ namespace TestConsole
             _configuration = builder.Build();
             var connectionString = _configuration.GetConnectionString("Expenses");
 
-            ExpensesRepository.SetConnectionFirstTime(connectionString);
-            var repo = ExpensesRepository.Instance;
-
-            //var yesterday = DateTime.Now.Date.AddDays(-1);
-
-            //var locale = Path.Combine(baseLocale, @"SqlScripts\vTrans.sql");
-            //var result = locale.ReadFile();
-            //Console.WriteLine(result);
-
-            //var result = Task.Factory.StartNew(async () =>
-            //{
-            //    //await repo.InsertOrUpdaTeTransactionAsync(0, 100, "Test debit", 2, 14, yesterday.Date.AddDays(1), 1, false);
-            //    var rows = await repo.GetTransactionViewsAsync(yesterday, yesterday.Date.AddDays(1), 1);
-
-            //}
-            //);
-
-
+            ////First time seeder if needed
             //using (var context = new ExpensesContext())
             //{
             //    try
@@ -53,6 +37,28 @@ namespace TestConsole
             //        Console.WriteLine("Fail");
             //    }
             //}
+
+            ExpensesRepository.SetConnectionFirstTime(connectionString);
+            var repo = ExpensesRepository.Instance;
+
+            var yesterday = DateTime.Now.Date.AddDays(-1);
+
+            //repo.InsertOrUpdaTeTransaction(0, 1000, "Start", 1, 20, yesterday, 1, false);
+            //repo.InsertOrUpdaTeTransaction(0, 200, "Transaction Test", 2, 13, yesterday, 1, false);
+
+            //[
+            //{"transactionId": "6853", "reconciled": "true"},
+            //{"transactionId": "6854", "reconciled": "true"}
+            //]
+
+            //var items = new (int transactionId, bool reconciled)[] ;
+            //var json = JsonConvert.SerializeObject(new object[] 
+            //    {
+            //        new { transactionId= 1, reconciled =  false},
+            //        new { transactionId= 2, reconciled =  false}
+            //    });
+            //var result = repo.ReconcileTransactions(json);
+            //Console.WriteLine(result);
 
             Console.ReadLine();
         }

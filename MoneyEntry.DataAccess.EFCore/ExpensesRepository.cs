@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace MoneyEntry.DataAccess.EFCore
 {
@@ -225,6 +226,50 @@ namespace MoneyEntry.DataAccess.EFCore
                 try
                 {
                     return await Task.Factory.StartNew(() => context.spUpdateTotals.FromSql("spUpdateTotals").First().RowsUpdated);
+                }
+                catch (Exception ex)
+                {
+#if DEBUG
+                    Console.WriteLine(ex.Message);
+#endif
+                    return -1;
+                }
+            }
+        }
+
+        public int ReconcileTransactions(string json)
+        {
+            using (var context = new ExpensesContext(_connection))
+            {
+                try
+                {
+                    var firstMember = json.Substring(json.IndexOf("{"), json.IndexOf("}"));
+                    if (!(firstMember.Contains("\"transactionId\"") && firstMember.Contains("\"reconciled\"")))
+                        return -1;
+
+                    return context.spBulkReconcileFromJSON.FromSql("spBulkReconcileFromJSON @p0", parameters: new[] { json}).FirstOrDefault().RowsUpdated;
+                }
+                catch (Exception ex)
+                {
+#if DEBUG
+                    Console.WriteLine(ex.Message);
+#endif
+                    return -1;
+                }
+            }
+        }
+
+        public async Task<int> ReconcileTransactionsAsync(string json)
+        {
+            using (var context = new ExpensesContext(_connection))
+            {
+                try
+                {
+                    var firstMember = json.Substring(json.IndexOf("{"), json.IndexOf("}"));
+                    if (!(firstMember.Contains("\"transactionId\"") && firstMember.Contains("\"reconciled\"")))
+                        return -1;
+
+                    return await Task.Factory.StartNew(() => context.spBulkReconcileFromJSON.FromSql("spBulkReconcileFromJSON @p0", parameters: new[] { json }).FirstOrDefault().RowsUpdated);
                 }
                 catch (Exception ex)
                 {
