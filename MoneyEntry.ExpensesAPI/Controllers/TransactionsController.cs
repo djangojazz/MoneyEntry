@@ -12,6 +12,7 @@ using Microsoft.Extensions.Configuration;
 using MoneyEntry.DataAccess.EFCore;
 using MoneyEntry.ExpensesAPI.Models;
 using MoneyEntry.ExpensesAPI.Services;
+using Newtonsoft.Json;
 
 namespace MoneyEntry.ExpensesAPI.Controllers
 {
@@ -73,7 +74,7 @@ namespace MoneyEntry.ExpensesAPI.Controllers
         public async Task<IActionResult> ReconcileTransactions([FromBody]TransactionReconcileModel[] trans) =>
             await CheckPersonToProceed(async personId =>
             {
-                return Ok(trans);
+                return Ok(await _repo.ReconcileTransactionsAsync(JsonConvert.SerializeObject(trans)));
             });
     }
 }

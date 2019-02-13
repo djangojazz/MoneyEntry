@@ -15,6 +15,7 @@ namespace MoneyEntry.DataAccess.EFCore.Expenses
         public virtual DbSet<TdType> TdType { get; set; }
         public virtual DbSet<TePerson> TePerson { get; set; }
         public virtual DbSet<TeTransaction> TeTransaction { get; set; }
+        public virtual DbSet<TeTransactionArchive> TeTransactionArchive { get; set; }
 
         //Views
         public virtual DbSet<vTrans> vTrans { get; set; }
@@ -48,6 +49,7 @@ namespace MoneyEntry.DataAccess.EFCore.Expenses
 
             //An index is most likely the same deal as above
             modelBuilder.Entity<TeTransaction>(entity => entity.HasIndex(e => new { e.CreatedDt, e.TransactionId, e.PersonId }).HasName("IX_teTransaction_PersonId"));
+            modelBuilder.Entity<TeTransactionArchive>(entity => entity.HasIndex(e => new { e.CreatedDt, e.TransactionId, e.PersonId }).HasName("IX_teTransactionArchive_PersonId"));
         }
     }
 }
