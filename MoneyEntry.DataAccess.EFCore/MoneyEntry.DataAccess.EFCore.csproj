@@ -6,6 +6,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Expenses\Models\Procs\spPostTransactionsToArchive.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.2.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.2.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="2.2.0" />
@@ -28,6 +32,10 @@
 
   <ItemGroup>
     <Folder Include="SqlScripts\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Expenses\Models\Procs\spPostTransactionsToArchive.cs" />
   </ItemGroup>
 
   <ItemGroup>
