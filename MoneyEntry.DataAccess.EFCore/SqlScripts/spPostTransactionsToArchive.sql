@@ -1,6 +1,6 @@
-create proc spPostTransactionsToArchive
+Create proc spPostTransactionsToArchive
 	(
-		@TransactionIdStarting int
+		@TransactionIdToKeep int
 	,	@LastCreatedDate date
 	,	@PersonId int
 	)
@@ -14,15 +14,15 @@ BEGIN TRANSACTION
 Insert into teTransactionArchive
 Select  *
 from teTransaction
-where TransactionID < @TransactionIdStarting
-and CreatedDt <= @LastCreatedDate
+where CreatedDt <= @LastCreatedDate
 and PersonID = @PersonId
+and TransactionId <> @TransactionIdToKeep
 order by CreatedDt, TransactionID
 
 delete teTransaction
-where TransactionID < @TransactionIdStarting
-and CreatedDt <= @LastCreatedDate
+where CreatedDt <= @LastCreatedDate
 and PersonID = @PersonId
+and TransactionId <> @TransactionIdToKeep
 
 COMMIT TRANSACTION
 
