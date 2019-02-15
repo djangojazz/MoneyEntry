@@ -18,8 +18,8 @@ namespace MoneyEntry.DataAccess.EFCore.Expenses.Models
         public TdType Type { get; set; }
         [ForeignKey("CategoryId")]
         public TdCategory Category { get; set; }
-        public DateTime? CreatedDt { get; set; }
-        public DateTime? ModifiedDt { get; set; }
+        public DateTime CreatedDt { get; set; }
+        public DateTime ModifiedDt { get; set; }
         public bool? Reconciled { get; set; }
         [Column(TypeName = "money")]
         public decimal? RunningTotal { get; set; }
