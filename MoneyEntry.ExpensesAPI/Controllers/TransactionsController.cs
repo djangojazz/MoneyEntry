@@ -72,9 +72,6 @@ namespace MoneyEntry.ExpensesAPI.Controllers
 
         [HttpPost]
         public async Task<IActionResult> ReconcileTransactions([FromBody]TransactionReconcileModel[] trans) =>
-            await CheckPersonToProceed(async personId =>
-            {
-                return Ok(await _repo.ReconcileTransactionsAsync(JsonConvert.SerializeObject(trans)));
-            });
+            await CheckPersonToProceed(async personId => Ok(await _repo.ReconcileTransactionsAsync(JsonConvert.SerializeObject(trans))) );
     }
 }
