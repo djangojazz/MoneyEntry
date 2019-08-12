@@ -43,22 +43,6 @@ namespace MoneyEntry.ExpensesAPI
                     options.DefaultChallengeScheme = "oidc";
                 })
                 .AddCookie("Cookies")
-                .AddOpenIdConnect("oidc", options =>
-                {
-                    options.SignInScheme = "Cookies";
-
-                    options.Authority = "ExpensesAPI";
-                    options.RequireHttpsMetadata = false;
-
-                    options.ClientId = "testclient";
-                    options.ClientSecret = "secret";
-                    options.ResponseType = "code id_token";
-                    options.SaveTokens = true;
-                    options.GetClaimsFromUserInfoEndpoint = true;
-
-                    options.Scope.Add("testapi");
-                    options.Scope.Add("offline_access");
-                })
                 .AddJwtBearer(cfg =>
                 {
                     cfg.TokenValidationParameters = new TokenValidationParameters()
